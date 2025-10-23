@@ -1,0 +1,7 @@
+<h2 style="text-align: center;">Registrar Usuario</h2>
+
+<app-form-user
+    [persons]="personsAvailable"
+    (save)="handleSaveUser($event)"
+    [cancelRoute]="'/securitymodule/User'">
+</app-form-user>

@@ -1,0 +1,66 @@
+<app-data-table title="Ítems por Estado" icon="category" [columns]="columns" [dataSource]="items()"
+	emptyMessage="No hay ítems que coincidan con los filtros aplicados" emptyIcon="inventory_2" [rowClickable]="true"
+	(rowClicked)="onItemClick($event)">
+
+	<!-- Acciones del header -->
+	<ng-template #headerActions>
+		<mat-form-field appearance="outline" class="status-filter">
+			<mat-label>Filtrar por estado</mat-label>
+			<mat-select [value]="selectedStatuses()" multiple (valueChange)="onStatusFilterChange($event)">
+				<mat-option *ngFor="let status of availableStatuses" [value]="status">
+					{{ status }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</ng-template>
+
+	<!-- Template para el contenido de las celdas -->
+	<ng-template #cellContent let-item let-column="column">
+		<ng-container [ngSwitch]="column.key">
+			<!-- Código -->
+			<div *ngSwitchCase="'code'" class="code-cell">
+				<mat-icon>qr_code</mat-icon>
+				{{ item.code }}
+			</div>
+
+			<!-- Nombre -->
+			<span *ngSwitchCase="'name'">
+				{{ item.name }}
+			</span>
+
+			<!-- Estado Base -->
+			<span *ngSwitchCase="'baseStatus'" class="status-badge"
+				[ngClass]="getStatusClass(item.baseInventoryStatus)">
+				{{ item.baseInventoryStatus }}
+			</span>
+
+			<!-- Estado Actual -->
+			<span *ngSwitchCase="'currentStatus'" class="status-badge" [ngClass]="getStatusClass(item.currentStatus)">
+				{{ item.currentStatus }}
+			</span>
+
+			<!-- Tendencia -->
+			<span *ngSwitchCase="'trend'" class="trend-badge" [ngClass]="item.trend">
+				<mat-icon>{{ getTrendIcon(item.trend) }}</mat-icon>
+				{{ getTrendLabel(item.trend) }}
+			</span>
+
+			<!-- Cambios -->
+			<div *ngSwitchCase="'changes'" class="changes-cell">
+				<span class="changes-count">{{ item.totalChanges }}</span>
+				<button mat-icon-button (click)="onViewHistory(item, $event)" class="history-btn"
+					matTooltip="Ver historial">
+					<mat-icon>history</mat-icon>
+				</button>
+			</div>
+
+			<!-- Último Cambio -->
+			<span *ngSwitchCase="'lastChange'">
+				{{ item.lastChangeDate ? formatDate(item.lastChangeDate) : 'Sin cambios' }}
+			</span>
+
+			<!-- Default case -->
+			<span *ngSwitchDefault>{{ item[column.key] }}</span>
+		</ng-container>
+	</ng-template>
+</app-data-table>

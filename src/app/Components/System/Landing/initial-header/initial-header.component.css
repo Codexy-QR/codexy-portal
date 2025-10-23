@@ -1,0 +1,82 @@
+.header {
+	display: flex;
+	align-items: center;
+	height: 75px;
+	background-color: var(--color-blue-1000);
+	border-bottom: 2px solid var(--color-white);
+	box-sizing: border-box;
+	padding: 0 1.5rem;
+	position: relative;
+	/* Por defecto relative */
+	z-index: 100;
+	width: 100%;
+}
+
+/* Clase para cuando es fijo */
+.header.fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 900;
+}
+
+/* Clase en main-content para compensar el header fijo */
+/* .main-content.with-sidebar {
+	margin-top: 75px;
+}	 */
+
+.sidebar-toggle {
+	color: var(--color-white) !important;
+}
+
+.sidebar-toggle:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Ajuste para cuando no hay botón */
+.title {
+	font-size: 1.8rem;
+	font-weight: 800;
+	letter-spacing: 1.5px;
+	color: var(--color-white);
+	margin-left: 0;
+	/* Valor por defecto */
+}
+
+/* Cuando hay botón, agregamos margen al título */
+.header:has(.sidebar-toggle) .title {
+	margin-left: 0.5rem;
+}
+
+.center {
+	flex: 1;
+	text-align: center;
+}
+
+.text {
+	font-size: 1.8rem;
+	font-weight: 600;
+	letter-spacing: 1.5px;
+	color: var(--color-white);
+}
+
+.header-logo {
+	width: 70px;
+	height: 70px;
+}
+
+@media (max-width: 600px) {
+	.text {
+		display: none;
+	}
+
+	.header {
+		padding: 0 1rem;
+	}
+
+	/* En móviles, el botón siempre visible si aplica */
+	.sidebar-toggle {
+		display: block !important;
+	}
+}

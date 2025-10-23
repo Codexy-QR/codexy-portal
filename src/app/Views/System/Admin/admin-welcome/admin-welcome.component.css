@@ -1,0 +1,156 @@
+.welcome-container {
+	max-width: 100%;
+	margin: 0 auto;
+	padding: 2rem;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.welcome-header {
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+.welcome-logo {
+	width: 80px;
+	height: 80px;
+	margin: 0 auto 1.5rem;
+	background: linear-gradient(135deg, var(--color-blue-variante-2) 0%, var(--color-blue-1000) 100%);
+	border-radius: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-logo mat-icon {
+	font-size: 2.5rem;
+	width: 2.5rem;
+	height: 2.5rem;
+	color: var(--color-white);
+}
+
+.welcome-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	color: var(--color-blue-900);
+	margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+	font-size: 1.1rem;
+	color: var(--color-gray-400);
+	max-width: 600px;
+	margin: 0 auto;
+	line-height: 1.6;
+}
+
+.welcome-content {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2rem;
+	align-items: center;
+	justify-content: center;
+}
+
+.welcome-card {
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 20px;
+	padding: 2.5rem;
+	text-align: center;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	backdrop-filter: blur(10px);
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+	flex: 1;
+	min-width: 300px;
+	max-width: 500px;
+}
+
+
+.welcome-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+	border-color: rgba(102, 126, 234, 0.3);
+}
+
+.card-icon {
+	width: 60px;
+	height: 60px;
+	margin: 0 auto 1.5rem;
+	background: linear-gradient(135deg, var(--color-blue-100) 0%, var(--color-blue-200) 100%);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.card-icon mat-icon {
+	font-size: 1.8rem;
+	width: 1.8rem;
+	height: 1.8rem;
+	color: var(--color-blue-700);
+}
+
+.card-title {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: var(--color-blue-900);
+	margin-bottom: 1rem;
+}
+
+.card-description {
+	color: var(--color-gray-400);
+	margin-bottom: 2rem;
+	line-height: 1.6;
+}
+
+.btn-register {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	background: linear-gradient(135deg, var(--color-blue-600) 0%, var(--color-blue-800) 100%);
+	color: var(--color-white);
+	border: none;
+	border-radius: 8px;
+	padding: 0.8rem 1.5rem;
+	font-size: 1rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-register:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+.btn-register:active {
+	transform: translateY(0);
+}
+
+.btn-register mat-icon {
+	font-size: 1.2rem;
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
+@media (max-width: 768px) {
+	.welcome-container {
+		padding: 1.5rem;
+	}
+
+	.welcome-title {
+		font-size: 2rem;
+	}
+
+	.welcome-card {
+		padding: 2rem 1.5rem;
+	}
+}

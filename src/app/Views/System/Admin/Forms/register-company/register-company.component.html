@@ -1,0 +1,143 @@
+<div class="layout-container">
+	<main class="main-content">
+		<div class="contenedor-formulario">
+			<div class="form-header">
+				<button mat-icon-button class="back-button" (click)="onCancel()">
+					<mat-icon>arrow_back</mat-icon>
+				</button>
+				<h1>Registrar Empresa</h1>
+			</div>
+
+			<div class="form-two-column-layout">
+				<!-- Sección izquierda: Ilustración/Icono -->
+				<div class="form-illustration">
+					<div class="illustration-container">
+						<mat-icon class="main-illustration">apartment</mat-icon>
+						<div class="illustration-background"></div>
+					</div>
+					<h3>Comienza tu journey empresarial</h3>
+					<p>Registra los datos de tu empresa para acceder a todas las funcionalidades del sistema de
+						inventario</p>
+				</div>
+
+				<!-- Sección derecha: Formulario -->
+				<div class="form-container">
+					<form [formGroup]="companyForm" (ngSubmit)="onSubmit()" class="formulario">
+						<!-- Información de la Empresa -->
+						<h2 class="form-section-title">
+							<mat-icon>business</mat-icon>
+							Información de la Empresa
+						</h2>
+
+						<div class="form-row">
+							<!-- Nombre Comercial -->
+							<div class="custom-input-group">
+								<input id="name" type="text" formControlName="name" required placeholder=" ">
+								<label for="name">Nombre Comercial</label>
+								<div class="error-message" *ngIf="hasFieldError('name')">
+									{{ getFieldError('name') }}
+								</div>
+							</div>
+
+							<!-- Razón Social -->
+							<div class="custom-input-group">
+								<input id="businessName" type="text" formControlName="businessName" required
+									placeholder=" ">
+								<label for="businessName">Razón Social</label>
+								<div class="error-message" *ngIf="hasFieldError('businessName')">
+									{{ getFieldError('businessName') }}
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- NIT -->
+							<div class="custom-input-group">
+								<input id="nit" type="text" formControlName="nit" required placeholder="123456789"
+									appNumericInput [maxLength]="9">
+								<label for="nit">NIT</label>
+								<div class="error-message" *ngIf="hasFieldError('nit')">
+									{{ getFieldError('nit') }}
+								</div>
+							</div>
+
+
+							<!-- Industria -->
+							<div class="custom-select-group">
+								<select id="industryId" formControlName="industryId" required>
+									<option value="" disabled selected>Seleccione una opción</option>
+									<option *ngFor="let industry of industries" [value]="industry.id">{{industry.name}}
+									</option>
+								</select>
+								<label for="industryId">Industria</label>
+								<div class="error-message" *ngIf="hasFieldError('industryId')">
+									{{ getFieldError('industryId') }}
+								</div>
+							</div>
+						</div>
+
+						<!-- Información de Contacto -->
+						<h2 class="form-section-title">
+							<mat-icon>contact_mail</mat-icon>
+							Información de Contacto
+						</h2>
+
+						<div class="form-row">
+							<!-- Email -->
+							<div class="custom-input-group full-width">
+								<input id="email" type="email" formControlName="email" required
+									placeholder="Ej:correo@dominio.com">
+								<label for="email">Email Corporativo</label>
+								<div class="error-message" *ngIf="hasFieldError('email')">
+									<span *ngIf="companyForm.get('email')?.hasError('required')">Este campo es
+										requerido</span>
+									<span *ngIf="companyForm.get('email')?.hasError('emailFormat')">Formato de email
+										inválido</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Sitio Web -->
+							<div class="custom-input-group full-width">
+								<input id="website" type="text" formControlName="website"
+									placeholder="Ej:www.sitio.com">
+								<label for="website">Sitio Web (Opcional)</label>
+								<div class="error-message" *ngIf="hasFieldError('website')">
+									{{ getFieldError('website') }}
+								</div>
+							</div>
+						</div>
+
+						<!-- Términos y Condiciones -->
+						<!-- <div class="terms-container">
+							<div class="checkbox-group">
+								<input type="checkbox" id="termsAccepted" formControlName="termsAccepted">
+								<label for="termsAccepted">Acepto los <a [routerLink]="'/admin/register-company'"
+										class="terms-link">términos y condiciones</a>
+									y la <a [routerLink]="'/admin/register-company'" class="terms-link">política de
+										privacidad</a></label>
+							</div>
+							<div class="error-message" *ngIf="hasFieldError('termsAccepted')">
+								{{ getFieldError('termsAccepted') }}
+							</div>
+						</div> -->
+
+						<!-- Botones de acción -->
+						<div class="form-actions">
+							<button mat-stroked-button type="button" (click)="onCancel()" class="cancel-button">
+								<mat-icon>arrow_back</mat-icon>
+								Cancelar
+							</button>
+							<button mat-raised-button type="submit" [disabled]="companyForm.invalid || isSubmit()"
+								class="submit-button">
+								<mat-icon>app_registration</mat-icon>
+								{{ isSubmit() ? 'Registrando...' : 'Registrar Empresa' }}
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+</div>

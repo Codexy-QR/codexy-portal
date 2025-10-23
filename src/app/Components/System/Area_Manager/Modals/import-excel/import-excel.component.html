@@ -1,0 +1,52 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>cloud_upload</mat-icon>
+				Importar {{typeName}} desde Excel
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content">
+			<p class="modal-description">
+				Selecciona un archivo Excel para importar el inventario base de
+				<strong>{{ entityName }}</strong>
+			</p>
+
+			<!-- Área de arrastre o clic -->
+			<div class="file-drop-area" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+				(drop)="onDrop($event)" (click)="triggerFileDialog()" [class.dragover]="isDragging()">
+				<mat-icon class="upload-icon">cloud_upload</mat-icon>
+				<p>Haz clic o arrastra un archivo Excel aquí</p>
+				<span class="file-types">Formatos admitidos: .xlsx, .xls</span>
+			</div>
+
+			<!-- Archivo seleccionado -->
+			<div class="selected-file" *ngIf="selectedFile">
+				<mat-icon class="file-icon">description</mat-icon>
+				<div class="file-info">
+					<span class="file-name">{{ selectedFile.name }}</span>
+					<span class="file-size">{{ getFileSize(selectedFile.size) }}</span>
+				</div>
+				<button mat-icon-button (click)="removeFile()" class="remove-file-btn">
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+
+			<footer class="modal-actions">
+				<button mat-stroked-button type="button" (click)="closeModal()">
+					<mat-icon>cancel</mat-icon>
+					Cancelar
+				</button>
+				<button mat-raised-button type="button" (click)="importFile()" [disabled]="!selectedFile"
+					class="import-button">
+					<mat-icon>upload_file</mat-icon>
+					Importar
+				</button>
+			</footer>
+		</div>
+	</div>
+</div>

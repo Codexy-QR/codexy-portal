@@ -1,0 +1,111 @@
+<!-- checker-verifications-modal.component.html -->
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>verified</mat-icon>
+				Verificaciones de {{checker?.fullName}}
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content" *ngIf="checker && verifications().length > 0">
+			<!-- Estadísticas Rápidas -->
+			<div class="stats-section">
+				<div class="stats-grid">
+					<div class="stat-card">
+						<div class="stat-icon total">
+							<mat-icon>inventory_2</mat-icon>
+						</div>
+						<div class="stat-content">
+							<div class="stat-value">{{ totalVerifications() }}</div>
+							<div class="stat-label">Total Verificaciones</div>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon approved">
+							<mat-icon>check_circle</mat-icon>
+						</div>
+						<div class="stat-content">
+							<div class="stat-value">{{ approvedCount() }}</div>
+							<div class="stat-label">Aprobadas</div>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon rejected">
+							<mat-icon>cancel</mat-icon>
+						</div>
+						<div class="stat-content">
+							<div class="stat-value">{{ rejectedCount() }}</div>
+							<div class="stat-label">Rechazadas</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Lista de Verificaciones -->
+			<div class="verifications-section">
+				<h3>Historial de Verificaciones</h3>
+
+				<div class="table-container">
+					<table class="verifications-table">
+						<thead>
+							<tr>
+								<th>Fecha</th>
+								<th>Zona</th>
+								<th>Grupo Operativo</th>
+								<th>Resultado</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let verification of verifications()">
+								<td class="date-cell">
+									{{ formatDateTime(verification.date) }}
+								</td>
+								<td class="zone-cell">
+									{{ verification.zoneName }}
+								</td>
+								<td class="group-cell">
+									{{ verification.operatingGroupName }}
+								</td>
+								<td class="result-cell">
+									<span class="result-badge"
+										[ngClass]="verification.result ? 'approved' : 'rejected'">
+										<mat-icon>{{ verification.result ? 'check_circle' : 'cancel' }}</mat-icon>
+										{{ verification.result ? 'Aprobado' : 'Rechazado' }}
+									</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- Acciones -->
+			<footer class="modal-actions">
+				<button mat-stroked-button (click)="closeModal()" class="btn-close">
+					<mat-icon>close</mat-icon>
+					Cerrar
+				</button>
+			</footer>
+		</div>
+
+		<!-- Empty State -->
+		<div class="modal-content" *ngIf="verifications().length === 0">
+			<div class="empty-state">
+				<mat-icon>verified</mat-icon>
+				<h3>No hay verificaciones registradas</h3>
+				<p>{{ checker?.fullName }} no ha realizado verificaciones aún.</p>
+			</div>
+
+			<footer class="modal-actions">
+				<button mat-stroked-button (click)="closeModal()" class="btn-close">
+					<mat-icon>close</mat-icon>
+					Cerrar
+				</button>
+			</footer>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,16 @@
+<h2>Module</h2>
+
+<button class="btn-register" mat-raised-button routerLink="/securitymodule/Module/Create">
+    <mat-icon>add_circle</mat-icon> Registrar
+</button>
+
+<mat-card class="contenedor-tabla">
+    <app-base-table
+        [data]="moduleData"
+        [columns]="columnasMostrar"
+        [tooltipColumns]="[]"
+        [statusLabels]="{ true: 'Activo', false: 'Inactivo' }"
+        (onEdit)="editarModule($event)"
+        (onDelete)="eliminarModule($event)">
+    </app-base-table>
+</mat-card>

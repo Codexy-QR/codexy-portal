@@ -1,0 +1,75 @@
+<nav class="sidebar" [class.expanded]="isExpanded">
+	<div class="sidebar-header">
+		<button mat-icon-button class="toggle-btn" (click)="onToggleSidebar()">
+			<mat-icon>{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+		</button>
+		<div class="logo-container" *ngIf="isExpanded">
+			<span class="logo-text">Panel Encargado de Zona</span>
+		</div>
+	</div>
+
+	<div class="sidebar-content">
+		<!-- Sección de Bienvenida -->
+		<div class="welcome-section" *ngIf="isExpanded">
+			<div class="welcome-icon">
+				<mat-icon>business_center</mat-icon>
+			</div>
+			<h3 class="welcome-title">Gerencia de Área</h3>
+		</div>
+
+		<!-- Separador Decorativo -->
+		<div class="divider" *ngIf="isExpanded">
+			<div class="divider-line"></div>
+		</div>
+
+		<!-- Navegación Dinámica -->
+		<div class="nav-section" *ngFor="let item of navigationItems"
+			[ngStyle]="{'display': isExpanded ? 'block' : 'none'}">
+
+			<!-- Elemento Simple (No Expandible) -->
+			<button *ngIf="!item.expandable" class="nav-item-simple" [class.active]="isRouteActive(item.route!)"
+				(click)="navigateTo(item.route!)">
+				<div class="nav-icon">
+					<mat-icon>{{ item.icon }}</mat-icon>
+				</div>
+				<span class="nav-label">{{ item.label }}</span>
+				<mat-icon class="nav-chevron">chevron_right</mat-icon>
+			</button>
+
+			<!-- Elemento Expandible -->
+			<div *ngIf="item.expandable">
+				<button class="nav-header" [class.active]="isSectionActive(item.id)" (click)="toggleSection(item.id)">
+					<div class="nav-icon">
+						<mat-icon>{{ item.icon }}</mat-icon>
+					</div>
+					<span class="nav-label">{{ item.label }}</span>
+					<mat-icon class="nav-chevron">
+						{{ isSectionExpanded(item.id) ? 'expand_less' : 'expand_more' }}
+					</mat-icon>
+				</button>
+
+				<!-- Submenú -->
+				<div class="nav-submenu" [class.expanded]="isSectionExpanded(item.id)">
+					<button *ngFor="let subItem of item.children" class="nav-subitem"
+						[class.active]="isRouteActive(subItem.route!)" (click)="navigateTo(subItem.route!)">
+						<mat-icon>{{ subItem.icon }}</mat-icon>
+						<span>{{ subItem.label }}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Separador antes del footer -->
+		<div class="divider" *ngIf="isExpanded">
+			<div class="divider-line"></div>
+		</div>
+
+		<!-- Footer -->
+		<div class="sidebar-footer" *ngIf="isExpanded">
+			<p class="footer-text">v1.0 - 2025</p>
+		</div>
+	</div>
+</nav>
+
+<!-- Overlay para cerrar al hacer clic fuera -->
+<div class="sidebar-overlay" [class.visible]="isExpanded" (click)="onToggleSidebar()"></div>
