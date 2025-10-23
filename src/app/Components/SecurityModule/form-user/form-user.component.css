@@ -1,0 +1,49 @@
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    /* Centrado horizontal */
+}
+
+.mat-error-password{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.mat-icon-view {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 1em !important;
+}
+
+.text-danger{
+    margin-top: 6px;
+    color: red;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.button-group button {
+    flex: 1;
+}
+
+button mat-icon {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Campos no editables */
+.readonly {
+    background-color: #f3f3f3;
+    pointer-events: none;
+    opacity: 0.7;
+}

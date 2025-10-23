@@ -1,0 +1,38 @@
+<!-- admin-profile-generic.component.html -->
+<div class="layout-container">
+	<main class="main-content">
+		<app-show-info-profile
+			[profileData]="user()"
+			[profileFields]="profileFields"
+			[backRoute]="'/subadmin/dashboard'"
+			[headerIcon]="'person'"
+			[headerTitle]="'Mi Perfil'"
+			[headerSubtitle]="'Gestiona tu información personal y seguridad'"
+			[avatarInitials]="getUserInitials()"
+			[avatarTitle]="user()?.name + ' ' + user()?.lastName"
+			[avatarSubtitle]="user()?.email"
+			[avatarRole]="getFormattedRole()"
+			(onEdit)="openEditModal()"
+			(onChangePassword)="openPasswordModal()">
+		</app-show-info-profile>
+	</main>
+</div>
+
+@if (isEditModalOpen()) {
+	<app-update-info-profile
+		[profileData]="user()"
+		[isOpen]="isEditModalOpen()"
+		[editFields]="editFields"
+		[saveService]="saveProfile.bind(this)"
+		(onClose)="closeEditModal()"
+		(onSave)="onProfileUpdated($event)">
+	</app-update-info-profile>
+}
+
+@if (isPasswordModalOpen()) {
+<app-change-password-modal
+	[isOpen]="isPasswordModalOpen()"
+	(onClose)="closePasswordModal()"
+	(onSuccess)="onPasswordChanged()">
+</app-change-password-modal>
+}

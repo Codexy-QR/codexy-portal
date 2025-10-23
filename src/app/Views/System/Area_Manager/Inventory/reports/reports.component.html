@@ -1,0 +1,50 @@
+<div class="reports-container">
+	<!-- Loader -->
+	<app-loader [loading]="loading()" loadingMessage="Cargando Reportes de Zona..." [fullScreen]="true" [diameter]="70"
+		color="primary">
+	</app-loader>
+
+	<!-- Error State -->
+	<div *ngIf="error() && !loading()" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage() }}</p>
+		<button mat-raised-button color="primary" (click)="loadReports()">
+			Reintentar
+		</button>
+	</div>
+
+	<!-- Contenido Principal -->
+	<ng-container *ngIf="!loading() && !error()">
+
+		<!-- Header con filtros -->
+		<app-zone-report-header [zoneInfo]="zoneReport().zoneInfo" [loading]="loading()" [initialFilters]="filters"
+			(filtersApplied)="onFiltersApplied($event)" (exportExcel)="onExportExcel()" (exportPDF)="onExportPDF()">
+		</app-zone-report-header>
+
+		<!-- Resumen de Zona -->
+		<app-zone-summary [zoneReport]="zoneReport()">
+		</app-zone-summary>
+
+		<!-- Reportes Básicos -->
+		<div class="reports-section">
+			<!-- Inventarios Realizados -->
+			<app-inventories-table [inventories]="filteredInventories()">
+			</app-inventories-table>
+
+			<!-- Ítems por Estado -->
+			<app-items-evolution-table [items]="filteredItems()" [selectedStatuses]="filters.selectedStatus"
+				(statusFilterChanged)="onStatusFilterChanged($event)" (viewHistory)="onViewHistory($event)"
+				(itemSelected)="onItemSelected($event)">
+			</app-items-evolution-table>
+
+			<!-- Verificaciones -->
+			<app-verifications-table [verifications]="filteredVerifications()">
+			</app-verifications-table>
+		</div>
+	</ng-container>
+
+	<!-- Modal de Historial -->
+	<app-item-history-report [isOpen]="isHistoryModalOpen()" [item]="selectedItemHistory()"
+		(onClose)="closeHistoryModal()">
+	</app-item-history-report>
+</div>

@@ -1,0 +1,17 @@
+<h2>Person</h2>
+
+<button class="btn-register" mat-raised-button routerLink="/securitymodule/Person/Create">
+    <mat-icon>add_circle</mat-icon> Registrar
+</button>
+
+<mat-card class="contenedor-tabla">
+    <app-base-table
+        [data]="personData"
+        [columns]="columnasMostrar"
+        [tooltipColumns]="['email', 'documentNumber', 'phone']"
+        [statusLabels]="{ true: 'Activo', false: 'Inactivo' }"
+        (onEdit)="editarPerson($event)"
+        (onDelete)="eliminarPerson($event)">
+    </app-base-table>
+</mat-card>
+

@@ -1,0 +1,25 @@
+.btn-update {
+    margin-right: 0.5rem;
+    color: rgb(228, 174, 11);
+}
+
+.btn-delete{
+    color: red;
+}
+
+.msg-empty{
+    color: #e06262;
+    text-align: center; 
+}
+
+.status-active {
+    color: green;
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: red;
+    font-weight: bold;
+}
+
+

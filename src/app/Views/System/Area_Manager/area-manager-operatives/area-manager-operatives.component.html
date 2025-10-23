@@ -1,0 +1,178 @@
+<div class="operatives-container">
+	<!-- Loader -->
+	<app-loader [loading]="loading()" loadingMessage="Cargando operativos..." [fullScreen]="true" [diameter]="70"
+		color="primary">
+	</app-loader>
+
+	<!-- Error State -->
+	<div *ngIf="error() && !loading()" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage() }}</p>
+		<button mat-raised-button color="primary" (click)="loadOperativesData()">
+			Reintentar
+		</button>
+	</div>
+
+	<!-- Main Content -->
+	<ng-container *ngIf="!loading() && !error()">
+		<!-- Header -->
+		<header class="header">
+			<h1>Gestión de Operativos</h1>
+			<p>Administración del personal operativo asignado</p>
+		</header>
+
+		<!-- Empty State (Primer estado - Sin datos) -->
+		<div *ngIf="!hasOperativesData()" class="empty-state">
+			<div class="empty-icon">
+				<mat-icon>groups</mat-icon>
+			</div>
+			<h2>No hay operativos registrados</h2>
+			<p>Comienza importando un archivo Excel con los datos de tu personal operativo o descarga la plantilla para
+				completarla.</p>
+
+			<div class="action-buttons">
+				<button mat-raised-button color="primary" (click)="openImportModal()">
+					<mat-icon>upload_file</mat-icon>
+					Importar desde Excel
+				</button>
+
+				<button mat-stroked-button color="primary" (click)="downloadTemplate()">
+					<mat-icon>download</mat-icon>
+					Descargar Plantilla
+				</button>
+			</div>
+
+			<div class="instructions">
+				<h3>Instrucciones para importar:</h3>
+				<ul>
+					<li>Asegúrate de usar la plantilla proporcionada</li>
+					<li>Verifica que todos los campos obligatorios estén completos</li>
+					<li>Revisa que los formatos de datos sean correctos</li>
+					<li>El archivo no debe exceder los 5MB de tamaño</li>
+					<li>Campos requeridos: Nombre, Apellido, Email, Tipo Documento, Número Documento, Teléfono</li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- Data State (Segundo estado - Con datos) -->
+		<div *ngIf="hasOperativesData()" class="has-data-state">
+			<!-- Table Header -->
+			<div class="table-header">
+				<h2>Operativos Registrados</h2>
+				<div class="header-actions">
+					<button mat-raised-button color="primary" (click)="navigateToCreateOperative()">
+						<mat-icon>person_add</mat-icon>
+						Nuevo Operativo
+					</button>
+				</div>
+			</div>
+
+			<!-- Search and Filter Controls -->
+			<div class="table-controls">
+				<!-- Search -->
+				<div class="search-container">
+					<mat-icon class="search-icon">search</mat-icon>
+					<input type="text" class="search-input" placeholder="Buscar operativos..."
+						[ngModel]="filterService.searchText()"
+						(ngModelChange)="filterService.searchText.set($event); onSearchChange()">
+					<button class="clear-search" (click)="filterService.searchText.set(''); onSearchChange()"
+						*ngIf="filterService.searchText()">
+						<mat-icon>close</mat-icon>
+					</button>
+				</div>
+
+				<!-- Filter Button -->
+				<div class="control-buttons">
+					<button mat-stroked-button [matMenuTriggerFor]="filterMenu">
+						<mat-icon>filter_list</mat-icon>
+						Filtrar
+						<mat-icon *ngIf="filterService.groupFilter() !== 'all'">filter_alt</mat-icon>
+					</button>
+
+					<!-- Filter Menu -->
+					<mat-menu #filterMenu="matMenu" class="filter-menu">
+						<!-- Group Filter -->
+						<div class="filter-section">
+							<h3>Grupo Operativo</h3>
+							<div class="filter-options">
+								<button mat-menu-item (click)="filterByGroup('all')"
+									[class.active]="filterService.groupFilter() === 'all'">
+									<mat-icon>all_inclusive</mat-icon>
+									Todos
+								</button>
+								<button mat-menu-item (click)="filterByGroup('with-group')"
+									[class.active]="filterService.groupFilter() === 'with-group'">
+									<mat-icon>group</mat-icon>
+									Con Grupo
+								</button>
+								<button mat-menu-item (click)="filterByGroup('without-group')"
+									[class.active]="filterService.groupFilter() === 'without-group'">
+									<mat-icon>person</mat-icon>
+									Sin Grupo
+								</button>
+								<mat-divider></mat-divider>
+								<!-- Grupos específicos -->
+								<ng-container *ngFor="let groupId of operativeGroups()">
+									<button
+										*ngIf="groupId !== 'all' && groupId !== 'with-group' && groupId !== 'without-group'"
+										mat-menu-item (click)="filterByGroup(groupId)"
+										[class.active]="filterService.groupFilter() === groupId">
+										<mat-icon>group_work</mat-icon>
+										Grupo {{ groupId }}
+									</button>
+								</ng-container>
+							</div>
+						</div>
+
+						<mat-divider></mat-divider>
+						<button mat-menu-item (click)="clearFilters()">
+							<mat-icon>clear_all</mat-icon>
+							Limpiar todos los filtros
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+
+			<!-- Active Filters -->
+			<div class="active-filters" *ngIf="filterService.hasActiveFilters()">
+				<span class="filter-label">Filtros activos:</span>
+
+				<mat-chip *ngIf="filterService.searchText()" [removable]="true"
+					(removed)="filterService.searchText.set(''); onSearchChange()">
+					Búsqueda: "{{ filterService.searchText() }}"
+					<mat-icon matChipRemove>cancel</mat-icon>
+				</mat-chip>
+
+				<mat-chip *ngIf="filterService.groupFilter() !== 'all'" [removable]="true"
+					(removed)="filterByGroup('all')">
+					{{ getGroupFilterDisplay(filterService.groupFilter()) }}
+					<mat-icon matChipRemove>cancel</mat-icon>
+				</mat-chip>
+			</div>
+
+			<!-- Table -->
+			<div class="table-container">
+				<app-operatives-table [dataSource]="mappedTableData()" (deleteItem)="onDeleteItem($event)"></app-operatives-table>
+			</div>
+
+			<!-- Footer with Pagination -->
+			<div class="table-footer">
+				<div class="footer-info">
+					<p>Mostrando {{ getDisplayedRange() }} de {{ totalOperatives() }} operativos</p>
+					<p *ngIf="filterService.hasActiveFilters()" class="filtered-count">
+						(Filtrado de {{ allOperatives().length }} operativos totales)
+					</p>
+				</div>
+				<mat-paginator class="custom-paginator" [length]="totalOperatives()"
+					[pageSize]="filterService.pageSize()" [pageIndex]="filterService.pageIndex()"
+					[pageSizeOptions]="[5, 10, 25, 50]" (page)="onPageChange($event)" aria-label="Seleccionar página">
+				</mat-paginator>
+			</div>
+		</div>
+
+		<!-- Import Modal -->
+		<app-import-excel [entityName]="'Operativos'" [typeName]="'Operativos'" [isOpen]="showImportModal()"
+			(onClose)="closeImportModal()" (onImport)="processExcelImport($event)">
+		</app-import-excel>
+	</ng-container>
+</div>
