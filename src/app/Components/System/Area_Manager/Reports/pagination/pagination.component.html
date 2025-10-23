@@ -1,0 +1,57 @@
+<div class="pagination-container" *ngIf="paginationData().pagination.totalPages > 1">
+<!-- <div class="pagination-container"> -->
+	<!-- Información de páginas -->
+	<div class="pagination-info">
+		<span class="results-info">
+			Mostrando {{ paginationData().pagination.startIndex + 1 }} -
+			{{ paginationData().pagination.endIndex + 1 }} de
+			{{ paginationData().pagination.totalItems }} resultados
+		</span>
+
+		<!-- Selector de elementos por página -->
+		<mat-form-field appearance="outline" class="page-size-selector">
+			<mat-label>Por página</mat-label>
+			<mat-select [value]="paginationData().pagination.itemsPerPage" (valueChange)="onPageSizeChange($event)">
+				<mat-option *ngFor="let option of itemsPerPageOptions()" [value]="option">
+					{{ option }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+
+	<!-- Controles de paginación -->
+	<div class="pagination-controls">
+		<!-- Botón Primera Página -->
+		<button mat-icon-button [disabled]="!paginationData().pagination.hasPreviousPage" (click)="onFirstPage()"
+			matTooltip="Primera página">
+			<mat-icon>first_page</mat-icon>
+		</button>
+
+		<!-- Botón Página Anterior -->
+		<button mat-icon-button [disabled]="!paginationData().pagination.hasPreviousPage" (click)="onPreviousPage()"
+			matTooltip="Página anterior">
+			<mat-icon>chevron_left</mat-icon>
+		</button>
+
+		<!-- Números de página -->
+		<div class="page-numbers">
+			<button *ngFor="let pageNum of visiblePageNumbers()" mat-button
+				[class.current-page]="pageNum === paginationData().pagination.currentPage"
+				(click)="onPageClick(pageNum)">
+				{{ pageNum }}
+			</button>
+		</div>
+
+		<!-- Botón Página Siguiente -->
+		<button mat-icon-button [disabled]="!paginationData().pagination.hasNextPage" (click)="onNextPage()"
+			matTooltip="Página siguiente">
+			<mat-icon>chevron_right</mat-icon>
+		</button>
+
+		<!-- Botón Última Página -->
+		<button mat-icon-button [disabled]="!paginationData().pagination.hasNextPage" (click)="onLastPage()"
+			matTooltip="Última página">
+			<mat-icon>last_page</mat-icon>
+		</button>
+	</div>
+</div>

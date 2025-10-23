@@ -1,0 +1,13 @@
+<div class="reports-header">
+	<div class="header-content">
+		<h1>Reportes de Zona</h1>
+		<p *ngIf="zoneInfo()">
+			Análisis y documentación de {{ zoneInfo()!.name }}
+		</p>
+	</div>
+
+	<!-- Filtros Globales -->
+	<app-report-filters [filters]="currentFilters()" [loading]="loading()" [showStatusFilter]="false"
+		(filtersApplied)="onFiltersApplied($event)" (exportExcel)="onExportExcel()" (exportPDF)="onExportPDF()">
+	</app-report-filters>
+</div>

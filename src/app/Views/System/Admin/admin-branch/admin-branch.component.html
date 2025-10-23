@@ -1,0 +1,159 @@
+<div class="container-base">
+	<app-loader [loading]="loading" [loadingMessage]="'Cargando información de la sucursal...'" [fullScreen]="true"
+		[diameter]="60" color="accent">
+	</app-loader>
+
+	<div *ngIf="error && !loading" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage }}</p>
+		<button mat-raised-button color="primary" (click)="cargarDatos()">
+			Reintentar
+		</button>
+	</div>
+
+	<ng-container *ngIf="!loading && !error">
+		<!-- Header -->
+		<div class="header-base">
+			<div class="header-text">
+				<h1 class="title-primary">{{ sucursal?.name }}</h1>
+				<p class="subtitle-primary">Información detallada de la sucursal</p>
+			</div>
+			<div class="actions-section">
+				<button class="delete-btn" (click)="onDeleteSucursal()">
+					Deshabilitar Sucursal
+				</button>
+			</div>
+		</div>
+
+		<!-- Información General -->
+		<div class="info-grid">
+			<!-- Información Principal -->
+			<div class="main-info-card">
+				<div class="info-item">
+					<mat-icon class="info-icon">location_on</mat-icon>
+					<div class="info-content">
+						<h3>Dirección</h3>
+						<p>{{ sucursal?.address }}</p>
+					</div>
+				</div>
+
+				<div class="info-item">
+					<mat-icon class="info-icon">phone</mat-icon>
+					<div class="info-content">
+						<h3>Teléfono</h3>
+						<p>{{ sucursal?.phone}}</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Subadministrador -->
+			<div class="responsible-card">
+				<div class="responsible-header">
+					<div class="responsible-icon">
+						<mat-icon>admin_panel_settings</mat-icon>
+					</div>
+					<h3 class="responsible-title">Encargado Sucursal</h3>
+				</div>
+
+				<div class="responsible-info">
+					<div class="responsible-contact">
+						<mat-icon>person</mat-icon>
+						<span>{{ subAdministrador?.inChargeFullName }}</span>
+					</div>
+
+					<div class="responsible-contact">
+						<mat-icon>phone</mat-icon>
+						<span>{{ subAdministrador?.inChargePhone }}</span>
+					</div>
+
+					<div class="responsible-contact" *ngIf="subAdministrador?.inChargeEmail">
+						<mat-icon>email</mat-icon>
+						<span>{{ subAdministrador?.inChargeEmail }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Zonas de la Sucursal -->
+		<div class="zones-section">
+			<div class="zones-header">
+				<h2 class="section-title">Zonas de la Sucursal</h2>
+
+				<!-- Campo de búsqueda (solo mostrar si hay zonas) -->
+				<div class="search-container" *ngIf="hasZones">
+					<mat-icon class="search-icon">search</mat-icon>
+					<input type="text" class="search-input" placeholder="Buscar zona o encargado..."
+						[(ngModel)]="searchText">
+				</div>
+			</div>
+
+			<div class="zones-grid">
+				<!-- Estado cuando hay zonas -->
+				<ng-container *ngIf="hasZones; else noZonesTemplate">
+					<!-- Aplicamos el pipe de filtrado -->
+					<div class="zone-card" *ngFor="let zone of (sucursal?.zones || []) | zoneFilter: searchText">
+						<div class="zone-header">
+							<mat-icon class="zone-icon">place</mat-icon>
+							<h3 class="zone-name">{{ zone.name }}</h3>
+						</div>
+
+						<div class="zone-info">
+							<div class="zone-detail">
+								<mat-icon>person</mat-icon>
+								<span>Encargado: {{ zone.inChargeFullName }}</span>
+							</div>
+
+							<div class="zone-detail">
+								<mat-icon>inventory</mat-icon>
+								<span>Ítems: {{ zone.itemsCount }}</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Mensaje cuando no hay resultados de búsqueda -->
+					<div class="no-results"
+						*ngIf="((sucursal?.zones || []) | zoneFilter: searchText).length === 0 && searchText">
+						<mat-icon>search_off</mat-icon>
+						<p>No se encontraron zonas que coincidan con "{{ searchText }}"</p>
+					</div>
+				</ng-container>
+
+				<!-- Estado cuando no hay zonas -->
+				<ng-template #noZonesTemplate>
+					<div class="empty-state">
+						<div class="empty-icon">
+							<mat-icon>map</mat-icon>
+						</div>
+						<h3>No hay zonas configuradas</h3>
+						<p>
+							Esta sucursal no tiene zonas asignadas. Comunícate con el encargado de la
+							sucursal.
+						</p>
+					</div>
+				</ng-template>
+			</div>
+
+			<!-- Información Extra -->
+			<div class="extra-info">
+				<h2 class="section-title">Estadísticas de la Sucursal</h2>
+
+				<div class="extra-grid">
+					<div class="extra-item">
+						<div class="extra-value">{{ sucursal?.inventoriesCount }}</div>
+						<div class="extra-label">Inventarios Realizados</div>
+					</div>
+
+					<div class="extra-item">
+						<div class="extra-value">{{ totalItems }}</div>
+						<div class="extra-label">Total de Ítems</div>
+					</div>
+
+					<div class="extra-item">
+						<div class="extra-value">{{ sucursal?.zonesCount }}</div>
+						<div class="extra-label">Zonas Activas</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+</div>

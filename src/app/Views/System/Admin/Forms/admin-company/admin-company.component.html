@@ -1,0 +1,32 @@
+<div class="layout-container">
+    <main class="main-content">
+        <app-show-info-edification
+            [entityData]="company"
+            [entityType]="'Empresa'"
+            [dataFields]="companyFields"
+            [backRoute]="'/admin/dashboard'"
+            [headerIcon]="'business'"
+            [headerTitle]="'Datos de Empresa'"
+            [headerSubtitle]="'Gestión de información empresarial'"
+            [avatarInitials]="getCompanyInitials()"
+            [avatarTitle]="company?.name || 'Empresa'"
+            [avatarSubtitle]="company?.email || 'Correo electrónico'"
+            [avatarRole]="company?.industryName || 'Industria'"
+            (onEdit)="openEditModal()"
+            (onDelete)="openDeleteModal()">
+        </app-show-info-edification>
+    </main>
+</div>
+
+<!-- Modal de edición -->
+@if (isEditModalOpen()) {
+<app-update-info-edification
+    [entityData]="company"
+    [isOpen]="isEditModalOpen()"
+    [entityType]="'Empresa'"
+    [editFields]="editFields"
+    [saveService]="saveCompany.bind(this)"
+    (onClose)="closeEditModal()"
+    (onSave)="onCompanyUpdated($event)">
+</app-update-info-edification>
+}

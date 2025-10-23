@@ -1,0 +1,69 @@
+.chart-container {
+	background: rgba(255, 255, 255, 0.02);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 16px;
+	padding: 1.5rem;
+	height: 400px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.chart-title {
+	font-size: 1.25rem;
+	color: var(--color-white);
+	margin-bottom: 1rem;
+	font-weight: 600;
+}
+
+@media (max-width: 768px) {
+	.chart-container {
+		height: 350px;
+		padding: 1rem;
+	}
+}
+
+.coming-soon {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: rgba(255, 255, 255, 0.5);
+	text-align: center;
+	opacity: 0;
+	animation: fadeIn 0.5s forwards;
+}
+
+.coming-soon mat-icon {
+	font-size: 4rem;
+	width: 4rem;
+	height: 4rem;
+	margin-bottom: 1rem;
+	color: rgba(255, 255, 255, 0.3);
+}
+
+.coming-soon p {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.info{
+	margin-top: 1rem !important;
+	font-size: 1.6rem !important;
+	font-weight: 500;
+}
+
+@keyframes fadeIn {
+	to {
+		opacity: 1;
+	}
+}
+
+/* Asegurar que el canvas ocupe el espacio disponible */
+canvas {
+	flex: 1;
+	min-height: 0;
+}

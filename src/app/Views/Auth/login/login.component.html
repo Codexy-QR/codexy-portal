@@ -1,0 +1,87 @@
+<div class="login-container">
+	<!-- Fondo con elementos decorativos -->
+	<!-- <div class="background-decoration">
+		<div class="decoration-circle circle-1"></div>
+		<div class="decoration-circle circle-2"></div>
+		<div class="decoration-circle circle-3"></div>
+	</div> -->
+
+	<app-initial-header [text]="'Inicio de Sesión'" [textMargin]="'3rem'"></app-initial-header>
+
+	<main class="main-content">
+		<div class="login-card">
+			<!-- Header de la tarjeta -->
+			<div class="card-header">
+				<div class="header-icon">
+					<mat-icon>lock_person</mat-icon>
+				</div>
+				<h1>Bienvenido de Nuevo</h1>
+				<p>Ingresa tus credenciales para acceder al sistema</p>
+			</div>
+
+			<!-- Formulario -->
+			<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+				<div class="form-fields">
+					<!-- Campo Usuario -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">person</mat-icon>
+							<input id="username" type="text" formControlName="username" required
+								placeholder="Usuario">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+							<mat-icon>error</mat-icon>
+							Usuario requerido
+						</div>
+					</div>
+
+					<!-- Campo Contraseña -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">lock</mat-icon>
+							<input id="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+								required placeholder="Contraseña">
+							<button type="button" class="toggle-password" (click)="hidePassword = !hidePassword"
+								[class.active]="!hidePassword">
+								<mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+							</button>
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+							<mat-icon>error</mat-icon>
+							La contraseña es requerida
+						</div>
+					</div>
+				</div>
+
+				<!-- Recordar contraseña -->
+				<div class="remember-forgot">
+					<a class="forgot-link" (click)="onForgotPassword()">
+						¿Olvidaste tu contraseña?
+					</a>
+				</div>
+
+				<!-- Botón de envío -->
+				<button mat-raised-button type="submit" class="submit-btn"
+					[disabled]="loginForm.invalid || isLoggingIn()" [class.loading]="isLoggingIn()">
+					<span class="btn-content">
+						<mat-icon *ngIf="!isLoggingIn()">login</mat-icon>
+						{{ isLoggingIn() ? 'Iniciando Sesión...' : 'Iniciar Sesión' }}
+					</span>
+				</button>
+
+				<!-- Enlace de registro -->
+				<div class="register-section">
+					<p>¿No tienes una cuenta?</p>
+					<a class="register-link" routerLink="/Register">
+						<mat-icon>person_add</mat-icon>
+						Crear cuenta nueva
+					</a>
+				</div>
+			</form>
+		</div>
+	</main>
+</div>

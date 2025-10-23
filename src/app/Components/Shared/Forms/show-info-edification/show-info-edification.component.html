@@ -1,0 +1,97 @@
+<div class="data-view-container">
+	<!-- Header -->
+	<header class="data-view-header">
+		<button mat-icon-button class="back-button" [routerLink]="backRoute">
+			<mat-icon>arrow_back</mat-icon>
+		</button>
+		<div class="header-content">
+			<h1>
+				<mat-icon>{{ headerIcon }}</mat-icon>
+				{{ headerTitle }}
+			</h1>
+			<p>{{ headerSubtitle }}</p>
+		</div>
+	</header>
+
+	<!-- Contenido principal -->
+	<div class="data-view-content">
+		<div class="data-view-grid">
+			<!-- Columna izquierda: avatar/icono -->
+			<div class="data-view-left-column" *ngIf="showAvatarSection">
+				<div class="data-view-card">
+					<section class="avatar-section">
+						<div class="avatar-badge">
+							<mat-icon>{{ avatarBadgeIcon }}</mat-icon>
+							<span>{{ avatarBadgeText }}</span>
+						</div>
+						<div class="entity-avatar-large">
+							<span class="avatar-initials">{{ avatarInitials }}</span>
+						</div>
+						<h2>{{ avatarTitle }}</h2>
+						<p class="entity-email">{{ avatarSubtitle }}</p>
+						<p class="entity-role">{{ avatarRole }}</p>
+					</section>
+				</div>
+			</div>
+
+			<!-- Columna derecha: información y acciones -->
+			<div class="data-view-right-column" [class.full-width]="!showAvatarSection">
+				<div class="data-view-card">
+					<mat-tab-group mat-stretch-tabs dynamicHeight>
+						<!-- Pestaña Información -->
+						<mat-tab>
+							<ng-template mat-tab-label>
+								<mat-icon style="color: white !important;">info</mat-icon>
+								<span style="color: white !important;">Información</span>
+							</ng-template>
+
+							<section class="info-section">
+								<h3 class="section-title">
+									<mat-icon>business</mat-icon>
+									Información {{ entityType }}
+								</h3>
+								<div class="info-grid">
+									<ng-container *ngFor="let field of dataFields">
+										<div class="info-item" *ngIf="field.visible !== false">
+											<mat-icon>{{ field.icon }}</mat-icon>
+											<div class="info-content">
+												<label>{{ field.label }}</label>
+												<p [matTooltip]="getFieldValue(field.key)">{{ getFieldValue(field.key) || 'No especificado' }}</p>
+											</div>
+										</div>
+									</ng-container>
+								</div>
+							</section>
+						</mat-tab>
+
+						<!-- Pestaña Acciones -->
+						<mat-tab>
+							<ng-template mat-tab-label>
+								<mat-icon style="color: white !important;">settings</mat-icon>
+								<span style="color: white !important;">Acciones</span>
+							</ng-template>
+							<section class="action-section">
+								<h3 class="section-title">
+									<mat-icon>edit</mat-icon>
+									Gestionar {{ entityType }}
+								</h3>
+								<div class="action-buttons">
+									<button mat-raised-button class="edit-button" (click)="onEdit.emit()"
+										[disabled]="!entityData">
+										<mat-icon>edit</mat-icon>
+										Actualizar Datos
+									</button>
+									<button *ngIf="showDeleteButton" mat-stroked-button class="delete-button" (click)="onDelete.emit()"
+										[disabled]="!entityData">
+										<mat-icon>delete</mat-icon>
+										Eliminar {{ entityType }}
+									</button>
+								</div>
+							</section>
+						</mat-tab>
+					</mat-tab-group>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

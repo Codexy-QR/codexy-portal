@@ -1,0 +1,198 @@
+<div class="register-container">
+	<!-- Elementos decorativos de fondo -->
+	<!-- <div class="background-decoration">
+		<div class="decoration-circle circle-1"></div>
+		<div class="decoration-circle circle-2"></div>
+		<div class="decoration-circle circle-3"></div>
+	</div> -->
+
+	<!-- Header -->
+	<app-initial-header [text]="'Registro'" [textMargin]="'3rem'"></app-initial-header>
+
+	<main class="main-content">
+		<div class="register-card">
+			<!-- Card Header -->
+			<div class="card-header">
+				<div class="header-icon">
+					<mat-icon>person_add</mat-icon>
+				</div>
+				<h1>Crear tu Cuenta</h1>
+				<p>Únete a nuestra comunidad hoy mismo</p>
+			</div>
+
+			<!-- Formulario -->
+			<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+				<!-- Primera fila: Nombre, Apellido, Email -->
+				<div class="form-row">
+					<!-- Nombre -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">person</mat-icon>
+							<input id="name" type="text" formControlName="name" required placeholder="Nombres"
+								minlength="3">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('name')?.hasError('required')">El nombre es requerido</span>
+							<span *ngIf="registerForm.get('name')?.hasError('minlength')">Mínimo 3 caracteres</span>
+						</div>
+					</div>
+
+					<!-- Apellido -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">person</mat-icon>
+							<input id="lastName" type="text" formControlName="lastName" required placeholder="Apellidos"
+								minlength="3">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('lastName')?.hasError('required')">El apellido es
+								requerido</span>
+							<span *ngIf="registerForm.get('lastName')?.hasError('minlength')">Mínimo 3 caracteres</span>
+						</div>
+					</div>
+
+					<!-- Email -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">email</mat-icon>
+							<input id="email" type="email" formControlName="email" required
+								placeholder="Correo electrónico">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('email')?.hasError('required')">Este campo es requerido</span>
+							<span *ngIf="registerForm.get('email')?.hasError('emailFormat')">Formato de email
+								inválido</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Segunda fila: Tipo documento, Número documento, Teléfono -->
+				<div class="form-row">
+					<!-- Tipo Documento -->
+					<div class="form-field select-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">badge</mat-icon>
+							<select id="documentType" formControlName="documentType" required>
+								<option value="" disabled selected hidden>Seleccione documento</option>
+								<option *ngFor="let doc of documentTypes" [value]="doc.value">{{doc.label}}</option>
+							</select>
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('documentType')?.invalid && registerForm.get('documentType')?.touched">
+							<mat-icon>error</mat-icon>
+							<span>Este campo es requerido</span>
+						</div>
+					</div>
+
+					<!-- Número de Documento -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">numbers</mat-icon>
+							<input id="documentNumber" type="text" formControlName="documentNumber" required
+								placeholder="Número de documento" appNumericInput [maxLength]="10">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('documentNumber')?.invalid && registerForm.get('documentNumber')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('documentNumber')?.hasError('required')">Este campo es
+								requerido</span>
+							<span *ngIf="registerForm.get('documentNumber')?.hasError('documentNumber')">{{
+								registerForm.get('documentNumber')?.getError('documentNumber') }}</span>
+						</div>
+					</div>
+
+					<!-- Teléfono Celular -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">phone</mat-icon>
+							<input id="phone" type="text" formControlName="phone" required
+								placeholder="Teléfono celular" appNumericInput [maxLength]="10">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('phone')?.hasError('required')">Este campo es requerido</span>
+							<span *ngIf="registerForm.get('phone')?.hasError('colombianPhone')">{{
+								registerForm.get('phone')?.getError('colombianPhone') }}</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Tercera fila: Usuario y Contraseña -->
+				<div class="form-row">
+					<!-- Nombre de Usuario -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">account_circle</mat-icon>
+							<input id="username" type="text" formControlName="username" required
+								placeholder="Nombre de usuario" minlength="3">
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('username')?.hasError('required')">El nombre de usuario es
+								requerido</span>
+							<span *ngIf="registerForm.get('username')?.hasError('minlength')">Mínimo 3 caracteres</span>
+						</div>
+					</div>
+
+					<!-- Contraseña -->
+					<div class="form-field">
+						<div class="input-container">
+							<mat-icon class="input-icon">lock</mat-icon>
+							<input id="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+								required placeholder="Contraseña">
+							<button type="button" class="toggle-password" (click)="hidePassword = !hidePassword"
+								[class.active]="!hidePassword">
+								<mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+							</button>
+						</div>
+						<div class="field-line"></div>
+						<div class="error-message"
+							*ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+							<mat-icon>error</mat-icon>
+							<span *ngIf="registerForm.get('password')?.hasError('required')">La contraseña es
+								requerida</span>
+							<span *ngIf="registerForm.get('password')?.hasError('minlength')">Mínimo 8 caracteres</span>
+							<span *ngIf="registerForm.get('password')?.hasError('strongPassword')">Incluir mayúsculas,
+								minúsculas, números y caracteres especiales</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Botón de registro -->
+				<div class="cnt-submit-btn">
+					<button mat-raised-button type="submit" class="submit-btn"
+						[disabled]="registerForm.invalid || isSubmitting()" [class.loading]="isSubmitting()">
+						<span class="btn-content">
+							<mat-icon *ngIf="!isSubmitting()">done</mat-icon>
+							{{ isSubmitting() ? 'Registrando...' : 'Crear Cuenta' }}
+						</span>
+					</button>
+				</div>
+
+				<!-- Enlace a login -->
+				<div class="login-section">
+					<p>¿Ya tienes cuenta?</p>
+					<a class="login-link" routerLink="/Login">
+						<mat-icon>lock_person</mat-icon>
+						Inicia sesión
+					</a>
+				</div>
+			</form>
+		</div>
+	</main>
+</div>

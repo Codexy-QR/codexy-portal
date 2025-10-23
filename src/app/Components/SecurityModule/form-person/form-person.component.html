@@ -1,0 +1,95 @@
+<form [formGroup]="formPerson" (ngSubmit)="onSubmit()" class="formulario">
+	<div class="form-grid">
+		<!-- Name -->
+		<mat-form-field appearance="outline">
+			<mat-label>Name</mat-label>
+			<input matInput formControlName="name" placeholder="Digite el Nombre">
+			<mat-error *ngIf="formPerson.get('name')?.hasError('required')">Este campo es requerido</mat-error>
+			<mat-error *ngIf="formPerson.get('name')?.hasError('minlength')">El nombre debe tener al menos 3
+				caracteres</mat-error>
+		</mat-form-field>
+
+		<!-- Last Name -->
+		<mat-form-field appearance="outline">
+			<mat-label>Last Name</mat-label>
+			<input matInput formControlName="lastName" placeholder="Digite el Apellido">
+			<mat-error *ngIf="formPerson.get('lastName')?.hasError('required')">Este campo es requerido</mat-error>
+			<mat-error *ngIf="formPerson.get('lastName')?.hasError('minlength')">El apellido debe tener al menos 3
+				caracteres</mat-error>
+		</mat-form-field>
+
+		<!-- Email -->
+		<mat-form-field appearance="outline">
+			<mat-label>Email</mat-label>
+			<input matInput type="email" formControlName="email" placeholder="ejemplo@dominio.com">
+
+			<mat-error *ngIf="formPerson.get('email')?.hasError('required')">
+				Este campo es requerido
+			</mat-error>
+
+			<mat-error *ngIf="formPerson.get('email')?.hasError('email')">
+				Error de validación estándar de Angular
+			</mat-error>
+
+			<mat-error *ngIf="formPerson.get('email')?.hasError('emailFormat')">
+				Formato de email inválido
+			</mat-error>
+		</mat-form-field>
+
+		<!-- Phone -->
+		<mat-form-field appearance="outline">
+			<mat-label>Teléfono Celular</mat-label>
+			<input matInput formControlName="phone" placeholder="Ej: 3001234567" appNumericInput  [maxLength]="10">
+
+			<mat-error *ngIf="formPerson.get('phone')?.hasError('required')">
+				Este campo es requerido
+			</mat-error>
+
+			<mat-error class="mat-error-campos" *ngIf="formPerson.get('phone')?.hasError('colombianPhone')">
+				<!-- <span matTooltip="El número debe empezar con 3 y tener exactamente 10 dígitos"
+					matTooltipPosition="above">
+					Formato inválido
+				</span> -->
+				<span>
+					{{ formPerson.get('phone')?.getError('colombianPhone') }}
+				</span>
+			</mat-error>
+		</mat-form-field>
+
+		<!-- Document Type -->
+		<mat-form-field appearance="outline">
+			<mat-label>Tipo de Documento</mat-label>
+			<mat-select formControlName="documentType">
+				<mat-option disabled>Seleccione un tipo</mat-option>
+				<mat-option *ngFor="let docType of documentTypes" [value]="docType.value">{{docType.label}}</mat-option>
+			</mat-select>
+			<mat-error *ngIf="formPerson.get('documentType')?.hasError('required')">Este campo es requerido</mat-error>
+		</mat-form-field>
+
+		<!-- Document Number -->
+		<mat-form-field appearance="outline">
+			<mat-label>Número de Documento</mat-label>
+			<input matInput formControlName="documentNumber" appNumericInput [maxLength]="10"
+				placeholder="Número de Documento">
+			<mat-error *ngIf="formPerson.get('documentNumber')?.hasError('required')">Este campo es
+				requerido</mat-error>
+			<mat-error *ngIf="formPerson.get('documentNumber')?.hasError('documentNumber')">{{ formPerson.get('documentNumber')?.getError('documentNumber') }}</mat-error>
+		</mat-form-field>
+	</div>
+
+	<!-- Toggle para Reactivar Usuario (solo visible si status es false) -->
+	<mat-slide-toggle *ngIf="showReactivarToggle" color="primary" [checked]="reactivarUsuario"
+		(change)="onToggleChange($event)">
+		Reactivar Usuario
+	</mat-slide-toggle>
+
+	<!-- Botones -->
+	<div class="button-group text-center">
+		<button mat-flat-button type="submit" [disabled]="formPerson.invalid">
+			<mat-icon>save</mat-icon> {{ isEditMode ? 'Actualizar' : 'Registrar' }}
+		</button>
+		<button mat-stroked-button type="button" (click)="onCancel()">
+			<mat-icon>cancel</mat-icon> Cancelar
+		</button>
+	</div>
+</form>

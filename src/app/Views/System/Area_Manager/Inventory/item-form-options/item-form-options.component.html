@@ -1,0 +1,128 @@
+<div class="data-view-container">
+	<!-- Header -->
+	<header class="data-view-header">
+		<button mat-icon-button class="back-button" (click)="navigateBack()">
+			<mat-icon>arrow_back</mat-icon>
+		</button>
+		<div class="header-content">
+			<h1>
+				<mat-icon>inventory</mat-icon>
+				{{ isEditMode() ? 'Editar Item' : 'Crear Nuevo Item' }}
+			</h1>
+			<p>{{ isEditMode() ? 'Actualiza la información del item' : 'Completa el formulario para agregar un nuevo item' }}</p>
+		</div>
+	</header>
+
+	<!-- Main content -->
+	<div class="data-view-content">
+		<div class="data-view-grid">
+			<!-- Left column: Form -->
+			<div class="data-view-left-column">
+				<div class="data-view-card">
+					<section class="item-representation">
+						<div class="item-icon-large">
+							<mat-icon>inventory</mat-icon>
+						</div>
+
+						<h2>Gestión de Inventario</h2>
+						<p class="item-type">Formulario de {{ isEditMode() ? 'Actualización' : 'Registro' }}</p>
+						<p class="item-description-text">
+							{{ isEditMode() ? 'Complete los campos para actualizar la información del item en el inventario.' : 'Complete todos los campos requeridos para registrar un nuevo item en el sistema de inventario.'}}
+						</p>
+					</section>
+				</div>
+			</div>
+
+			<!-- Right column: Item representation -->
+			<div class="data-view-right-column">
+				<div class="data-view-card">
+					<form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="item-form">
+						<div class="form-section">
+							<h3 class="section-title">
+								<mat-icon>description</mat-icon>
+								Información del Item
+							</h3>
+
+							<!-- Fila 1: Code y Name -->
+							<div class="form-row">
+								<!-- Código -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label class="prueba">Código</mat-label>
+									<input matInput formControlName="code" placeholder="Ej: ITM-001">
+									<mat-icon matSuffix class="icon-input">code</mat-icon>
+									<mat-error *ngIf="getFieldError('code')">
+										{{ getFieldError('code') }}
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Nombre -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Nombre</mat-label>
+									<input matInput formControlName="name" placeholder="Ej: Monitor LED 24\">
+									<mat-icon matSuffix class="icon-input">title</mat-icon>
+									<mat-error *ngIf="getFieldError('name')">
+										{{ getFieldError('name') }}
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<!-- Fila 2: Description -->
+							<div class="form-row">
+								<!-- Descripción -->
+								<mat-form-field appearance="outline" class="full-width">
+									<mat-label>Descripción</mat-label>
+									<textarea matInput formControlName="description"
+										placeholder="Descripción detallada del item..." rows="1"></textarea>
+									<mat-icon matSuffix class="icon-input">notes</mat-icon>
+									<mat-hint>{{ itemForm.get('description')?.value?.length || 0 }}/500</mat-hint>
+								</mat-form-field>
+							</div>
+
+							<!-- Fila 3: Selects (Categoría y Estado) -->
+							<div class="form-row">
+								<!-- Categoría -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Categoría</mat-label>
+									<mat-select formControlName="categoryItemId">
+										<mat-option *ngFor="let category of categories()" [value]="category.id">
+											{{ category.name }}
+										</mat-option>
+									</mat-select>
+									<mat-icon matSuffix class="icon-input">category</mat-icon>
+									<mat-error *ngIf="getFieldError('categoryItemId')">
+										{{ getFieldError('categoryItemId') }}
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Estado -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Estado</mat-label>
+									<mat-select formControlName="stateItemId">
+										<mat-option *ngFor="let state of states()" [value]="state.id">
+											{{ state.name }}
+										</mat-option>
+									</mat-select>
+									<mat-error *ngIf="getFieldError('stateItemId')">
+										{{ getFieldError('stateItemId') }}
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<!-- Botones de acción -->
+							<div class="form-actions">
+								<button mat-stroked-button type="button" (click)="navigateBack()" [disabled]="saving()">
+									<mat-icon>cancel</mat-icon>
+									Cancelar
+								</button>
+								<button mat-raised-button color="primary" type="submit"
+									[disabled]="itemForm.invalid || saving()">
+									{{ saving() ? 'Guardando...' : (isEditMode() ? 'Actualizar' : 'Crear Item') }}
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

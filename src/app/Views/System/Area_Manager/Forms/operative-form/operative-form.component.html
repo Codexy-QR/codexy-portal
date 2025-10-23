@@ -1,0 +1,139 @@
+<div class="data-view-container">
+	<!-- Header -->
+	<header class="data-view-header">
+		<button mat-icon-button class="back-button" (click)="navigateBack()">
+			<mat-icon>arrow_back</mat-icon>
+		</button>
+		<div class="header-content">
+			<h1>
+				<mat-icon>person_add</mat-icon>
+				Registrar Nuevo Operativo
+			</h1>
+			<p>Completa el formulario para registrar un nuevo operativo</p>
+		</div>
+	</header>
+
+	<!-- Main content -->
+	<div class="data-view-content">
+		<div class="data-view-grid">
+			<!-- Left column: Form -->
+			<div class="data-view-left-column">
+				<div class="data-view-card">
+					<section class="item-representation">
+						<div class="item-icon-large">
+							<mat-icon>engineering</mat-icon>
+						</div>
+
+						<h2>Gestión de Operativos</h2>
+						<p class="item-type">Formulario de Registro</p>
+						<p class="item-description-text">
+							Complete todos los campos requeridos para registrar un nuevo operativo en el sistema.
+						</p>
+					</section>
+				</div>
+			</div>
+
+			<!-- Right column: Form -->
+			<div class="data-view-right-column">
+				<div class="data-view-card">
+					<form [formGroup]="operativeForm" (ngSubmit)="onSubmit()" class="item-form">
+						<div class="form-section">
+							<h3 class="section-title">
+								<mat-icon>person</mat-icon>
+								Información Personal
+							</h3>
+
+							<!-- Primera fila: Nombre, Apellido -->
+							<div class="form-row">
+								<!-- Nombre -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Nombres</mat-label>
+									<input matInput formControlName="name" placeholder="Ej: Juan Carlos" required>
+									<mat-icon matSuffix class="icon-input">person</mat-icon>
+									<mat-error *ngIf="getFieldError('name')">
+										{{ getFieldError('name') }}
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Apellido -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Apellidos</mat-label>
+									<input matInput formControlName="lastName" placeholder="Ej: Pérez García" required>
+									<mat-icon matSuffix class="icon-input">person</mat-icon>
+									<mat-error *ngIf="getFieldError('lastName')">
+										{{ getFieldError('lastName') }}
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<!-- Tercera fila: Tipo documento, Número documento -->
+							<div class="form-row">
+								<!-- Tipo Documento -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Tipo de Documento</mat-label>
+									<mat-select formControlName="documentType" required>
+										<mat-option *ngFor="let doc of documentTypes" [value]="doc.value">
+											{{ doc.label }}
+										</mat-option>
+									</mat-select>
+									<mat-icon matSuffix class="icon-input">badge</mat-icon>
+									<mat-error *ngIf="getFieldError('documentType')">
+										{{ getFieldError('documentType') }}
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Número de Documento -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>N° de Documento</mat-label>
+									<input matInput formControlName="documentNumber" placeholder="Ej: 123456789"
+										required appNumericInput [maxLength]="10">
+									<mat-icon matSuffix class="icon-input">numbers</mat-icon>
+									<mat-error *ngIf="getFieldError('documentNumber')">
+										{{ getFieldError('documentNumber') }}
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<!-- Tercera fila: Email, Telefono -->
+							<div class="form-row">
+								<!-- Teléfono -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Teléfono Celular</mat-label>
+									<input matInput formControlName="phone" placeholder="Ej: 3123456789" required
+										appNumericInput [maxLength]="10">
+									<mat-icon matSuffix class="icon-input">phone</mat-icon>
+									<mat-error *ngIf="getFieldError('phone')">
+										{{ getFieldError('phone') }}
+									</mat-error>
+								</mat-form-field>
+
+								<!-- Email -->
+								<mat-form-field appearance="outline" class="form-field">
+									<mat-label>Email</mat-label>
+									<input matInput formControlName="email" placeholder="Ej: correo@dominio.com"
+										type="email" required>
+									<mat-icon matSuffix class="icon-input">email</mat-icon>
+									<mat-error *ngIf="getFieldError('email')">
+										{{ getFieldError('email') }}
+									</mat-error>
+								</mat-form-field>
+							</div>
+
+							<!-- Botones de acción -->
+							<div class="form-actions">
+								<button mat-stroked-button type="button" (click)="navigateBack()" [disabled]="saving()">
+									<mat-icon>cancel</mat-icon>
+									Cancelar
+								</button>
+								<button mat-raised-button color="primary" type="submit"
+									[disabled]="operativeForm.invalid || saving()">
+									{{ saving() ? 'Guardando...' : 'Registrar Operativo' }}
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

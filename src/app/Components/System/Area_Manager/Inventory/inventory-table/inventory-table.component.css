@@ -1,0 +1,157 @@
+.table-wrapper {
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 16px;
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
+
+.inventory-table {
+	width: 100%;
+	background: transparent;
+}
+
+.inventory-table th {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--color-white);
+	font-weight: 600;
+	font-size: 0.9rem;
+	padding: 1rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	text-align: center;
+}
+
+.inventory-table td {
+	padding: 1rem;
+	color: rgba(255, 255, 255, 0.8);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	text-align: center;
+
+}
+
+.inventory-row {
+	transition: all 0.2s ease;
+}
+
+.inventory-row:hover {
+	background: rgba(255, 255, 255, 0.03);
+}
+
+/* Celdas específicas */
+.code-cell .code-badge {
+	background: rgba(30, 64, 175, 0.2);
+	padding: 0.35rem 0.75rem;
+	border-radius: 8px;
+	font-size: 0.85rem;
+	color: var(--color-blue-500);
+	border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.name-cell .item-details,
+.description-cell .item-details {
+	display: flex;
+	flex-direction: column;
+}
+
+.name-cell .item-name,
+.description-cell .item-description {
+	font-weight: 500;
+	color: var(--color-white);
+}
+
+.description-cell {
+	text-align: left !important;
+}
+
+.name-cell .item-category {
+	font-size: 0.8rem;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.state-cell .state-badge {
+	padding: 0.35rem 0.75rem;
+	border-radius: 8px;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+.state-ok {
+	background: rgba(16, 185, 129, 0.1);
+	color: rgb(16, 185, 129);
+	border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.state-repair {
+	background: rgba(245, 158, 11, 0.1);
+	color: rgb(245, 158, 11);
+	border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.state-damaged {
+	background: rgba(239, 68, 68, 0.1);
+	color: rgb(239, 68, 68);
+	border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.state-lost {
+	background: rgba(107, 114, 128, 0.1);
+	color: rgb(107, 114, 128);
+	border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+/* fallback */
+.state-default {
+	background: rgba(156, 163, 175, 0.1);
+	color: rgb(156, 163, 175);
+	border: 1px solid rgba(156, 163, 175, 0.2);
+}
+
+.actions-cell {
+	text-align: center;
+}
+
+.actions-cell button {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.actions-cell button:hover {
+	color: var(--color-blue-500);
+	background: rgba(59, 130, 246, 0.1);
+}
+
+.no-data-cell {
+	padding: 3rem 1rem;
+	text-align: center;
+}
+
+.no-data-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.no-data-content mat-icon {
+	font-size: 3rem;
+	width: 3rem;
+	height: 3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.inventory-table {
+		min-width: 600px;
+	}
+
+	.table-wrapper {
+		overflow-x: auto;
+	}
+
+	.name-cell .item-details {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+}

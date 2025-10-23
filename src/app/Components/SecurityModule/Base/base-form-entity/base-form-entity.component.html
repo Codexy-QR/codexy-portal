@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="formulario">
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" placeholder="Digite el nombre" minlength="3">
+        <mat-error *ngIf="form.get('name')?.hasError('required')">Este campo es requerido</mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('minlength')">Mínimo 3 caracteres</mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="description" placeholder="Digite la descripción" minlength="5">
+        <mat-error *ngIf="form.get('description')?.hasError('required')">Este campo es requerido</mat-error>
+        <mat-error *ngIf="form.get('description')?.hasError('minlength')">Mínimo 5 caracteres</mat-error>
+    </mat-form-field>
+
+    <!-- Toggle para Reactivar Usuario (solo visible si status es false) -->
+    <mat-slide-toggle 
+        *ngIf="showReactivarToggle"
+        color="primary"
+        [checked]="reactivarUsuario"
+        (change)="onToggleChange($event)">
+        Reactivar Usuario
+    </mat-slide-toggle>
+
+    <!-- Botones -->
+    <div class="button-group text-center">
+        <button mat-flat-button type="submit" [disabled]="form.invalid">
+            <mat-icon>save</mat-icon> {{ isEditMode ? 'Actualizar' : 'Registrar' }}
+        </button>
+        <button mat-stroked-button type="button" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon> Cancelar
+        </button>
+    </div>
+</form>

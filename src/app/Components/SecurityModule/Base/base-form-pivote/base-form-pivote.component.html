@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="formulario">
+    <!-- Selects Dinámicos -->
+    <ng-container *ngFor="let field of selectFields">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-select [formControlName]="field.controlName" required>
+                <mat-option *ngFor="let option of field.options" [value]="option.id">
+                    {{ option.name }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get(field.controlName)?.invalid">
+                Campo obligatorio
+            </mat-error>
+            <mat-hint *ngIf="field.options.length === 0" class="text-danger">
+                No hay {{ field.label }} disponibles
+            </mat-hint>
+        </mat-form-field>
+    </ng-container>
+
+    <!-- Toggle para Reactivar Usuario (solo visible si status es false) -->
+    <mat-slide-toggle 
+        *ngIf="showReactivarToggle"
+        color="primary"
+        [checked]="reactivarUsuario"
+        (change)="onToggleChange($event)">
+        Reactivar Usuario
+    </mat-slide-toggle>
+
+    <!-- Botones -->
+    <div class="button-group text-center">
+        <button mat-flat-button type="submit" [disabled]="form.invalid">
+            <mat-icon>save</mat-icon> {{ isEditMode ? 'Actualizar' : 'Registrar' }}
+        </button>
+        <button mat-stroked-button type="button" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon> Cancelar
+        </button>
+    </div>
+</form>
