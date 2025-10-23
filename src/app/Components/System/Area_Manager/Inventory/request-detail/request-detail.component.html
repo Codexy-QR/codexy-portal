@@ -1,0 +1,149 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+            <h2>
+                <mat-icon>inventory_2</mat-icon>
+                Detalles de Solicitud de Cambio
+            </h2>
+            <button mat-icon-button class="close-button" (click)="closeModal()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </header>
+
+        <div class="modal-content" *ngIf="request">
+            <!-- Información General -->
+            <div class="request-info-section">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <mat-icon>calendar_today</mat-icon>
+                        <div class="info-content">
+                            <span class="info-label">Fecha del Inventario</span>
+                            <span class="info-value">{{ formatDate(request.content.inventaryDate) }}</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <mat-icon>groups</mat-icon>
+                        <div class="info-content">
+                            <span class="info-label">Grupo Operativo</span>
+                            <span class="info-value" [matTooltip]="request.content.operatingGroupName">{{ request.content.operatingGroupName }}</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <mat-icon>list_alt</mat-icon>
+                        <div class="info-content">
+                            <span class="info-label">Ítems con Diferencias</span>
+                            <span class="info-value">{{ request.content.differences.length }}</span>
+                        </div>
+                    </div>
+					<div class="info-item">
+                        <mat-icon>person_search</mat-icon>
+                        <div class="info-content">
+                            <span class="info-label">Verificador</span>
+                            <span class="info-value" [matTooltip]="request.content.checkerName">{{ request.content.checkerName }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<!-- Observaciones del Verificador -->
+            <div class="observations-section" *ngIf="request.content.checkerObservation">
+                <div class="section-header">
+                    <mat-icon>rate_review</mat-icon>
+                    <h3>Observaciones del Verificador</h3>
+                </div>
+                <div class="observations-content">
+                    <p>{{ request.content.checkerObservation }}</p>
+                </div>
+            </div>
+
+            <!-- Tabla de Diferencias -->
+            <div class="differences-section">
+                <h3>Diferencias Encontradas</h3>
+
+                <div class="table-container">
+                    <table class="differences-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre del Ítem</th>
+                                <th>Categoría</th>
+                                <th>Estado Base</th>
+                                <th>Estado en Inventario</th>
+                                <th>Cambio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let diff of request.content.differences">
+                                <td class="code-cell">
+                                    <div class="code-content">
+                                        <mat-icon>qr_code_2</mat-icon>
+                                        {{ diff.code }}
+                                    </div>
+                                </td>
+                                <td class="name-cell">{{ diff.name }}</td>
+                                <td class="category-cell">
+                                    <span class="category-badge">{{ diff.category }}</span>
+                                </td>
+                                <td class="state-cell">
+                                    <span class="state-badge base-state">{{ diff.baseState }}</span>
+                                </td>
+                                <td class="state-cell">
+                                    <span class="state-badge" [ngClass]="getStateChangeClass(diff.baseState, diff.inventaryState)">
+                                        {{ diff.inventaryState }}
+                                    </span>
+                                </td>
+                                <td class="change-cell">
+                                    <span class="change-indicator" [ngClass]="getStateChangeClass(diff.baseState, diff.inventaryState)">
+                                        <mat-icon>{{ getChangeIcon(diff.baseState, diff.inventaryState) }}</mat-icon>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resumen de Cambios -->
+            <div class="changes-summary">
+                <h4>Resumen de Cambios Propuestos</h4>
+                <div class="summary-cards">
+                    <div class="summary-card improved">
+                        <div class="summary-icon">
+                            <mat-icon>trending_up</mat-icon>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">{{ getImprovedCount() }}</div>
+                            <div class="summary-label">Mejoraron</div>
+                        </div>
+                    </div>
+                    <div class="summary-card worsened">
+                        <div class="summary-icon">
+                            <mat-icon>trending_down</mat-icon>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">{{ getWorsenedCount() }}</div>
+                            <div class="summary-label">Empeoraron</div>
+                        </div>
+                    </div>
+                    <div class="summary-card critical">
+                        <div class="summary-icon">
+                            <mat-icon>warning</mat-icon>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">{{ getCriticalCount() }}</div>
+                            <div class="summary-label">Críticos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <footer class="modal-actions">
+                <button mat-stroked-button (click)="closeModal()" class="btn-close">
+                    <mat-icon>close</mat-icon>
+                    Cerrar
+                </button>
+            </footer>
+        </div>
+    </div>
+</div>

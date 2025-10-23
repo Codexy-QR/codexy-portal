@@ -1,0 +1,9 @@
+<h2 style="text-align: center;">Editar FormModule</h2>
+
+<app-base-form-pivote
+  *ngIf="entity && selectFields.length > 0"
+    [entity]="entity"
+    [selectFields]="selectFields"
+    [cancelRoute]="'/securitymodule/FormModule'"
+    (save)="handleUpdateFormModule($event)">
+</app-base-form-pivote>

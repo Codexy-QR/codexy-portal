@@ -1,0 +1,181 @@
+.modal-container {
+	max-width: 500px;
+}
+
+.modal-description {
+	color: rgba(255, 255, 255, 0.8);
+	margin-bottom: 1.5rem;
+	line-height: 1.5;
+}
+
+.modal-description strong {
+	color: var(--color-white);
+	font-weight: 600;
+}
+
+/* Área de arrastre de archivos */
+.file-drop-area {
+	border: 2px dashed rgba(255, 255, 255, 0.3);
+	border-radius: 12px;
+	padding: 2.5rem 1.5rem;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	margin-bottom: 1.5rem;
+	background: rgba(255, 255, 255, 0.02);
+}
+
+.file-drop-area:hover {
+	border-color: var(--color-blue-400);
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.file-drop-area.dragover {
+	border-color: var(--color-blue-400);
+	background: rgba(59, 130, 246, 0.1);
+	transform: scale(1.02);
+}
+
+.upload-icon {
+	font-size: 3rem !important;
+	width: 3rem !important;
+	height: 3rem !important;
+	color: var(--color-blue-400);
+	margin-bottom: 1rem;
+}
+
+.file-drop-area p {
+	color: var(--color-white);
+	font-weight: 500;
+	margin: 0 0 0.5rem 0;
+	font-size: 1.1rem;
+}
+
+.file-types {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 0.9rem;
+}
+
+/* Archivo seleccionado */
+.selected-file {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	margin-bottom: 1.5rem;
+	animation: fadeInUp 0.3s ease;
+}
+
+.file-icon {
+	color: var(--color-blue-400);
+	font-size: 2rem !important;
+	width: 2rem !important;
+	height: 2rem !important;
+	flex-shrink: 0;
+}
+
+.file-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.file-name {
+	color: var(--color-white);
+	font-weight: 500;
+	font-size: 0.95rem;
+	word-break: break-word;
+}
+
+.file-size {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 0.8rem;
+}
+
+.remove-file-btn {
+	color: rgba(255, 255, 255, 0.6) !important;
+	transition: all 0.2s ease;
+}
+
+.remove-file-btn:hover {
+	color: var(--color-white) !important;
+	background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Botón de importar */
+.import-button {
+	background: linear-gradient(135deg, var(--color-blue-600) 0%, var(--color-blue-700) 100%) !important;
+	color: var(--color-white) !important;
+}
+
+.import-button:hover:not([disabled]) {
+	background: linear-gradient(135deg, var(--color-blue-700) 0%, var(--color-blue-800) 100%) !important;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.import-button:disabled {
+	background: rgba(255, 255, 255, 0.1) !important;
+	color: rgba(255, 255, 255, 0.4) !important;
+	cursor: not-allowed !important;
+	transform: none !important;
+	box-shadow: none !important;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+	.modal-container {
+		max-width: 90%;
+	}
+
+	.file-drop-area {
+		padding: 2rem 1rem;
+	}
+
+	.upload-icon {
+		font-size: 2.5rem !important;
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+	}
+
+	.selected-file {
+		padding: 0.75rem;
+	}
+
+	.file-icon {
+		font-size: 1.5rem !important;
+		width: 1.5rem !important;
+		height: 1.5rem !important;
+	}
+}
+
+@media (max-width: 480px) {
+	.file-drop-area p {
+		font-size: 1rem;
+	}
+
+	.modal-actions {
+		flex-direction: column;
+	}
+
+	.modal-actions button {
+		width: 100%;
+	}
+}

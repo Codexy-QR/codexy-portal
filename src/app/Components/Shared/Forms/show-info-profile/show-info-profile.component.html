@@ -1,0 +1,97 @@
+<div class="data-view-container">
+	<!-- Header -->
+	<header class="data-view-header">
+		<button mat-icon-button class="back-button" [routerLink]="backRoute">
+			<mat-icon>arrow_back</mat-icon>
+		</button>
+		<div class="header-content">
+			<h1>
+				<mat-icon>{{ headerIcon }}</mat-icon>
+				{{ headerTitle }}
+			</h1>
+			<p>{{ headerSubtitle }}</p>
+		</div>
+	</header>
+
+	<!-- Main content -->
+	<div class="data-view-content">
+		<div class="data-view-grid">
+			<!-- Left column: avatar -->
+			<div class="data-view-left-column">
+				<div class="data-view-card">
+					<section class="avatar-section">
+						<div class="avatar-badge">
+							<mat-icon>account_circle</mat-icon>
+							<span>Perfil</span>
+						</div>
+						<div class="entity-avatar-large">
+							<span class="avatar-initials">{{ avatarInitials }}</span>
+						</div>
+						<h2>{{ avatarTitle }}</h2>
+						<p class="entity-email">{{ avatarSubtitle }}</p>
+						<p class="entity-role">{{ avatarRole }}</p>
+					</section>
+				</div>
+			</div>
+
+			<!-- Right column: information and actions -->
+			<div class="data-view-right-column">
+				<div class="data-view-card">
+					<mat-tab-group mat-stretch-tabs dynamicHeight>
+						<!-- Information Tab -->
+						<mat-tab>
+							<ng-template mat-tab-label>
+								<mat-icon style="color: white !important;">info</mat-icon>
+								<span style="color: white !important;">Información</span>
+							</ng-template>
+
+							<section class="info-section">
+								<h3 class="section-title">
+									<mat-icon>person</mat-icon>
+									Información Personal
+								</h3>
+								<div class="info-grid">
+									<ng-container *ngFor="let field of profileFields">
+										<div class="info-item" *ngIf="field.visible !== false">
+											<mat-icon>{{ field.icon }}</mat-icon>
+											<div class="info-content">
+												<label>{{ field.label }}</label>
+												<p>{{ getFieldValue(field.key) || 'No especificado' }}</p>
+											</div>
+										</div>
+									</ng-container>
+								</div>
+							</section>
+						</mat-tab>
+
+						<!-- Actions Tab -->
+						<mat-tab>
+							<ng-template mat-tab-label>
+								<mat-icon style="color: white !important;">settings</mat-icon>
+								<span style="color: white !important;">Acciones</span>
+							</ng-template>
+							<section class="action-section">
+								<h3 class="section-title">
+									<mat-icon>edit</mat-icon>
+									Gestionar Perfil
+								</h3>
+								<div class="action-buttons">
+									<button mat-raised-button class="edit-button" (click)="onEdit.emit()"
+										[disabled]="!profileData">
+										<mat-icon>edit</mat-icon>
+										Actualizar Datos
+									</button>
+									<button mat-stroked-button class="password-button" (click)="onChangePassword.emit()"
+										[disabled]="!profileData">
+										<mat-icon>lock</mat-icon>
+										Cambiar Contraseña
+									</button>
+								</div>
+							</section>
+						</mat-tab>
+					</mat-tab-group>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

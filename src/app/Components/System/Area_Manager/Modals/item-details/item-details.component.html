@@ -1,0 +1,103 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>inventory</mat-icon>
+				Detalles del Item: {{itemData.code}}
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content">
+			<div class="details-container" *ngIf="itemData">
+				<!-- Sección de información en formato de formulario -->
+				<div class="form-row">
+					<!-- Código -->
+					<div class="custom-input-group">
+						<input id="modalCode" type="text" [value]="itemData.code" readonly>
+						<label for="modalCode">Código</label>
+					</div>
+
+					<!-- Nombre -->
+					<div class="custom-input-group">
+						<input id="modalName" type="text" [value]="itemData.name" readonly>
+						<label for="modalName">Nombre</label>
+					</div>
+				</div>
+
+				<!-- Descripción (ocupará toda la fila) -->
+				<div class="form-row single-column">
+					<div class="custom-input-group">
+						<input id="modalDescription" type="text" [value]="itemData.description || 'Sin descripción'"
+							readonly>
+						<label for="modalDescription">Descripción</label>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<!-- Categoría -->
+					<div class="custom-input-group">
+						<input id="modalCategory" type="text" [value]="itemData.categoryName" readonly>
+						<label for="modalCategory">Categoría</label>
+					</div>
+
+					<!-- Estado -->
+					<div class="custom-input-group">
+						<input id="modalState" type="text" [value]="itemData.stateItemName" readonly>
+						<label for="modalState">Estado</label>
+					</div>
+				</div>
+
+				<div class="form-row single-column">
+					<!-- Zona -->
+					<div class="custom-input-group">
+						<input id="modalZone" type="text" [value]="itemData.zoneName" readonly>
+						<label for="modalZone">Zona</label>
+					</div>
+				</div>
+
+				<!-- Código QR -->
+				<div class="form-row single-column" *ngIf="itemData.qrPath">
+					<h3 style="margin: 1rem 0 0.5rem; color: var(--color-white);">
+						<mat-icon>qr_code</mat-icon>
+						Código QR
+					</h3>
+					<div class="qr-container">
+						<div class="qr-image-wrapper">
+							<!-- Estado de carga -->
+							<div class="qr-loading" *ngIf="qrLoading()">
+								<mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+								<span>Cargando QR...</span>
+							</div>
+
+							<!-- Imagen QR -->
+							<img #qrImage [src]="itemData.qrPath" alt="Código QR del item" class="qr-image"
+								[class.hidden]="qrLoading() || qrError()">
+
+							<!-- Estado de error -->
+							<div class="qr-loading error" *ngIf="qrError() && !qrLoading()">
+								<mat-icon>error_outline</mat-icon>
+								<span>Error al cargar el QR</span>
+							</div>
+						</div>
+
+						<button mat-stroked-button (click)="downloadQR()" class="download-qr-btn"
+							*ngIf="!qrLoading() && !qrError()" [disabled]="isDownloading()">
+							<mat-icon>download</mat-icon>
+							{{ isDownloading() ? 'Descargando...' : 'Descargar QR' }}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="modal-actions-item">
+			<button mat-raised-button color="primary" (click)="closeModal()" class="close-btn">
+				<mat-icon>close</mat-icon>
+				Cerrar
+			</button>
+		</footer>
+	</div>
+</div>

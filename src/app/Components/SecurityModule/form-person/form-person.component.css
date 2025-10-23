@@ -1,0 +1,58 @@
+.formulario {
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.mat-error-campos{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.button-group button {
+    flex: 1;
+}
+
+button mat-icon {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mat-error {
+    font-size: 12px !important;
+}
+
+
+/* Campos no editables */
+.readonly {
+    background-color: #f3f3f3;
+    pointer-events: none;
+    opacity: 0.7;
+}

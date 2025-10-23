@@ -1,0 +1,21 @@
+.modal-container {
+	max-width: 500px;
+}
+
+.custom-input-group input {
+	padding-left: 1rem;
+}
+
+
+/* Estilos específicos para inputs de fecha/hora */
+input[type="datetime-local"] {
+	font-family: inherit;
+	padding: 0.75rem 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.modal-container {
+		max-width: 95%;
+	}
+}

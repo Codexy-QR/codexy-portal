@@ -1,0 +1,132 @@
+<div class="layout-container">
+	<app-initial-header [text]="''" [textMargin]="'-4rem'" [showSidebarToggle]="true"
+		(toggleSidebar)="onToggleSidebar()" [isFixed]="true"></app-initial-header>
+
+	<app-sidebar-initial [isExpanded]="isSidebarExpanded" (toggleSidebar)="onToggleSidebar()">
+	</app-sidebar-initial>
+
+	<div class="main-content" [class.with-sidebar]="isSidebarExpanded">
+
+		<!-- Hero Section -->
+		<section class="hero-section">
+			<div class="hero-content">
+				<div class="hero-text">
+					<h1 class="hero-title">
+						<span class="gradient-text">Revoluciona</span> tu gestión
+						<span class="gradient-text">de inventario</span>
+					</h1>
+					<p class="hero-subtitle">Tecnología QR inteligente para un control total de tu inventario en tiempo
+						real</p>
+					<div class="hero-actions">
+						<button class="btn-empezar" (click)="expandSidebar()">
+							Empezar Ahora
+							<svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+								<path fill-rule="evenodd"
+									d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+									clip-rule="evenodd"></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="hero-visual">
+					<div class="floating-card">
+						<mat-icon>qr_code_2</mat-icon>
+						<span>Escaneo instantáneo</span>
+					</div>
+					<div class="floating-card">
+						<mat-icon>trending_up</mat-icon>
+						<span>Analytics en tiempo real</span>
+					</div>
+				</div>
+			</div>
+			<div class="scroll-indicator">
+				<mat-icon>keyboard_arrow_down</mat-icon>
+			</div>
+		</section>
+
+		<!-- Stats Section -->
+		<section class="stats-section">
+			<div class="stats-container">
+				<div class="stat-item">
+					<div class="stat-number">99.9%</div>
+					<div class="stat-label">Precisión</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-number">+500</div>
+					<div class="stat-label">Productos gestionados</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-number">24/7</div>
+					<div class="stat-label">Disponibilidad</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-number">+50</div>
+					<div class="stat-label">Clientes satisfechos</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Carrusel Section -->
+		<section class="carousel-section">
+			<div class="section-header">
+				<h2>Descubre cómo funciona</h2>
+				<p>Una experiencia intuitiva y poderosa para tu negocio</p>
+			</div>
+			<app-carousel></app-carousel>
+		</section>
+
+		<!-- Features Section -->
+		<section class="features-section">
+			<div class="section-header">
+				<h2>Potencia tu gestión con features increíbles</h2>
+				<p>Todo lo que necesitas para un control inventarial perfecto</p>
+			</div>
+			<div class="features-grid">
+				<div class="feature-card">
+					<div class="feature-icon">
+						<div class="icon-wrapper">
+							<mat-icon>qr_code_scanner</mat-icon>
+						</div>
+					</div>
+					<h3>Escaneo QR Avanzado</h3>
+					<p>Registra y consulta productos al instante con nuestra tecnología de escaneo ultra rápida</p>
+					<ul class="feature-list">
+						<li><mat-icon>check_circle</mat-icon> Escaneo en segundos</li>
+						<li><mat-icon>check_circle</mat-icon> Sin conexión a internet</li>
+						<li><mat-icon>check_circle</mat-icon> Historial completo</li>
+					</ul>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<div class="icon-wrapper">
+							<mat-icon>bar_chart</mat-icon>
+						</div>
+					</div>
+					<h3>Analytics Inteligentes</h3>
+					<p>Dashboard interactivo con métricas clave para tomar decisiones basadas en datos</p>
+					<ul class="feature-list">
+						<li><mat-icon>check_circle</mat-icon> Reportes automáticos</li>
+						<li><mat-icon>check_circle</mat-icon> Tendencia de inventario</li>
+						<li><mat-icon>check_circle</mat-icon> Alertas predictivas</li>
+					</ul>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<div class="icon-wrapper">
+							<mat-icon>sync</mat-icon>
+						</div>
+					</div>
+					<h3>Sincronización en Tiempo Real</h3>
+					<p>Actualizaciones instantáneas across todos tus dispositivos y ubicaciones</p>
+					<ul class="feature-list">
+						<li><mat-icon>check_circle</mat-icon> Multi-dispositivo</li>
+						<li><mat-icon>check_circle</mat-icon> Backup automático</li>
+						<li><mat-icon>check_circle</mat-icon> Sync instantáneo</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+<div class="dashboard-container">
+	<app-loader [loading]="loading" loadingMessage="Cargando Dashboard..." [fullScreen]="true" [diameter]="70"
+		color="primary">
+	</app-loader>
+
+	<div *ngIf="error && !loading" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage }}</p>
+		<button mat-raised-button color="primary" (click)="handleRetry()">Reintentar</button>
+	</div>
+
+	<ng-container *ngIf="!loading && !error">
+		<!-- Header Section -->
+		<div class="dashboard-header">
+			<h1>Dashboard de Administración</h1>
+			<p>Visión general del sistema de inventario</p>
+		</div>
+
+		<!-- KPI Cards Section -->
+		<div class="kpi-grid">
+			<app-kpi-card icon="store" [value]="totalSucursales" label="Sucursales"></app-kpi-card>
+			<app-kpi-card icon="map" [value]="totalZonas" label="Zonas"></app-kpi-card>
+			<app-kpi-card icon="inventory_2" [value]="totalItems" label="Ítems Totales"></app-kpi-card>
+			<app-kpi-card icon="people" [value]="totalUsuarios" label="Personal Activo"></app-kpi-card>
+		</div>
+
+		<!-- Grid para gráficos y distribuciones -->
+		<div class="dashboard-grid">
+			<!-- Gráfico de categorías -->
+			<div class="grid-item full-width">
+				<div class="section">
+					<app-category-chart [data]="itemsPorCategoria"></app-category-chart>
+				</div>
+			</div>
+
+			<!-- Distribución de usuarios -->
+			<div class="grid-item">
+				<div class="section">
+					<h2>Distribución de Usuarios por Rol</h2>
+					<div class="role-distribution">
+						<div class="role-item" *ngFor="let role of getRoleKeys()">
+							<div class="role-info">
+								<mat-icon>{{ getRoleIcon(role) }}</mat-icon>
+								<span class="role-name">{{ getRoleLabel(role) }}</span>
+							</div>
+							<span class="role-count">{{ usuariosPorRol[role] }}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Gráfico de estados -->
+			<div class="grid-item">
+				<div class="section">
+					<app-status-chart [data]="itemsPorEstado"></app-status-chart>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+</div>
