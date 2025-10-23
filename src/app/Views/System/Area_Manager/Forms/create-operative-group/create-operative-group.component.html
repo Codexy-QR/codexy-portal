@@ -1,0 +1,107 @@
+<div class="register-zone-container">
+	<div class="form-wrapper">
+		<!-- Panel lateral con información -->
+		<div class="form-sidebar">
+			<div class="sidebar-content">
+				<div class="creation-icon">
+					<mat-icon>diversity_3</mat-icon>
+					<h2>Crear Grupo Operativo</h2>
+				</div>
+
+				<div class="step-indicator">
+					<div class="step active">
+						<div class="step-number">
+							<mat-icon>info</mat-icon>
+						</div>
+						<div class="step-info">
+							<h3>Datos del Grupo</h3>
+							<p>Información básica del grupo operativo</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Contenido principal del formulario -->
+		<div class="form-content">
+			<div class="contenedor-formulario">
+				<form [formGroup]="operativeGroupForm" (ngSubmit)="onSubmit()" class="formulario">
+					<!-- Paso único: Datos del Grupo Operativo -->
+					<div class="form-step">
+						<h2 class="section-title">
+							<mat-icon>group_add</mat-icon>
+							Datos del Grupo Operativo
+						</h2>
+
+						<div class="step-description">
+							Complete la información básica del grupo operativo
+						</div>
+
+						<div class="form-row">
+							<!-- Nombre del Grupo -->
+							<div class="custom-input-group">
+								<input id="groupName" type="text" formControlName="groupName" required placeholder=" "
+									minlength="3">
+								<label for="groupName">Nombre del Grupo</label>
+								<div class="error-message"
+									*ngIf="operativeGroupForm.get('groupName')?.invalid && operativeGroupForm.get('groupName')?.touched">
+									<span *ngIf="operativeGroupForm.get('groupName')?.hasError('required')">El campo es
+										requerido</span>
+									<span *ngIf="operativeGroupForm.get('groupName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Fecha de Inicio -->
+							<div class="custom-input-group">
+								<input id="dateStart" type="datetime-local" formControlName="dateStart" required>
+								<label for="dateStart">Fecha de Inicio</label>
+								<div class="error-message"
+									*ngIf="operativeGroupForm.get('dateStart')?.invalid && operativeGroupForm.get('dateStart')?.touched">
+									<span *ngIf="operativeGroupForm.get('dateStart')?.hasError('required')">La fecha de
+										inicio es requerida</span>
+									<span *ngIf="operativeGroupForm.get('dateStart')?.hasError('invalidDate')">Fecha
+										inválida</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form">
+							<!-- Fecha de Fin -->
+							<div class="custom-input-group">
+								<input id="dateEnd" type="datetime-local" formControlName="dateEnd" required>
+								<label for="dateEnd">Fecha de Fin</label>
+								<div class="error-message"
+									*ngIf="operativeGroupForm.get('dateEnd')?.invalid && operativeGroupForm.get('dateEnd')?.touched">
+									<span *ngIf="operativeGroupForm.get('dateEnd')?.hasError('required')">La fecha de
+										fin es requerida</span>
+									<span *ngIf="operativeGroupForm.get('dateEnd')?.hasError('invalidDate')">Fecha
+										inválida</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Mensaje de validación de fechas -->
+						<div class="error-message" *ngIf="operativeGroupForm.hasError('dateRangeInvalid')">
+							<span>La fecha de fin debe ser posterior a la fecha de inicio</span>
+						</div>
+
+						<div class="step-actions">
+							<button type="button" class="cancel-btn" (click)="onCancel()">
+								<mat-icon>arrow_back</mat-icon>
+								Cancelar
+							</button>
+
+							<button mat-raised-button type="submit"
+								[disabled]="operativeGroupForm.invalid || isSubmit()">
+								{{ isSubmit() ? 'Creando...' : 'Crear Grupo' }}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

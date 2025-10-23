@@ -1,0 +1,155 @@
+<div class="layout-container">
+	<main class="main-content">
+		<div class="profile-container">
+			<!-- Header -->
+			<header class="profile-header">
+				<button mat-icon-button class="back-button" (click)="goToBack()">
+					<mat-icon>arrow_back</mat-icon>
+				</button>
+				<div class="header-content">
+					<h1>
+						<mat-icon>person</mat-icon>
+						Mi Perfil
+					</h1>
+					<p>Gestiona tu información personal y seguridad</p>
+				</div>
+			</header>
+
+			<!-- Contenido principal -->
+			<div class="profile-content">
+				<div class="profile-grid">
+
+					<!-- Columna izquierda: avatar -->
+					<div class="profile-left-column">
+						<div class="profile-card">
+							<section class="avatar-section">
+								<div class="avatar-badge">
+									<mat-icon>account_circle</mat-icon>
+									<span>Perfil</span>
+								</div>
+								<div class="user-avatar-large">
+									<span class="avatar-initials">{{ getUserInitials() }}</span>
+								</div>
+								<h2>{{ user()?.name }} {{ user()?.lastName }}</h2>
+								<p class="user-email">{{ user()?.email }}</p>
+								<p class="user-role">{{ getFormattedRole() }}</p>
+							</section>
+						</div>
+					</div>
+
+					<div class="profile-right-column">
+						<div class="profile-card">
+							<mat-tab-group mat-stretch-tabs dynamicHeight>
+								<!-- Pestaña Información Personal -->
+								<mat-tab>
+									<ng-template mat-tab-label>
+										<mat-icon style="color: white !important;">info</mat-icon>
+										<span style="color: white !important;">Información</span>
+									</ng-template>
+
+									<section class="user-info-section">
+										<h3 class="section-title">
+											<mat-icon>person</mat-icon>
+											Información Personal
+										</h3>
+										<div class="info-grid">
+											<div class="info-item">
+												<mat-icon>person</mat-icon>
+												<div class="info-content">
+													<label>Nombres</label>
+													<p>{{ user()?.name || 'No especificado' }}</p>
+												</div>
+											</div>
+											<div class="info-item">
+												<mat-icon>person</mat-icon>
+												<div class="info-content">
+													<label>Apellidos</label>
+													<p>{{ user()?.lastName || 'No especificado' }}</p>
+												</div>
+											</div>
+											<div class="info-item">
+												<mat-icon>email</mat-icon>
+												<div class="info-content">
+													<label>Correo Electrónico</label>
+													<p>{{ user()?.email || 'No especificado' }}</p>
+												</div>
+											</div>
+											<div class="info-item">
+												<mat-icon>phone</mat-icon>
+												<div class="info-content">
+													<label>Teléfono Celular</label>
+													<p>{{ user()?.phone || 'No especificado' }}</p>
+												</div>
+											</div>
+											<div class="info-item">
+												<mat-icon>badge</mat-icon>
+												<div class="info-content">
+													<label>Tipo Documento</label>
+													<p>{{ getDocumentLabel(user()?.documentType) || 'No especificado' }}
+													</p>
+												</div>
+											</div>
+											<div class="info-item">
+												<mat-icon>numbers</mat-icon>
+												<div class="info-content">
+													<label>Número Documento</label>
+													<p>{{ user()?.documentNumber || 'No especificado' }}</p>
+												</div>
+											</div>
+											<!-- <div class="info-item">
+												<mat-icon>calendar_today</mat-icon>
+												<div class="info-content">
+													<label>Último acceso</label>
+													<p>{{ lastLogin() | date:'medium' }}</p>
+												</div>
+											</div> -->
+										</div>
+									</section>
+								</mat-tab>
+
+								<!-- Pestaña Acciones -->
+								<mat-tab>
+									<ng-template mat-tab-label>
+										<mat-icon style="color: white !important;">settings</mat-icon>
+										<span style="color: white !important;">Acciones</span>
+									</ng-template>
+									<section class="action-section">
+										<h3 class="section-title">
+											<mat-icon>edit</mat-icon>
+											Gestionar Perfil
+										</h3>
+										<div class="action-buttons">
+											<button mat-raised-button class="edit-button" (click)="openEditModal()"
+												[disabled]="!user()">
+												<mat-icon>edit</mat-icon>
+												Actualizar Datos
+											</button>
+											<button mat-stroked-button class="password-button"
+												(click)="openPasswordModal()" [disabled]="!user()">
+												<mat-icon>lock</mat-icon>
+												Cambiar Contraseña
+											</button>
+										</div>
+									</section>
+								</mat-tab>
+							</mat-tab-group>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</div>
+
+<!-- Modales (sin cambios) -->
+@if (isEditModalOpen()) {
+<app-admin-edit-profile-modal [user]="user()!" [isOpen]="isEditModalOpen()" (onClose)="closeEditModal()"
+	(onSave)="onProfileUpdated($event)">
+</app-admin-edit-profile-modal>
+}
+
+@if (isPasswordModalOpen()) {
+<app-change-password-modal [isOpen]="isPasswordModalOpen()" (onClose)="closePasswordModal()"
+	(onSuccess)="onPasswordChanged()">
+</app-change-password-modal>
+}

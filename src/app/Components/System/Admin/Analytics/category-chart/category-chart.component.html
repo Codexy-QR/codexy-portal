@@ -1,0 +1,8 @@
+<div class="chart-container">
+	<canvas *ngIf="hasData" #chartCanvas></canvas>
+	<div *ngIf="!hasData" class="coming-soon">
+		<mat-icon>insights</mat-icon>
+		<p>No hay datos disponibles para analizar.</p>
+		<p class="info">Empieza tu Gestión de Inventario</p>
+	</div>
+</div>

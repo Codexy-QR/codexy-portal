@@ -1,0 +1,72 @@
+<form [formGroup]="formUser" (ngSubmit)="onSubmit()" class="formulario">
+    <!-- Username -->
+    <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" required>
+        <mat-error *ngIf="formUser.get('username')?.hasError('required')">
+            El nombre de usuario es requerido
+        </mat-error>
+        <mat-error *ngIf="formUser.get('username')?.hasError('minlength')">
+            Mínimo 3 caracteres
+        </mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field appearance="outline" style="display: block; margin-bottom: 0.5rem;">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <!-- Boton Ver Contraseña -->
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Mostrar contraseña'" type="button">
+            <mat-icon class="mat-icon-view">
+                {{hidePassword ? 'visibility_off' : 'visibility'}}
+            </mat-icon>
+        </button>
+        <!-- Validaciones -->
+        <mat-error *ngIf="formUser.get('password')?.hasError('required')">
+            La contraseña es requerida
+        </mat-error>
+        <mat-error *ngIf="formUser.get('password')?.hasError('minlength')">
+            Mínimo 8 caracteres
+        </mat-error>
+        <mat-error class="mat-error-password" *ngIf="formUser.get('password')?.hasError('strongPassword')">
+            <span matTooltip="La contraseña debe incluir mayúsculas, minúsculas, números y caracteres especiales"
+                matTooltipPosition="above">
+                La contraseña debe incluir mayúsculas, minúsculas, números y caracteres especiales
+            </span>
+        </mat-error>
+    </mat-form-field>
+
+    <!-- Selector de Persona (solo en creación) -->
+    <mat-form-field appearance="outline" *ngIf="!isEditMode">
+        <mat-label>Persona</mat-label>
+        <mat-select formControlName="personId" required>
+            <mat-option *ngFor="let p of persons" [value]="p.id">{{ p.name }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formUser.get('personId')?.invalid">
+            Selecciona una persona
+        </mat-error>
+        <mat-hint *ngIf="!isEditMode && noPersonsAvailable" class="text-danger">
+            No hay personas disponibles
+        </mat-hint>
+    </mat-form-field>
+
+    <!-- Toggle para Reactivar Entidad (solo visible si status es false) -->
+    <mat-slide-toggle 
+        *ngIf="showReactivarToggle"
+        color="primary"
+        [checked]="reactivarUsuario"
+        (change)="onToggleChange($event)">
+        Reactivar Usuario
+    </mat-slide-toggle>
+
+    <!-- Botones -->
+    <div class="button-group">
+        <button mat-flat-button type="submit" [disabled]="formUser.invalid">
+            <mat-icon>save</mat-icon> {{ isEditMode ? 'Actualizar' : 'Registrar' }}
+        </button>
+        <button mat-stroked-button type="button" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon> Cancelar
+        </button>
+    </div>
+</form>

@@ -1,0 +1,15 @@
+<mat-toolbar class="header" [class.fixed]="isFixed">
+	<!-- Botón condicional -->
+	<button *ngIf="showSidebarToggle" mat-icon-button class="sidebar-toggle" (click)="onToggleSidebar()">
+		<mat-icon>menu</mat-icon>
+	</button>
+	<img src="/img/Logo.png" alt="Logo Codexy" class="header-logo" [routerLink]="redirectUrl" routerLinkActive="active"
+		style="cursor: pointer;">
+
+
+	<div class="center">
+		<span class="text" [ngStyle]="{'margin-left': textMargin}">{{ text }}</span>
+	</div>
+
+	<span class="title">Codexy</span>
+</mat-toolbar>

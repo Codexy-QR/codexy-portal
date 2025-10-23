@@ -1,0 +1,16 @@
+<div class="layout-container" [class.sidebar-expanded]="isSidebarExpanded">
+	<app-area-manager-header
+		(toggleSidebar)="onToggleSidebar()"
+		[redirectUrl]="'/subadmin/dashboard'"
+		>
+	</app-area-manager-header>
+
+	<app-area-manager-sidebar
+		[isExpanded]="isSidebarExpanded"
+		(toggleSidebar)="onToggleSidebar()">
+	</app-area-manager-sidebar>
+
+	<div class="main-content">
+		<router-outlet></router-outlet>
+	</div>
+</div>

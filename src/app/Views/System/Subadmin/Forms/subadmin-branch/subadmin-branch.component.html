@@ -1,0 +1,33 @@
+<div class="layout-container">
+    <main class="main-content">
+        <app-show-info-edification
+            [entityData]="branch"
+            [entityType]="'Sucursal'"
+            [dataFields]="branchFields"
+			[showDeleteButton]="true"
+            [backRoute]="'/subadmin/dashboard'"
+            [headerIcon]="'business'"
+            [headerTitle]="'Datos de Sucursal'"
+            [headerSubtitle]="'Gestión de información empresarial'"
+            [avatarInitials]="getCompanyInitials()"
+            [avatarTitle]="branch?.name || 'Empresa'"
+            [avatarSubtitle]="branch?.phone || 'Correo electrónico'"
+            [avatarRole]="branch?.companyName || 'Industria'"
+            (onEdit)="openEditModal()"
+            (onDelete)="openDeleteModal()">
+        </app-show-info-edification>
+    </main>
+</div>
+
+<!-- Modal de edición -->
+@if (isEditModalOpen()) {
+<app-update-info-edification
+    [entityData]="branch"
+    [isOpen]="isEditModalOpen()"
+    [entityType]="'Sucursal'"
+    [editFields]="editFields"
+    [saveService]="saveBranch.bind(this)"
+    (onClose)="closeEditModal()"
+    (onSave)="onCompanyUpdated($event)">
+</app-update-info-edification>
+}

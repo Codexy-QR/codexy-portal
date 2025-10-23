@@ -1,0 +1,107 @@
+.global-filters {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
+	padding: 1.5rem;
+	background: rgba(255, 255, 255, 0.03);
+	border-radius: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	align-items: center;
+}
+
+.date-filters {
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.date-filter {
+	min-width: 200px;
+}
+
+.date-filter .mat-mdc-form-field {
+	width: 100%;
+}
+
+.date-filter mat-label {
+	color: var(--color-white);
+}
+
+.date-filter mat-select {
+	color: var(--color-white);
+}
+
+.date-filter input {
+	color: var(--color-white);
+}
+
+.date-filter mat-datepicker-toggle-default-icon {
+	fill: var(--color-white);
+}
+
+.status-filter {
+	min-width: 250px;
+}
+
+.filter-actions {
+	display: flex;
+	gap: 0.5rem;
+	align-items: flex-start;
+	margin-left: auto;
+}
+
+.apply-filters-btn,
+.clear-filters-btn {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.export-actions {
+	display: flex;
+	gap: 0.5rem;
+	margin-left: auto;
+}
+
+.export-btn {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* Responsive para filtros */
+@media (max-width: 768px) {
+	.filter-row {
+		flex-direction: column;
+	}
+
+	.filter-actions {
+		margin-left: 0;
+		width: 100%;
+	}
+
+	.date-filters {
+		width: 100%;
+	}
+
+	.status-filter {
+		width: 100%;
+	}
+
+	.global-filters {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.export-actions {
+		flex-wrap: wrap;
+	}
+}

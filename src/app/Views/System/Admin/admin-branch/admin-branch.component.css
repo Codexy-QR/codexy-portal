@@ -1,0 +1,124 @@
+.zones-section {
+	margin-bottom: 3rem;
+}
+
+.zones-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.zones-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 1.5rem;
+	width: 100%;
+}
+
+.zone-card {
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 12px;
+	padding: 1.5rem;
+	transition: all 0.3s ease;
+	color: var(--color-white);
+}
+
+.zone-card:hover {
+	transform: translateY(-2px);
+	border-color: rgba(102, 126, 234, 0.3);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.zone-header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.zone-icon {
+	color: var(--color-blue-400);
+	font-size: 1.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.zone-name {
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin: 0;
+}
+
+.zone-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.zone-detail {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9rem;
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.zone-detail mat-icon {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+	color: var(--color-blue-400);
+}
+
+/* Acciones específicas de sucursal */
+.actions-section {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+.delete-btn {
+	display: none;
+	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 0.75rem 1.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* RESPONSIVE ESPECÍFICO SUCURSAL */
+@media (max-width: 968px) {
+	.zones-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.zones-header {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.actions-section {
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 480px) {
+	.zone-card {
+		padding: 1rem;
+	}
+}

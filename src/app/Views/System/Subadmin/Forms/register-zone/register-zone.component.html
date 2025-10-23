@@ -1,0 +1,211 @@
+<div class="register-zone-container">
+	<div class="form-wrapper">
+		<!-- Panel lateral con información -->
+		<div class="form-sidebar">
+			<div class="sidebar-content">
+				<div class="creation-icon">
+					<mat-icon>add_location_alt</mat-icon>
+					<h2>Crear Nueva Zona</h2>
+				</div>
+
+				<div class="step-indicator">
+					<div class="step" [class.active]="currentStep() === 0">
+						<div class="step-number">1</div>
+						<div class="step-info">
+							<h3>Datos de la Zona</h3>
+							<p>Información Básica de la Zona</p>
+						</div>
+					</div>
+
+					<div class="step" [class.active]="currentStep() === 1">
+						<div class="step-number">2</div>
+						<div class="step-info">
+							<h3>Enc. Zona</h3>
+							<p>Datos del Responsable</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Contenido principal del formulario -->
+		<div class="form-content">
+			<div class="contenedor-formulario">
+				<form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="formulario">
+					<!-- Paso 1: Datos de Zona -->
+					<div class="form-step" *ngIf="currentStep() === 0">
+						<h2 class="section-title">
+							<mat-icon>map</mat-icon>
+							Datos de la Zona
+						</h2>
+
+						<div class="step-description">
+							Complete la Información Básica de la Zona
+						</div>
+
+						<div class="form-row">
+							<!-- Nombre de Zona -->
+							<div class="custom-input-group">
+								<input id="zoneName" type="text" formControlName="zoneName" required placeholder=" "
+									minlength="3">
+								<label for="zoneName">Nombre de la Zona</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('zoneName')?.invalid && branchForm.get('zoneName')?.touched">
+									<span *ngIf="branchForm.get('zoneName')?.hasError('required')">El campo
+										requerido</span>
+									<span *ngIf="branchForm.get('zoneName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Descripcion de Zona -->
+							<div class="custom-input-group">
+								<input id="zoneDescription" type="text" formControlName="zoneDescription"
+									placeholder=" ">
+								<label for="zoneDescription">Descripción de la Zona</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('zoneDescription')?.invalid && branchForm.get('zoneDescription')?.touched">
+									<span *ngIf="branchForm.get('zoneDescription')?.hasError('minlength')">Mínimo 5
+										caracteres</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="step-actions">
+							<button type="button" class="cancel-btn" (click)="onCancel()">
+								<mat-icon>arrow_back</mat-icon>
+								Cancelar
+							</button>
+
+							<button type="button" class="next-btn" (click)="nextStep()" [disabled]="!isStepValid(0)">
+								Siguiente
+								<mat-icon>arrow_forward</mat-icon>
+							</button>
+						</div>
+					</div>
+
+					<!-- Paso 2: Datos del Subadministrador -->
+					<div class="form-step" *ngIf="currentStep() === 1">
+						<h2 class="section-title">
+							<mat-icon>admin_panel_settings</mat-icon>
+							Datos del Enc. Zona
+						</h2>
+
+						<div class="step-description">
+							Complete la Información del Encargado de la Zona
+						</div>
+
+						<div class="form-row">
+							<!-- Nombre -->
+							<div class="custom-input-group">
+								<input id="encZoneName" type="text" formControlName="encZoneName" required
+									placeholder=" " minlength="3">
+								<label for="encZoneName">Nombre</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('encZoneName')?.invalid && branchForm.get('encZoneName')?.touched">
+									<span *ngIf="branchForm.get('encZoneName')?.hasError('required')">El campo es
+										requerido</span>
+									<span *ngIf="branchForm.get('encZoneName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+
+							<!-- Apellido -->
+							<div class="custom-input-group">
+								<input id="encZoneLastName" type="text" formControlName="encZoneLastName" required
+									placeholder=" " minlength="3">
+								<label for="encZoneLastName">Apellidos</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('encZoneLastName')?.invalid && branchForm.get('encZoneLastName')?.touched">
+									<span *ngIf="branchForm.get('encZoneLastName')?.hasError('required')">El apellido es
+										requerido</span>
+									<span *ngIf="branchForm.get('encZoneLastName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Tipo de Documento -->
+							<div class="custom-select-group">
+								<select id="encZoneDocumentType" formControlName="encZoneDocumentType" required>
+									<option value="" disabled selected>Seleccione una opción</option>
+									<option *ngFor="let doc of documentTypes" [value]="doc.value">{{doc.label}}</option>
+								</select>
+								<label for="encZoneDocumentType">Tipo de documento</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('encZoneDocumentType')?.invalid && branchForm.get('encZoneDocumentType')?.touched">
+									<span>El campo es requerido</span>
+								</div>
+							</div>
+
+							<!-- Numero de documento-->
+							<div class="custom-input-group">
+								<input id="encZoneDocumentNumber" type="text" formControlName="encZoneDocumentNumber"
+									required placeholder=" " appNumericInput [maxLength]="10">
+								<label for="encZoneDocumentNumber">Número de Documento</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('encZoneDocumentNumber')?.invalid && branchForm.get('encZoneDocumentNumber')?.touched">
+									<span *ngIf="branchForm.get('encZoneDocumentNumber')?.hasError('required')">El campo
+										es requerido</span>
+									<span *ngIf="branchForm.get('encZoneDocumentNumber')?.hasError('documentNumber')">
+										{{ branchForm.get('encZoneDocumentNumber')?.getError('documentNumber') }}</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Teléfono -->
+							<div class="custom-input-group">
+								<input id="encZonePhone" type="text" formControlName="encZonePhone" required
+									placeholder="Ej: 3123456789" appNumericInput [maxLength]="10">
+
+								<label for="encZonePhone">Teléfono Celular</label>
+
+								<div class="error-message"
+									*ngIf="branchForm.get('encZonePhone')?.invalid && branchForm.get('encZonePhone')?.touched">
+									<span *ngIf="branchForm.get('encZonePhone')?.hasError('required')">
+										Este campo es requerido
+									</span>
+									<span *ngIf="branchForm.get('encZonePhone')?.hasError('colombianPhone')">
+										{{ branchForm.get('encZonePhone')?.getError('colombianPhone') }}
+									</span>
+								</div>
+							</div>
+
+
+
+							<!-- Email -->
+							<div class="custom-input-group">
+								<input id="encZoneEmail" type="email" formControlName="encZoneEmail" required
+									placeholder="Ej:correo@dominio.com">
+								<label for="encZoneEmail">Email</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('encZoneEmail')?.invalid && branchForm.get('encZoneEmail')?.touched">
+									<span *ngIf="branchForm.get('encZoneEmail')?.hasError('required')">Este campo es
+										requerido</span>
+									<span *ngIf="branchForm.get('encZoneEmail')?.hasError('emailFormat')">Formato de
+										email
+										inválido</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="step-actions">
+							<button type="button" class="prev-btn" (click)="prevStep()">
+								<mat-icon>arrow_back</mat-icon>
+								Anterior
+							</button>
+
+							<button mat-raised-button type="submit" [disabled]="branchForm.invalid || isSubmit()">
+								{{ isSubmit() ? 'Creando...' : 'Crear Zona' }}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,45 @@
+<app-data-table title="Inventarios Realizados" icon="list_alt" [columns]="columns" [dataSource]="inventories()"
+	emptyMessage="No hay inventarios en el rango de fechas seleccionado" emptyIcon="search_off">
+
+	<!-- Template para el contenido de las celdas -->
+	<ng-template #cellContent let-item let-column="column">
+		<ng-container [ngSwitch]="column.key">
+			<!-- Fecha -->
+			<div *ngSwitchCase="'date'" class="cell-with-icon">
+				<mat-icon>event</mat-icon>
+				{{ formatDate(item.date) }}
+			</div>
+
+			<!-- Grupo Operativo -->
+			<span *ngSwitchCase="'operatingGroup'">
+				{{ item.operatingGroupName }}
+			</span>
+
+			<!-- Ítems Count -->
+			<span *ngSwitchCase="'itemsCount'" class="items-badge">
+				{{ item.itemsCount }}
+			</span>
+
+			<!-- Verificación -->
+			<div *ngSwitchCase="'verification'">
+				<span *ngIf="item.verificationResult !== undefined" class="verification-badge"
+					[ngClass]="item.verificationResult ? 'approved' : 'rejected'">
+					<mat-icon>{{ item.verificationResult ? 'check_circle' : 'cancel' }}</mat-icon>
+					{{ item.verificationResult ? 'Aprobado' : 'Rechazado' }}
+				</span>
+				<span *ngIf="item.verificationResult === undefined" class="verification-badge pending">
+					<mat-icon>schedule</mat-icon>
+					Pendiente
+				</span>
+			</div>
+
+			<!-- Observaciones -->
+			<div *ngSwitchCase="'observations'" class="observations-cell">
+				{{ item.observations || 'Sin observaciones' }}
+			</div>
+
+			<!-- Default case -->
+			<span *ngSwitchDefault>{{ item[column.key] }}</span>
+		</ng-container>
+	</ng-template>
+</app-data-table>

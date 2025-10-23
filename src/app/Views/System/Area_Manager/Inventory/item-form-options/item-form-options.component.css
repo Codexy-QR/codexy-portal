@@ -1,0 +1,21 @@
+/* Iconos de error */
+.form-field mat-icon.error {
+	color: red;
+}
+
+/* Campos extra */
+.full-width textarea {
+	color: var(--color-white);
+}
+
+.full-width textarea::placeholder {
+	color: rgba(255, 255, 255, 0.3);
+}
+
+.full-width mat-label {
+	color: var(--color-white);
+}
+
+.full-width mat-hint {
+	color: var(--color-white);
+}

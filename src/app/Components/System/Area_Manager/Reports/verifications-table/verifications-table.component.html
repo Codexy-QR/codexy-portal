@@ -1,0 +1,43 @@
+<app-data-table title="Verificaciones" icon="verified" [columns]="columns" [dataSource]="verifications()"
+	emptyMessage="No hay verificaciones en el rango de fechas seleccionado" emptyIcon="verified">
+
+	<!-- Template para el contenido de las celdas -->
+	<ng-template #cellContent let-item let-column="column">
+		<ng-container [ngSwitch]="column.key">
+			<!-- Fecha Inventario -->
+			<span *ngSwitchCase="'inventoryDate'">
+				{{ formatDate(item.inventoryDate) }}
+			</span>
+
+			<!-- Grupo Operativo -->
+			<span *ngSwitchCase="'operatingGroup'">
+				{{ item.operatingGroupName }}
+			</span>
+
+			<!-- Verificador -->
+			<div *ngSwitchCase="'checker'" class="checker-cell">
+				<mat-icon>person</mat-icon>
+				{{ item.checkerName }}
+			</div>
+
+			<!-- Resultado -->
+			<span *ngSwitchCase="'result'" class="result-badge" [ngClass]="item.result ? 'approved' : 'rejected'">
+				<mat-icon>{{ item.result ? 'check_circle' : 'cancel' }}</mat-icon>
+				{{ item.result ? 'Aprobado' : 'Rechazado' }}
+			</span>
+
+			<!-- Fecha Verificación -->
+			<span *ngSwitchCase="'verificationDate'">
+				{{ formatDate(item.verificationDate) }}
+			</span>
+
+			<!-- Observaciones -->
+			<div *ngSwitchCase="'observations'" class="observations-cell">
+				{{ item.observations || 'Sin observaciones' }}
+			</div>
+
+			<!-- Default case -->
+			<span *ngSwitchDefault>{{ item[column.key] }}</span>
+		</ng-container>
+	</ng-template>
+</app-data-table>
