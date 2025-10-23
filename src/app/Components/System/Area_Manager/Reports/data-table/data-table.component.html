@@ -1,0 +1,61 @@
+<div class="report-card">
+	<!-- Header -->
+	<div class="report-header">
+		<mat-icon>{{ icon() }}</mat-icon>
+		<h3>{{ title() }}</h3>
+		<span class="report-count">
+			{{ paginatedData().pagination.totalItems }} registros
+			<span *ngIf="paginatedData().pagination.totalPages > 1" class="page-info">
+				(Página {{ paginatedData().pagination.currentPage }} de {{ paginatedData().pagination.totalPages }})
+			</span>
+		</span>
+
+		<!-- Slot para acciones personalizadas en el header -->
+		<div class="header-actions" *ngIf="headerActionsTemplate">
+			<ng-container [ngTemplateOutlet]="headerActionsTemplate"></ng-container>
+		</div>
+	</div>
+
+	<!-- Tabla -->
+	<div class="table-container" *ngIf="paginatedData().data.length > 0">
+		<table mat-table [dataSource]="paginatedData().data" class="report-table">
+			<!-- Columnas dinámicas -->
+			<ng-container *ngFor="let column of columns(); trackBy: trackByColumn" [matColumnDef]="column.key">
+				<th mat-header-cell *matHeaderCellDef>
+					{{ column.label }}
+				</th>
+				<td mat-cell *matCellDef="let row">
+					<!-- Slot para contenido personalizado de celda -->
+					<ng-container [ngTemplateOutlet]="cellTemplate"
+						[ngTemplateOutletContext]="{ $implicit: row, column: column }">
+					</ng-container>
+				</td>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"
+				[class.clickable]="rowClickable()">
+			</tr>
+		</table>
+	</div>
+
+	<!-- Paginación -->
+	<!-- *ngIf="paginatedData().pagination.totalPages > 1"  -->
+	<app-pagination
+		[paginationData]="paginatedData()"
+		[itemsPerPageOptions]="itemsPerPageOptions()"
+		(pageChanged)="onPageChanged($event)"
+		(pageSizeChanged)="onPageSizeChanged($event)">
+	</app-pagination>
+
+	<!-- Estado vacío -->
+	<div *ngIf="paginatedData().data.length === 0 && paginatedData().pagination.totalItems === 0" class="empty-state">
+		<mat-icon>{{ emptyIcon() }}</mat-icon>
+		<p>{{ emptyMessage() }}</p>
+
+		<button *ngIf="showRetryButton()" mat-raised-button color="primary" (click)="retry.emit()">
+			<mat-icon>refresh</mat-icon>
+			Reintentar
+		</button>
+	</div>
+</div>

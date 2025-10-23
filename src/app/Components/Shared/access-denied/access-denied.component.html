@@ -1,0 +1,21 @@
+<div class="container">
+	<mat-card class="access-denied-card">
+		<mat-card-header class="header">
+			<div mat-card-avatar class="icon-container">
+				<mat-icon class="icon">block</mat-icon>
+			</div>
+			<mat-card-title>Acceso Denegado</mat-card-title>
+		</mat-card-header>
+
+		<mat-card-content>
+			<p>No tienes permisos para acceder a esta sección.</p>
+		</mat-card-content>
+
+		<mat-card-actions>
+			<button mat-raised-button color="primary" (click)="goToLogin()">
+				<mat-icon>login</mat-icon>
+				Volver al Login
+			</button>
+		</mat-card-actions>
+	</mat-card>
+</div>

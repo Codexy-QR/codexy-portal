@@ -1,0 +1,606 @@
+.register-container {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background: linear-gradient(135deg, var(--color-blue-1000) 0%, var(--color-blue-950) 100%);
+	position: relative;
+	overflow: hidden;
+}
+
+/* Elementos decorativos de fondo */
+.background-decoration {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.decoration-circle {
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.03);
+	animation: float 6s ease-in-out infinite;
+}
+
+.circle-1 {
+	width: 200px;
+	height: 200px;
+	top: 10%;
+	left: 5%;
+	animation-delay: 0s;
+}
+
+.circle-2 {
+	width: 150px;
+	height: 150px;
+	top: 60%;
+	right: 10%;
+	animation-delay: 2s;
+}
+
+.circle-3 {
+	width: 100px;
+	height: 100px;
+	bottom: 20%;
+	left: 15%;
+	animation-delay: 4s;
+}
+
+@keyframes float {
+
+	0%,
+	100% {
+		transform: translateY(0px) scale(1);
+	}
+
+	50% {
+		transform: translateY(-20px) scale(1.05);
+	}
+}
+
+.main-content {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 2rem;
+	position: relative;
+	z-index: 1;
+}
+
+.register-card {
+	background: var(--color-blue-950);
+	color: var(--color-white);
+	backdrop-filter: blur(20px);
+	border-radius: 24px;
+	padding: 1.6rem 2.6rem;
+	width: 100%;
+	max-width: 900px;
+	box-shadow:
+		0 20px 40px rgba(0, 0, 0, 0.1),
+		0 0 0 1px rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	transform: translateY(0);
+	transition: all 0.3s ease;
+	max-height: 85vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.register-card:hover {
+	transform: translateY(-5px);
+	box-shadow:
+		0 25px 50px rgba(0, 0, 0, 0.15),
+		0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Personalizar scroll */
+.register-card::-webkit-scrollbar {
+	width: 6px;
+}
+
+.register-card::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 10px;
+}
+
+.register-card::-webkit-scrollbar-thumb {
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 3px;
+}
+
+.register-card::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Header de la tarjeta */
+.card-header {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.header-icon {
+	width: 80px;
+	height: 80px;
+	background: linear-gradient(135deg, #1e40af, #1e3a8a);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto 1.5rem;
+	box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+	animation: pulse-icon 3s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+
+	0%,
+	100% {
+		box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+	}
+
+	50% {
+		box-shadow: 0 8px 30px rgba(30, 64, 175, 0.5);
+	}
+}
+
+.header-icon mat-icon {
+	font-size: 2.5rem;
+	width: 2.5rem;
+	height: 2.5rem;
+	color: white;
+}
+
+.card-header h1 {
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: var(--color-blue-950);
+	margin: 0 0 0.5rem;
+	background: linear-gradient(135deg, #6c7ebb, #3b82f6);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.card-header p {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 0.95rem;
+	margin: 0;
+	font-weight: 500;
+}
+
+/* Formulario */
+.register-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.form-row {
+	display: flex;
+	gap: 1.2rem;
+	width: 100%;
+}
+
+.form-row>* {
+	flex: 1;
+	min-width: 0;
+}
+
+.form-field {
+	position: relative;
+	flex: 1;
+}
+
+.input-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.input-icon {
+	position: absolute;
+	left: 16px;
+	color: #9ca3af;
+	z-index: 2;
+	transition: color 0.3s ease;
+	font-size: 1.2rem;
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
+.form-field input,
+.form-field select {
+	width: 100%;
+	padding: 16px 16px 16px 48px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 12px;
+	font-size: 1rem;
+	color: white;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	font-family: inherit;
+}
+
+.form-field select {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: right 16px center;
+	background-size: 16px;
+	padding-right: 48px;
+	cursor: pointer;
+}
+
+.form-field select option {
+	background-color: var(--color-blue-950);
+	color: white;
+	padding: 10px;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+	outline: none;
+	background: rgba(255, 255, 255, 0.15);
+	border-color: rgba(255, 255, 255, 0.4);
+	box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+}
+
+.form-field input:focus~.input-icon,
+.form-field input:not(:placeholder-shown)~.input-icon {
+	color: #60a5fa;
+}
+
+.form-field input::placeholder,
+.form-field select::placeholder {
+	color: rgba(255, 255, 255, 0.6);
+	transition: color 0.3s ease;
+}
+
+.form-field input:focus::placeholder {
+	color: #d1d5db;
+}
+
+.field-line {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 2px;
+	background: linear-gradient(90deg, var(--color-blue-1000), #1e40af);
+	transition: width 0.3s ease;
+}
+
+.form-field input:focus~.field-line,
+.form-field select:focus~.field-line {
+	width: 100%;
+}
+
+/* Toggle password */
+.toggle-password {
+	position: absolute;
+	right: 16px;
+	background: none;
+	border: none;
+	color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+	padding: 4px;
+	border-radius: 999px;
+	transition: all 0.3s ease;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.toggle-password:hover {
+	background: rgba(96, 165, 250, 0.2);
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.toggle-password mat-icon {
+	font-size: 1.6rem;
+	width: 1.6rem;
+	height: 1.6rem;
+}
+
+/* Mensajes de error */
+.error-message {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: #dc2626;
+	font-size: 0.85rem;
+	margin-top: 0.5rem;
+	padding-left: 0.5rem;
+	font-weight: 500;
+}
+
+.error-message mat-icon {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+	flex-shrink: 0;
+}
+
+/* Botón de envío */
+.cnt-submit-btn{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+.submit-btn {
+	background: linear-gradient(135deg, #1e40af, #1e3a8a);
+	color: white !important;
+	border: none !important;
+	padding: 16px 32px !important;
+	border-radius: 12px !important;
+	font-size: 1rem !important;
+	font-weight: 600 !important;
+	height: auto !important;
+	width: 35% ;
+	transition: all 0.3s ease !important;
+	box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3) !important;
+	position: relative;
+	overflow: hidden;
+}
+
+.submit-btn:hover:not([disabled]) {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4) !important;
+}
+
+.submit-btn:active {
+	transform: translateY(0);
+}
+
+.submit-btn:disabled {
+	background: #9ca3af !important;
+	transform: none !important;
+	box-shadow: none !important;
+	cursor: not-allowed;
+}
+
+.submit-btn.loading {
+	pointer-events: none;
+}
+
+.btn-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+.btn-content mat-icon {
+	font-size: 1.2rem;
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
+/* Sección de login */
+.login-section {
+	text-align: center;
+	padding: 0;
+}
+
+.login-section p {
+	color: #b6b8bd;
+	margin: 0 0 0.75rem;
+	font-size: 0.9rem;
+}
+
+.login-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: #60a5fa;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 0.95rem;
+	padding: 0.75rem 1.5rem;
+	border: 2px solid;
+	border-color: #1e3a8a;
+	border-radius: 12px;
+	transition: all 0.3s ease;
+	background: rgba(96, 165, 250, 0.1);
+	cursor: pointer;
+}
+
+.login-link:hover {
+	background: #1e3a8a;
+	color: rgba(255, 255, 255, 0.9);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+.login-link mat-icon {
+	font-size: 1.1rem;
+	width: 1.1rem;
+	height: 1.1rem;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 768px) {
+	.main-content {
+		padding: 1rem;
+	}
+
+	.register-card {
+		padding: 1.5rem 2rem;
+		max-width: 95%;
+	}
+
+	.card-header h1 {
+		font-size: 1.6rem;
+	}
+
+	.header-icon {
+		width: 70px;
+		height: 70px;
+	}
+
+	.header-icon mat-icon {
+		font-size: 2rem;
+		width: 2rem;
+		height: 2rem;
+	}
+
+	.form-row {
+		gap: 1rem;
+	}
+
+	.form-field input,
+	.form-field select {
+		padding: 14px 14px 14px 44px;
+	}
+
+	.input-icon {
+		font-size: 1rem;
+		width: 1rem;
+		height: 1rem;
+	}
+}
+
+/* Responsive - Mobile */
+@media (max-width: 600px) {
+	.register-card {
+		padding: 1.2rem;
+		max-height: none;
+		border-radius: 20px;
+	}
+
+	.card-header h1 {
+		font-size: 1.4rem;
+	}
+
+	.card-header p {
+		font-size: 0.85rem;
+	}
+
+	.header-icon {
+		width: 60px;
+		height: 60px;
+	}
+
+	.header-icon mat-icon {
+		font-size: 1.8rem;
+		width: 1.8rem;
+		height: 1.8rem;
+	}
+
+	.form-row {
+		flex-direction: column;
+		gap: 1.2rem;
+	}
+
+	.form-row>* {
+		flex: 1;
+	}
+
+	.form-field input,
+	.form-field select {
+		padding: 12px 12px 12px 40px;
+		font-size: 16px;
+		/* Previene zoom en iOS */
+	}
+
+	.input-icon {
+		font-size: 0.9rem;
+		width: 0.9rem;
+		height: 0.9rem;
+		left: 12px;
+	}
+
+	.submit-btn {
+		padding: 14px 24px !important;
+		font-size: 0.95rem !important;
+		margin-top: 0.8rem;
+	}
+
+	.login-section {
+		margin-top: 0.8rem;
+	}
+
+	.login-section p {
+		font-size: 0.85rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.login-link {
+		padding: 0.6rem 1.2rem;
+		font-size: 0.9rem;
+	}
+}
+
+/* Muy pequeño */
+@media (max-width: 480px) {
+	.register-container {
+		min-height: 100vh;
+	}
+
+	.main-content {
+		padding: 0.8rem;
+	}
+
+	.register-card {
+		padding: 1rem;
+		border-radius: 16px;
+	}
+
+	.card-header {
+		margin-bottom: 1.2rem;
+	}
+
+	.card-header h1 {
+		font-size: 1.2rem;
+	}
+
+	.card-header p {
+		font-size: 0.8rem;
+	}
+
+	.register-form {
+		gap: 1.2rem;
+	}
+
+	.form-row {
+		gap: 1rem;
+	}
+
+	.form-field input,
+	.form-field select {
+		padding: 11px 11px 11px 36px;
+		font-size: 16px;
+		border-radius: 8px;
+	}
+
+	.input-icon {
+		font-size: 0.85rem;
+		width: 0.85rem;
+		height: 0.85rem;
+		left: 10px;
+	}
+
+	.toggle-password {
+		right: 10px;
+	}
+
+	.toggle-password mat-icon {
+		font-size: 1.4rem;
+		width: 1.4rem;
+		height: 1.4rem;
+	}
+
+	.submit-btn {
+		padding: 12px 20px !important;
+		font-size: 0.9rem !important;
+		margin-top: 0.6rem;
+	}
+}

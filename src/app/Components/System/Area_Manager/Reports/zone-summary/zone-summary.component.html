@@ -1,0 +1,64 @@
+<div class="zone-summary-section">
+	<h2>Resumen de Zona</h2>
+
+	<div class="summary-cards">
+		<!-- Total de Ítems -->
+		<div class="summary-card">
+			<div class="summary-icon">
+				<mat-icon>inventory_2</mat-icon>
+			</div>
+			<div class="summary-content">
+				<div class="summary-value">{{ zoneReport().zoneInfo.totalItems }}</div>
+				<div class="summary-label">Total de Ítems</div>
+				<div class="summary-subtext">En la zona</div>
+			</div>
+		</div>
+
+		<!-- Último Inventario -->
+		<div class="summary-card" *ngIf="zoneReport().zoneInfo.lastInventoryDate">
+			<div class="summary-icon">
+				<mat-icon>calendar_today</mat-icon>
+			</div>
+			<div class="summary-content">
+				<div class="summary-value">{{ formatDate(zoneReport().zoneInfo.lastInventoryDate!) }}</div>
+				<div class="summary-label">Último Inventario</div>
+				<div class="summary-subtext">Más reciente</div>
+			</div>
+		</div>
+
+		<!-- Última Verificación -->
+		<div class="summary-card" [ngClass]="getLastVerificationStatus()" *ngIf="zoneReport().zoneInfo.lastVerificationDate">
+			<div class="summary-icon" [ngClass]="getLastVerificationStatus()">
+				<mat-icon>{{ getLastVerificationIcon() }}</mat-icon>
+			</div>
+			<div class="summary-content">
+				<div class="summary-value">{{ formatDate(zoneReport().zoneInfo.lastVerificationDate!) }}</div>
+				<div class="summary-label">Última Verificación</div>
+				<div class="summary-subtext" [ngClass]="getLastVerificationStatus()">
+					{{ getLastVerificationText() }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Distribución por Estado -->
+	<div class="distribution-section">
+		<h3>Distribución por Estado</h3>
+		<div class="distribution-grid">
+			<div *ngFor="let item of zoneReport().itemsByStatus" class="distribution-card"
+				[ngClass]="getStatusClass(item.status)">
+				<div class="distribution-icon">
+					<mat-icon>{{ getStatusIcon(item.status) }}</mat-icon>
+				</div>
+				<div class="distribution-content">
+					<div class="distribution-count">{{ item.count }}</div>
+					<div class="distribution-label">{{ item.status }}</div>
+					<div class="distribution-percentage">{{ item.percentage }}%</div>
+				</div>
+				<div class="distribution-chart">
+					<div class="chart-bar" [style.width.%]="item.percentage"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

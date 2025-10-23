@@ -1,0 +1,93 @@
+<nav class="sidebar" [class.expanded]="isExpanded">
+	<div class="sidebar-header">
+		<button mat-icon-button class="toggle-btn" (click)="onToggleSidebar()">
+			<mat-icon>{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+		</button>
+		<div class="logo-container" *ngIf="isExpanded">
+			<span class="logo-text">Únete a Codexy</span>
+		</div>
+	</div>
+
+	<div class="sidebar-content">
+		<!-- Sección de Bienvenida -->
+		<div class="welcome-section" *ngIf="isExpanded">
+			<div class="welcome-icon">
+				<mat-icon>rocket_launch</mat-icon>
+			</div>
+			<h3 class="welcome-title">¡Bienvenido!</h3>
+			<p class="welcome-subtitle">Comienza tu experiencia con Codexy</p>
+		</div>
+
+		<!-- Separador Decorativo -->
+		<div class="divider" *ngIf="isExpanded">
+			<div class="divider-line"></div>
+			<mat-icon>star</mat-icon>
+			<div class="divider-line"></div>
+		</div>
+
+		<!-- Botones de Acción Principal -->
+		<div class="action-buttons" *ngIf="isExpanded">
+			<button class="btn-login" (click)="navigateTo('/Login')">
+				<mat-icon>login</mat-icon>
+				Iniciar Sesión
+			</button>
+
+			<button class="btn-register" (click)="navigateTo('Register')">
+				<mat-icon>person_add</mat-icon>
+				Crear Cuenta
+			</button>
+		</div>
+
+		<!-- Features Destacados -->
+		<div class="features-preview" *ngIf="isExpanded">
+			<div class="feature-item">
+				<div class="feature-icon">
+					<mat-icon>qr_code_scanner</mat-icon>
+				</div>
+				<div class="feature-info">
+					<h4>Escaneo QR</h4>
+					<p>Control instantáneo de inventario</p>
+				</div>
+			</div>
+
+			<div class="feature-item">
+				<div class="feature-icon">
+					<mat-icon>analytics</mat-icon>
+				</div>
+				<div class="feature-info">
+					<h4>Analytics</h4>
+					<p>Métricas en tiempo real</p>
+				</div>
+			</div>
+
+			<div class="feature-item">
+				<div class="feature-icon">
+					<mat-icon>sync</mat-icon>
+				</div>
+				<div class="feature-info">
+					<h4>Sincronización</h4>
+					<p>Multi-dispositivo</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer del Sidebar -->
+		<div class="sidebar-footer" *ngIf="isExpanded">
+			<div class="social-links">
+				<button mat-icon-button>
+					<mat-icon>help</mat-icon>
+				</button>
+				<button mat-icon-button>
+					<mat-icon>info</mat-icon>
+				</button>
+				<button mat-icon-button>
+					<mat-icon>mail</mat-icon>
+				</button>
+			</div>
+			<p class="footer-text">© 2025 Codexy - V1.0</p>
+		</div>
+	</div>
+</nav>
+
+<!-- Overlay para cerrar al hacer clic fuera -->
+<div class="sidebar-overlay" [class.visible]="isExpanded" (click)="onToggleSidebar()"></div>

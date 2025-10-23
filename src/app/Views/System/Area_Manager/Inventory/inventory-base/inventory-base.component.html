@@ -1,0 +1,184 @@
+<div class="inventory-container">
+	<!-- Loader -->
+	<app-loader [loading]="inventoryManager.loading()" loadingMessage="Cargando inventario base..." [fullScreen]="true"
+		[diameter]="70" color="primary">
+	</app-loader>
+
+	<!-- Error State -->
+	<div *ngIf="inventoryManager.error() && !inventoryManager.loading()" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ inventoryManager.errorMessage() }}</p>
+		<button mat-raised-button color="primary" (click)="inventoryManager.loadInventoryData()">
+			Reintentar
+		</button>
+	</div>
+
+	<!-- Main Content -->
+	<ng-container *ngIf="!inventoryManager.loading() && !inventoryManager.error()">
+		<!-- Header -->
+		<header class="header">
+			<h1>Inventario Base</h1>
+			<p>Gestión de todos los ítems registrados en {{ inventoryManager.zoneName() }}</p>
+		</header>
+
+		<!-- Empty State -->
+		<div *ngIf="!inventoryManager.hasInventoryData()" class="empty-state">
+			<div class="empty-icon">
+				<mat-icon>inventory_2</mat-icon>
+			</div>
+			<h2>No hay inventario base registrado</h2>
+			<p>Comienza importando un archivo Excel con los ítems de tu zona o descarga la plantilla para completarla.
+			</p>
+
+			<div class="action-buttons">
+				<button mat-raised-button color="primary" (click)="openImportModal()">
+					<mat-icon>upload_file</mat-icon>
+					Importar desde Excel
+				</button>
+
+				<button mat-stroked-button color="primary" (click)="downloadTemplate()">
+					<mat-icon>download</mat-icon>
+					Descargar Plantilla
+				</button>
+			</div>
+
+			<div class="instructions">
+				<h3>Instrucciones para importar:</h3>
+				<ul>
+					<li>Asegúrate de usar la plantilla proporcionada</li>
+					<li>Verifica que todos los campos obligatorios estén completos</li>
+					<li>Revisa que los formatos de datos sean correctos</li>
+					<li>El archivo no debe exceder los 5MB de tamaño</li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- Data State -->
+		<div *ngIf="inventoryManager.hasInventoryData()" class="has-data-state">
+			<!-- Table Header -->
+			<div class="table-header">
+				<h2>Inventario base de {{ inventoryManager.zoneName() }}</h2>
+				<div class="header-actions">
+					<button mat-raised-button color="primary" (click)="navigateToCreateItem()">
+						<mat-icon>add</mat-icon>
+						Nuevo Item
+					</button>
+					<button mat-stroked-button class="btn-export" (click)="exportToExcel()"
+						[disabled]="loadingDetails()">
+						<mat-icon>print</mat-icon>
+						{{ loadingDetails() ? 'Preparando...' : 'Exportar QRs Items' }}
+					</button>
+				</div>
+			</div>
+
+			<!-- Search and Filter Controls -->
+			<div class="table-controls">
+				<!-- Search -->
+				<div class="search-container">
+					<mat-icon class="search-icon">search</mat-icon>
+					<input type="text" class="search-input" placeholder="Buscar items..."
+						[ngModel]="filterService.searchText()"
+						(ngModelChange)="filterService.searchText.set($event); onSearchChange()">
+					<button class="clear-search" (click)="filterService.searchText.set(''); onSearchChange()"
+						*ngIf="filterService.searchText()">
+						<mat-icon>close</mat-icon>
+					</button>
+				</div>
+
+				<!-- Filter Button -->
+				<div class="control-buttons">
+					<button mat-stroked-button [matMenuTriggerFor]="filterMenu">
+						<mat-icon>filter_list</mat-icon>
+						Filtrar
+						<mat-icon
+							*ngIf="filterService.categoryFilter() !== 'all' || filterService.statusFilter() !== 'all'">
+							filter_alt
+						</mat-icon>
+					</button>
+
+					<!-- Filter Menu -->
+					<mat-menu #filterMenu="matMenu" class="filter-menu">
+						<!-- Category Filter -->
+						<div class="filter-section">
+							<h3>Categoría</h3>
+							<div class="filter-options">
+								<button mat-menu-item *ngFor="let category of categories()"
+									(click)="filterByCategory(category)"
+									[class.active]="filterService.categoryFilter() === category">
+									<mat-icon>{{ (category | categoryInventoryBase).icon }}</mat-icon>
+									{{ (category | categoryInventoryBase).label }}
+								</button>
+							</div>
+						</div>
+
+						<!-- Status Filter -->
+						<div class="filter-section">
+							<h3>Estado</h3>
+							<div class="filter-options">
+								<button mat-menu-item *ngFor="let status of statuses()" (click)="filterByStatus(status)"
+									[class.active]="filterService.statusFilter() === status">
+									<mat-icon>{{ (status | stateInventoryBase).icon }}</mat-icon>
+									{{ (status | stateInventoryBase).label }}
+								</button>
+							</div>
+						</div>
+
+						<mat-divider></mat-divider>
+						<button mat-menu-item (click)="clearFilters()">
+							<mat-icon>clear_all</mat-icon>
+							Limpiar todos los filtros
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+
+			<!-- Active Filters -->
+			<div class="active-filters" *ngIf="filterService.hasActiveFilters()">
+				<span class="filter-label">Filtros activos:</span>
+
+				<mat-chip *ngIf="filterService.categoryFilter() !== 'all'" [removable]="true"
+					(removed)="filterByCategory('all')">
+					{{ (filterService.categoryFilter() | categoryInventoryBase).label }}
+					<mat-icon matChipRemove>cancel</mat-icon>
+				</mat-chip>
+
+				<mat-chip *ngIf="filterService.statusFilter() !== 'all'" [removable]="true"
+					(removed)="filterByStatus('all')"
+					[ngClass]="(filterService.statusFilter() | stateInventoryBase).class">
+					{{ (filterService.statusFilter() | stateInventoryBase).label }}
+					<mat-icon matChipRemove>cancel</mat-icon>
+				</mat-chip>
+			</div>
+
+			<!-- Table -->
+			<div class="table-container">
+				<app-inventory-table [dataSource]="paginatedItems()" (editItem)="onEditItem($event)"
+					(deleteItem)="onDeleteItem($event)" (viewDetails)="onViewDetails($event)">
+				</app-inventory-table>
+			</div>
+
+			<!-- Footer with Pagination -->
+			<div class="table-footer">
+				<div class="footer-info">
+					<p>Mostrando {{ getDisplayedRange() }} de {{ totalItems() }} items</p>
+					<p *ngIf="filterService.hasActiveFilters()" class="filtered-count">
+						(Filtrado de {{ inventoryManager.allItems().length }} items totales)
+					</p>
+				</div>
+				<mat-paginator class="custom-paginator" [length]="totalItems()" [pageSize]="filterService.pageSize()"
+					[pageIndex]="filterService.pageIndex()" [pageSizeOptions]="[5, 10, 25, 50]"
+					(page)="onPageChange($event)" aria-label="Seleccionar página">
+				</mat-paginator>
+			</div>
+		</div>
+
+		<!-- Import Modal -->
+		<app-import-excel [entityName]="inventoryManager.zoneName()" [typeName]="'Inventario'" [isOpen]="showImportModal()"
+			(onClose)="closeImportModal()" (onImport)="processExcelImport($event)">
+		</app-import-excel>
+	</ng-container>
+	@if (showDetailsModal()) {
+	<app-item-details [isOpen]="showDetailsModal()" [itemData]="selectedItem()!" (onClose)="closeDetailsModal()">
+	</app-item-details>
+	}
+</div>

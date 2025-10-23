@@ -1,0 +1,16 @@
+<h2>Role</h2>
+
+<button class="btn-register" mat-raised-button routerLink="/securitymodule/Role/Create">
+    <mat-icon>add_circle</mat-icon> Registrar
+</button>
+
+<mat-card class="contenedor-tabla">
+    <app-base-table
+        [data]="roleData"
+        [columns]="columnasMostrar"
+        [tooltipColumns]="[]"
+        [statusLabels]="{ true: 'Activo', false: 'Inactivo' }"
+        (onEdit)="editarRole($event)"
+        (onDelete)="eliminarRole($event)">
+    </app-base-table>
+</mat-card>

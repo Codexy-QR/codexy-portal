@@ -1,0 +1,182 @@
+/* Badges compartidos */
+.items-badge {
+	background: rgba(59, 130, 246, 0.2);
+	color: var(--color-blue-400);
+	padding: 0.4rem 0.8rem;
+	border-radius: 12px;
+	font-weight: 600;
+	font-size: 0.85rem;
+}
+
+.verification-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+.verification-badge.approved {
+	background: rgba(16, 185, 129, 0.15);
+	color: #10b981;
+	border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.verification-badge.rejected {
+	background: rgba(239, 68, 68, 0.15);
+	color: #ef4444;
+	border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.verification-badge.pending {
+	background: rgba(245, 158, 11, 0.15);
+	color: #f59e0b;
+	border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.verification-badge mat-icon {
+	font-size: 1.1rem;
+	width: 1.1rem;
+	height: 1.1rem;
+}
+
+.status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.4rem 0.8rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+	border: 1px solid transparent;
+}
+
+.status-badge mat-icon {
+	font-size: 0.9rem;
+	width: 0.9rem;
+	height: 0.9rem;
+}
+
+.trend-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.4rem 0.8rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.trend-badge.mejorando {
+	background: rgba(34, 197, 94, 0.15);
+	color: #22c55e;
+	border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.trend-badge.empeorando {
+	background: rgba(239, 68, 68, 0.15);
+	color: #ef4444;
+	border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.trend-badge.estable {
+	background: rgba(156, 163, 175, 0.15);
+	color: #9ca3af;
+	border: 1px solid rgba(156, 163, 175, 0.3);
+}
+
+.result-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+.result-badge.approved {
+	background: rgba(16, 185, 129, 0.15);
+	color: #10b981;
+}
+
+.result-badge.rejected {
+	background: rgba(239, 68, 68, 0.15);
+	color: #ef4444;
+}
+
+/* Celdas especiales */
+.cell-with-icon {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.code-cell {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-family: 'Courier New', monospace;
+	font-weight: 600;
+}
+
+.code-cell mat-icon {
+	color: var(--color-blue-400);
+}
+
+.category-badge {
+	background: rgba(59, 130, 246, 0.15);
+	color: var(--color-blue-400);
+	padding: 0.4rem 0.8rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.checker-cell {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.changes-cell {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.changes-count {
+	background: rgba(59, 130, 246, 0.2);
+	color: var(--color-blue-400);
+	padding: 0.3rem 0.6rem;
+	border-radius: 10px;
+	font-weight: 600;
+	font-size: 0.8rem;
+}
+
+.history-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+}
+
+.history-btn mat-icon {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.history-btn:hover {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--color-white);
+}

@@ -1,0 +1,36 @@
+.reports-container {
+	padding: 2rem;
+	min-height: 100vh;
+}
+
+.reports-section {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+/* Empty State - Solo si no tienes sub-componente específico para esto */
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem;
+	color: rgba(255, 255, 255, 0.5);
+	text-align: center;
+}
+
+.empty-state mat-icon {
+	font-size: 3rem;
+	width: 3rem;
+	height: 3rem;
+	margin-bottom: 1rem;
+	opacity: 0.5;
+}
+
+/* Responsive para el contenedor principal */
+@media (max-width: 768px) {
+	.reports-container {
+		padding: 1rem;
+	}
+}

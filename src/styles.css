@@ -1,0 +1,176 @@
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.mat-typography,
+.mat-typography *:not(mat-icon) {
+	font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+	/* Colores */
+
+	/* ORANGE */
+	--color-orange-50: rgb(255, 247, 237);
+	--color-orange-100: rgb(255, 237, 213);
+	--color-orange-200: rgb(254, 215, 170);
+	--color-orange-300: rgb(253, 186, 116);
+	--color-orange-400: rgb(251, 146, 60);
+	--color-orange-500: rgb(249, 115, 22);
+	--color-orange-600: rgb(234, 88, 12);
+	--color-orange-700: rgb(194, 65, 12);
+	--color-orange-800: rgb(154, 52, 18);
+	--color-orange-900: rgb(124, 45, 18);
+	--color-orange-950: rgb(67, 20, 7);
+
+	/* YELLOW */
+	--color-yellow-50: rgb(254, 252, 232);
+	--color-yellow-100: rgb(254, 249, 195);
+	--color-yellow-200: rgb(254, 240, 138);
+	--color-yellow-300: rgb(253, 224, 71);
+	--color-yellow-400: rgb(250, 204, 21);
+	--color-yellow-500: rgb(234, 179, 8);
+	--color-yellow-600: rgb(202, 138, 4);
+	--color-yellow-700: rgb(161, 98, 7);
+	--color-yellow-800: rgb(133, 77, 14);
+	--color-yellow-900: rgb(113, 63, 18);
+	--color-yellow-950: rgb(66, 32, 6);
+
+	/* GREEN */
+	--color-green-50: rgb(240, 253, 244);
+	--color-green-100: rgb(220, 252, 231);
+	--color-green-200: rgb(187, 247, 208);
+	--color-green-300: rgb(134, 239, 172);
+	--color-green-400: rgb(74, 222, 128);
+	--color-green-500: rgb(34, 197, 94);
+	--color-green-600: rgb(22, 163, 74);
+	--color-green-700: rgb(21, 128, 61);
+	--color-green-800: rgb(22, 101, 52);
+	--color-green-900: rgb(20, 83, 45);
+	--color-green-950: rgb(5, 46, 22);
+
+	/* SKY */
+	--color-sky-50: rgb(240, 249, 255);
+	--color-sky-100: rgb(224, 242, 254);
+	--color-sky-200: rgb(186, 230, 253);
+	--color-sky-300: rgb(125, 211, 252);
+	--color-sky-400: rgb(56, 189, 248);
+	--color-sky-500: rgb(14, 165, 233);
+	--color-sky-600: rgb(2, 132, 199);
+	--color-sky-700: rgb(3, 105, 161);
+	--color-sky-800: rgb(7, 89, 133);
+	--color-sky-900: rgb(12, 74, 110);
+	--color-sky-950: rgb(8, 47, 73);
+
+	/* BLUE */
+	--color-blue-50: rgb(239, 246, 255);
+	--color-blue-100: rgb(219, 234, 254);
+	--color-blue-200: rgb(191, 219, 254);
+	--color-blue-300: rgb(147, 197, 253);
+	--color-blue-400: rgb(96, 165, 250);
+	--color-blue-500: rgb(59, 130, 246);
+	--color-blue-600: rgb(37, 99, 235);
+	--color-blue-700: rgb(29, 78, 216);
+	--color-blue-800: rgb(30, 64, 175);
+	--color-blue-900: rgb(30, 58, 138);
+	--color-blue-900-17: rgb(30, 58, 138,0.17);
+	--color-blue-950: rgb(23, 37, 84);
+	--color-blue-1000: rgb(15, 18, 36);
+	--color-blue-variante-1: rgb(41, 55, 81);
+	--color-blue-variante-2: rgb(26, 31, 54);
+
+	/* INDIGO */
+	--color-indigo-50: rgb(238, 242, 255);
+	--color-indigo-100: rgb(224, 231, 255);
+	--color-indigo-200: rgb(199, 210, 254);
+	--color-indigo-300: rgb(165, 180, 252);
+	--color-indigo-400: rgb(129, 140, 248);
+	--color-indigo-500: rgb(99, 102, 241);
+	--color-indigo-600: rgb(79, 70, 229);
+	--color-indigo-700: rgb(67, 56, 202);
+	--color-indigo-800: rgb(55, 48, 163);
+	--color-indigo-900: rgb(49, 46, 129);
+	--color-indigo-950: rgb(30, 27, 75);
+
+	/* RED */
+	--color-red-50: rgb(254, 242, 242);
+	--color-red-100: rgb(254, 226, 226);
+	--color-red-200: rgb(254, 202, 202);
+	--color-red-300: rgb(252, 165, 165);
+	--color-red-400: rgb(248, 113, 113);
+	--color-red-500: rgb(239, 68, 68);
+	--color-red-600: rgb(220, 38, 38);
+	--color-red-700: rgb(185, 28, 28);
+	--color-red-800: rgb(153, 27, 27);
+	--color-red-900: rgb(127, 29, 29);
+	--color-red-950: rgb(69, 10, 10);
+
+	/* GRAY */
+	--color-gray-50: rgb(249, 250, 251);
+	--color-gray-100: rgb(243, 244, 246);
+	--color-gray-200: rgb(229, 231, 235);
+	--color-gray-300: rgb(209, 213, 219);
+	--color-gray-400: rgb(156, 163, 175);
+	--color-gray-500: rgb(107, 114, 128);
+	--color-gray-600: rgb(75, 85, 99);
+	--color-gray-700: rgb(55, 65, 81);
+	--color-gray-800: rgb(31, 41, 55);
+	--color-gray-900: rgb(17, 24, 39);
+	--color-gray-950: rgb(3, 7, 18);
+
+	/* BYW */
+	--color-black: rgb(0, 0, 0);
+	--color-white: rgb(255, 255, 255);
+	--color-off-white: rgb(248, 250, 252);
+
+	/* Table */
+	--header-table-th: rgb(64, 69, 90);
+
+	/* Dimensiones */
+	--header-height: 75px;
+}
+
+.ejemplo-uso {
+	background-color: var(--color-blue-600);
+	color: var(--color-white);
+}
+
+/* Estilos Universales */
+.border-h {
+	border: 3px solid var(--color-green-500) !important;
+}
+
+/* ===== ERROR MESSAGE ===== */
+.error-message-loader {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.8);
+	background: rgba(239, 68, 68, 0.1);
+	border: 1px solid rgba(239, 68, 68, 0.3);
+	border-radius: 16px;
+	margin: 2rem;
+}
+
+.error-message-loader mat-icon {
+	font-size: 4rem;
+	width: 4rem;
+	height: 4rem;
+	margin-bottom: 1.5rem;
+	color: rgba(239, 68, 68, 0.8);
+}
+
+.error-message-loader p {
+	font-size: 1.2rem;
+	margin-bottom: 2rem;
+	max-width: 600px;
+}
