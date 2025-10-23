@@ -1,0 +1,118 @@
+/* recent-inventories.component.css */
+.recent-inventories {
+	background: rgba(255, 255, 255, 0.02);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 16px;
+	padding: 1.5rem;
+	display: flex;
+	flex-direction: column;
+}
+
+.recent-inventories h2 {
+	font-size: 1.5rem;
+	color: var(--color-white);
+	margin-bottom: 1.5rem;
+	font-weight: 600;
+}
+
+.inventories-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+}
+
+.inventory-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 12px;
+	transition: all 0.3s ease;
+}
+
+.inventory-item:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transform: translateX(5px);
+}
+
+.inventory-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.inventory-date {
+	font-size: 0.9rem;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.inventory-zone {
+	font-weight: 600;
+	color: var(--color-white);
+}
+
+.inventory-team {
+	font-size: 0.9rem;
+	color: var(--color-blue-300);
+}
+
+.inventory-status {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-weight: 600;
+}
+
+.inventory-status.approved {
+	background: rgba(16, 185, 129, 0.2);
+	color: rgba(16, 185, 129, 1);
+}
+
+.inventory-status.not-approved {
+	background: rgba(239, 68, 68, 0.2);
+	color: rgba(239, 68, 68, 1);
+}
+
+.inventory-status mat-icon {
+	font-size: 1.2rem;
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
+.no-inventories {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	color: rgba(255, 255, 255, 0.5);
+	flex: 1;
+}
+
+.no-inventories mat-icon {
+	font-size: 3rem;
+	width: 3rem;
+	height: 3rem;
+	margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+	.inventory-item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	.inventory-status {
+		align-self: flex-end;
+	}
+
+	.inventories-list {
+		max-height: 300px;
+	}
+}

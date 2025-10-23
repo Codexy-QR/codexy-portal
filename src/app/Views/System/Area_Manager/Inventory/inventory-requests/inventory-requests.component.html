@@ -1,0 +1,122 @@
+<!-- inventory-requests.component.html -->
+<div class="requests-container">
+	<!-- Loader -->
+	<app-loader [loading]="loading()" loadingMessage="Cargando Solicitudes..." [fullScreen]="true" [diameter]="70"
+		color="primary">
+	</app-loader>
+
+	<!-- Error State -->
+	<div *ngIf="error() && !loading()" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage() }}</p>
+		<button mat-raised-button color="primary" (click)="retryData()">Reintentar</button>
+	</div>
+
+	<!-- Contenido Principal -->
+	<ng-container *ngIf="!loading() && !error()">
+		<!-- Header -->
+		<div class="requests-header">
+			<h1>Solicitudes de Cambio de Inventario Base</h1>
+			<p>Actualizaciones de estado de ítems</p>
+
+			<!-- Filtros y Estadísticas -->
+			<div class="header-actions">
+				<div class="stats-cards">
+					<div class="stat-card">
+						<div class="stat-icon pending">
+							<mat-icon>notification_important</mat-icon>
+						</div>
+						<div class="stat-content">
+							<div class="stat-value">{{ pendingRequests().length }}</div>
+							<div class="stat-label">Pendientes</div>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon total">
+							<mat-icon>inventory_2</mat-icon>
+						</div>
+						<div class="stat-content">
+							<div class="stat-value">{{ requests().length }}</div>
+							<div class="stat-label">Total Solicitudes</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Lista de Solicitudes -->
+		<div class="requests-list">
+			<!-- Solicitud Pendiente -->
+			<div *ngFor="let request of requests()" class="request-card" [ngClass]="{'unread': !request.read}">
+				<!-- Header de la Solicitud -->
+				<div class="request-header">
+					<div class="request-info">
+						<div class="request-title">
+							<mat-icon class="request-icon">update</mat-icon>
+							<h3>{{ request.title }}</h3>
+							<span *ngIf="!request.read" class="unread-badge">Nuevo</span>
+						</div>
+						<div class="request-meta">
+							<span class="request-date">{{ formatDateTime(request.date) }}</span>
+							<span class="request-group">{{ request.content.operatingGroupName }}</span>
+						</div>
+					</div>
+
+					<div class="request-actions">
+						<button mat-stroked-button (click)="markAsRead(request)" *ngIf="!request.read"
+							class="btn-mark-read">
+							<mat-icon>mark_email_read</mat-icon>
+							Marcar como Leída
+						</button>
+						<button mat-raised-button color="primary" (click)="viewRequestDetails(request)"
+							class="btn-details">
+							<mat-icon>visibility</mat-icon>
+							Ver Detalles
+						</button>
+					</div>
+				</div>
+
+				<!-- Resumen de Diferencias -->
+				<div class="differences-summary">
+					<div class="summary-header">
+						<h4>Resumen de Cambios Propuestos</h4>
+						<span class="items-count">{{ request.content.differences.length }} ítems con diferencias</span>
+					</div>
+
+					<div class="differences-grid">
+						<div *ngFor="let diff of request.content.differences.slice(0, 3)" class="difference-preview">
+							<div class="item-code">{{ diff.code }}</div>
+							<div class="item-name">{{ diff.name }}</div>
+							<div class="state-comparison">
+								<span class="state-base">{{ diff.baseState }}</span>
+								<mat-icon class="arrow-icon">arrow_forward</mat-icon>
+								<span class="state-new"
+									[ngClass]="getStateChangeClass(diff.baseState, diff.inventaryState)">
+									{{ diff.inventaryState }}
+								</span>
+							</div>
+						</div>
+
+						<div *ngIf="request.content.differences.length > 3" class="more-items">
+							+{{ request.content.differences.length - 3 }} más ítems...
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Empty State -->
+			<div *ngIf="requests().length === 0" class="empty-state">
+				<mat-icon>inventory_2</mat-icon>
+				<h3>No hay solicitudes pendientes</h3>
+				<p>No se han encontrado solicitudes de cambio de inventario base</p>
+			</div>
+		</div>
+	</ng-container>
+
+	<!-- Modal de Detalles -->
+	<app-request-detail
+		[isOpen]="isDetailModalOpen()"
+		[request]="selectedRequest()"
+		(onClose)="closeDetailModal()">
+	</app-request-detail>
+</div>

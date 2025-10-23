@@ -1,0 +1,34 @@
+<div class="carousel-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+	<!-- Contenedor de slides -->
+	<div class="carousel-wrapper">
+		<div class="carousel-slides" [style.transform]="'translateX(-' + (currentIndex * 33.3333) + '%)'">
+			<div class="carousel-slide" *ngFor="let image of images; let i = index">
+				<div class="image-container">
+					<img [src]="image.src" [alt]="image.alt" class="carousel-image">
+					<div class="image-overlay">
+						<div class="slide-content">
+							<h3 class="slide-title">{{ image.title }}</h3>
+							<p class="slide-description">{{ image.description }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Botones de navegación -->
+		<button mat-icon-button class="nav-btn nav-btn-prev" (click)="prevSlide()" [disabled]="isTransitioning">
+			<mat-icon>chevron_left</mat-icon>
+		</button>
+
+		<button mat-icon-button class="nav-btn nav-btn-next" (click)="nextSlide()" [disabled]="isTransitioning">
+			<mat-icon>chevron_right</mat-icon>
+		</button>
+	</div>
+
+	<!-- Indicadores -->
+	<div class="carousel-indicators">
+		<button *ngFor="let image of images; let i = index" class="indicator" [class.active]="i === currentIndex"
+			(click)="goToSlide(i)" [disabled]="isTransitioning">
+		</button>
+	</div>
+</div>

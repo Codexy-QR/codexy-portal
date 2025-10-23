@@ -1,0 +1,59 @@
+<div class="global-filters">
+	<div class="filter-row">
+		<!-- Filtros de Fecha -->
+		<div class="date-filters">
+			<mat-form-field appearance="outline" class="date-filter">
+				<mat-label>Fecha desde</mat-label>
+				<input matInput [matDatepicker]="startPicker" [(ngModel)]="filters().startDate"
+					(ngModelChange)="onFiltersChange()">
+				<mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+				<mat-datepicker #startPicker></mat-datepicker>
+			</mat-form-field>
+
+			<mat-form-field appearance="outline" class="date-filter">
+				<mat-label>Fecha hasta</mat-label>
+				<input matInput [matDatepicker]="endPicker" [(ngModel)]="filters().endDate"
+					(ngModelChange)="onFiltersChange()">
+				<mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+				<mat-datepicker #endPicker></mat-datepicker>
+			</mat-form-field>
+		</div>
+
+		<!-- Filtro de Estado (solo si se muestra) -->
+		<mat-form-field *ngIf="showStatusFilter()" appearance="outline" class="status-filter">
+			<mat-label>Filtrar por estado</mat-label>
+			<mat-select [(ngModel)]="filters().selectedStatus" multiple (ngModelChange)="onFiltersChange()">
+				<mat-option *ngFor="let status of availableStatuses" [value]="status">
+					{{ status }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+
+		<!-- Botones de Acción -->
+		<div class="filter-actions">
+			<button mat-raised-button color="primary" (click)="applyFilters()" class="apply-filters-btn"
+				[disabled]="!isValidFilters()">
+				<mat-icon>filter_list</mat-icon>
+				Aplicar Filtros
+			</button>
+
+			<button mat-stroked-button (click)="clearFilters()" class="clear-filters-btn">
+				<mat-icon>clear</mat-icon>
+				Limpiar
+			</button>
+		</div>
+	</div>
+
+	<!-- Botones de Exportación -->
+	<div class="export-actions">
+		<button mat-raised-button color="accent" (click)="exportExcel.emit()" class="export-btn" [disabled]="loading()">
+			<mat-icon>description</mat-icon>
+			Exportar Excel
+		</button>
+
+		<button mat-raised-button color="warn" (click)="exportPDF.emit()" class="export-btn" [disabled]="loading()">
+			<mat-icon>picture_as_pdf</mat-icon>
+			Exportar PDF
+		</button>
+	</div>
+</div>

@@ -1,0 +1,54 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>edit</mat-icon>
+				Actualizar Información Personal
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()" [disabled]="isSaving()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content">
+			<form [formGroup]="editForm" class="modal-form" (ngSubmit)="saveChanges()">
+				<div class="form-row">
+					<ng-container *ngFor="let field of editFields">
+						<div class="custom-input-group" *ngIf="field.visible !== false">
+							<input [id]="'modal' + field.key" [type]="field.type || 'text'"
+								[formControlName]="field.key" [class.error]="getFieldErrors(field.key).length > 0">
+							<label [for]="'modal' + field.key">{{ field.label }}</label>
+
+							@if (getFieldErrors(field.key).length > 0) {
+							<div class="error-messages">
+								@for (error of getFieldErrors(field.key); track error) {
+								<div class="error-message">{{ error }}</div>
+								}
+							</div>
+							}
+						</div>
+					</ng-container>
+				</div>
+
+				<footer class="modal-actions">
+					<button mat-stroked-button type="button" (click)="closeModal()" [disabled]="isSaving()">
+						<mat-icon>cancel</mat-icon>
+						Cancelar
+					</button>
+					<button mat-raised-button type="submit" [disabled]="editForm.invalid || isSaving()"
+						class="save-button" [class.disabled]="editForm.invalid">
+						@if (isSaving()) {
+						<ng-container>
+							Guardando...
+						</ng-container>
+						} @else {
+						<ng-container>
+							Guardar Cambios
+						</ng-container>
+						}
+					</button>
+				</footer>
+			</form>
+		</div>
+	</div>
+</div>

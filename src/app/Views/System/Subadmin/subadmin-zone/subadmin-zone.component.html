@@ -1,0 +1,252 @@
+<div class="container-base zone-container">
+	<app-loader [loading]="loading" loadingMessage="Cargando información de la zona..." [fullScreen]="true"
+		[diameter]="60" color="accent" [showRetry]="true" (retry)="loadZoneData()">
+	</app-loader>
+
+	<div *ngIf="error && !loading" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage }}</p>
+		<button mat-raised-button color="primary" (click)="loadZoneData()">
+			Reintentar
+		</button>
+	</div>
+
+	<ng-container *ngIf="!loading && !error">
+		<!-- Header -->
+		<div class="header-base">
+			<div class="header-text">
+				<h1 class="title-primary">{{ zone.name }}</h1>
+				<p class="subtitle-primary">Información Detallada de la Zona</p>
+			</div>
+			<div class="zone-state" [class]="getStateClass(zone.state)">
+				<mat-icon>{{ getStateIcon(zone.state) }}</mat-icon>
+				<span>{{ zone.state }}</span>
+			</div>
+		</div>
+
+		<!-- Información General -->
+		<div class="info-grid">
+			<!-- Información Principal -->
+			<div class="main-info-card">
+				<h2 class="section-title">Información General</h2>
+
+				<div class="info-item">
+					<mat-icon class="info-icon">description</mat-icon>
+					<div class="info-content">
+						<h3>Descripción</h3>
+						<p>{{ zone.description }}</p>
+					</div>
+				</div>
+
+				<div class="info-item">
+					<mat-icon class="info-icon">fact_check</mat-icon>
+					<div class="info-content">
+						<h3>Total de Inventarios</h3>
+						<p>{{ zone.inventoriesCount }} Inventarios Realizados</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Encargado de Zona -->
+			<div class="responsible-card">
+				<div class="responsible-header">
+					<div class="responsible-icon">
+						<mat-icon>supervisor_account</mat-icon>
+					</div>
+					<h3 class="responsible-title">Encargado de Zona</h3>
+				</div>
+
+				<div class="responsible-info">
+					<div class="responsible-contact">
+						<mat-icon>person</mat-icon>
+						<span>{{ zone.inChargeFullName }}</span>
+					</div>
+
+					<div class="responsible-contact" *ngIf="zone.inChargePhone">
+						<mat-icon>phone</mat-icon>
+						<span>{{ zone.inChargePhone }}</span>
+					</div>
+
+					<div class="responsible-contact" *ngIf="zone.inChargeEmail">
+						<mat-icon>email</mat-icon>
+						<span>{{ zone.inChargeEmail }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Resumen de Ítems -->
+		<div class="items-summary">
+			<h2 class="section-title">Resumen de Ítems</h2>
+
+			<div class="summary-grid">
+				<!-- KPIs -->
+				<div class="kpi-cards">
+					<div class="kpi-card kpi-card--full">
+						<div class="kpi-icon">
+							<mat-icon>inventory_2</mat-icon>
+						</div>
+						<div class="kpi-content">
+							<div class="kpi-value">{{ zone.itemsCount }}</div>
+							<div class="kpi-label">Total de Ítems</div>
+						</div>
+					</div>
+
+					<div class="kpi-card">
+						<div class="kpi-icon item-state-good">
+							<mat-icon>check_circle</mat-icon>
+						</div>
+						<div class="kpi-content">
+							<div class="kpi-value">{{ itemsByState['En orden'] || 0 }}</div>
+							<div class="kpi-label">En orden</div>
+						</div>
+					</div>
+
+					<div class="kpi-card">
+						<div class="kpi-icon item-state-repair">
+							<mat-icon>build</mat-icon>
+						</div>
+						<div class="kpi-content">
+							<div class="kpi-value">{{ itemsByState['Reparación'] || 0 }}</div>
+							<div class="kpi-label">Reparación</div>
+						</div>
+					</div>
+
+					<div class="kpi-card">
+						<div class="kpi-icon item-state-damaged">
+							<mat-icon>warning</mat-icon>
+						</div>
+						<div class="kpi-content">
+							<div class="kpi-value">{{ itemsByState['Dañado'] || 0 }}</div>
+							<div class="kpi-label">Dañados</div>
+						</div>
+					</div>
+
+					<div class="kpi-card">
+						<div class="kpi-icon item-state-lost">
+							<mat-icon>search_off</mat-icon>
+						</div>
+						<div class="kpi-content">
+							<div class="kpi-value">{{ itemsByState['Perdido'] || 0 }}</div>
+							<div class="kpi-label">Perdidos</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Gráfico de distribución -->
+				<div class="chart-section">
+					<div class="section">
+						<app-category-item-chart [data]="itemsByCategory"></app-category-item-chart>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Inventario Base de la Zona -->
+		<div class="inventory-section">
+			<div class="inventory-header">
+				<div class="inventory-title">
+					<h2 class="section-title">Inventario Base de la Zona</h2>
+					<span class="items-count">
+						{{ (zone.items | inventoryFilter: searchText : categoryFilter : stateFilter).length }}
+						de {{ zone.items.length }} ítems
+					</span>
+				</div>
+
+				<!-- Controles de Búsqueda y Filtrado -->
+				<div class="inventory-controls">
+					<!-- Barra de búsqueda -->
+					<div class="search-container">
+						<mat-icon class="search-icon">search</mat-icon>
+						<input type="text" class="search-input" placeholder="Buscar por nombre o serial..."
+							[(ngModel)]="searchText">
+						<button class="clear-search" (click)="searchText = '';" *ngIf="searchText">
+							<mat-icon>close</mat-icon>
+						</button>
+					</div>
+
+					<!-- Filtros -->
+					<div class="filters-container">
+						<!-- Filtro por categoría -->
+						<div class="filter-group">
+							<label for="categoryFilter">Categoría:</label>
+							<select id="categoryFilter" [(ngModel)]="categoryFilter" class="filter-select">
+								<option value="all">Todas las categorías</option>
+								<option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+							</select>
+						</div>
+
+						<!-- Filtro por estado -->
+						<div class="filter-group">
+							<label for="stateFilter">Estado:</label>
+							<select id="stateFilter" [(ngModel)]="stateFilter" class="filter-select">
+								<option value="all">Todos los estados</option>
+								<option *ngFor="let state of states" [value]="state">{{ state }}</option>
+							</select>
+						</div>
+
+						<!-- Botón limpiar filtros -->
+						<button class="clear-filters-btn" (click)="clearFilters()"
+							*ngIf="searchText || categoryFilter !== 'all' || stateFilter !== 'all'">
+							<mat-icon>filter_alt_off</mat-icon>
+							Limpiar
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="inventory-grid">
+				<!-- Items filtrados -->
+				<div class="inventory-card"
+					*ngFor="let item of zone.items | inventoryFilter: searchText : categoryFilter : stateFilter">
+					<div class="item-header">
+						<h3 class="item-name">{{ item.name }}</h3>
+						<div class="item-state" [class]="getItemStateClass(item.state)">
+							<mat-icon>{{ getItemStateIcon(item.state) }}</mat-icon>
+							<span>{{ item.state }}</span>
+						</div>
+					</div>
+
+					<div class="item-details">
+						<div class="item-detail">
+							<mat-icon>category</mat-icon>
+							<span>{{ item.category }}</span>
+						</div>
+
+						<div class="item-detail" *ngIf="item.code">
+							<mat-icon>tag</mat-icon>
+							<span>Serial: {{ item.code }}</span>
+						</div>
+					</div>
+
+					<div class="item-description" *ngIf="item.description">
+						<mat-icon>info</mat-icon>
+						<p>{{ item.description }}</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Mensaje cuando no hay resultados -->
+			<div class="no-results" *ngIf="(zone.items | inventoryFilter: searchText : categoryFilter : stateFilter).length === 0
+       && (searchText || categoryFilter !== 'all' || stateFilter !== 'all')">
+				<mat-icon>search_off</mat-icon>
+				<h3>No se encontraron ítems</h3>
+				<p>No hay ítems que coincidan con los criterios de búsqueda y filtrado.</p>
+				<button class="clear-filters-btn" (click)="clearFilters()">
+					<mat-icon>filter_alt_off</mat-icon>
+					Limpiar filtros
+				</button>
+			</div>
+
+			<!-- Estado cuando no hay ítems -->
+			<div class="empty-state" *ngIf="zone.items.length === 0">
+				<div class="empty-icon">
+					<mat-icon>inventory_2</mat-icon>
+				</div>
+				<h3>No hay ítems registrados</h3>
+				<p>Esta zona no tiene ítems en su inventario base.</p>
+			</div>
+		</div>
+
+	</ng-container>
+</div>

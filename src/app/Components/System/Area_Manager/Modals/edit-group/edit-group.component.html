@@ -1,0 +1,74 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>edit</mat-icon>
+				Editar Grupo Operativo
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content">
+			<form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="modal-form">
+
+				<!-- Nombre del grupo -->
+				<div class="custom-input-group">
+					<input id="groupName" type="text" formControlName="name" placeholder=" "
+						[class.error]="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+					<label for="groupName">Nombre del Grupo</label>
+					<div class="error-messages">
+						<div class="error-message" *ngIf="getFieldError('name')">
+							<mat-icon>error_outline</mat-icon>
+							{{ getFieldError('name') }}
+						</div>
+					</div>
+				</div>
+
+				<!-- Fecha y hora de inicio -->
+				<div class="custom-input-group">
+					<input id="dateStart" type="datetime-local" formControlName="dateStart" placeholder=" "
+						[class.error]="editForm.get('dateStart')?.invalid && editForm.get('dateStart')?.touched">
+					<label for="dateStart">Fecha y Hora de Inicio</label>
+					<div class="error-messages">
+						<div class="error-message" *ngIf="getFieldError('dateStart')">
+							<mat-icon>error_outline</mat-icon>
+							{{ getFieldError('dateStart') }}
+						</div>
+					</div>
+				</div>
+
+				<!-- Fecha y hora de fin -->
+				<div class="custom-input-group">
+					<input id="dateEnd" type="datetime-local" formControlName="dateEnd" placeholder=" "
+						[class.error]="editForm.get('dateEnd')?.invalid && editForm.get('dateEnd')?.touched">
+					<label for="dateEnd">Fecha y Hora de Fin</label>
+					<div class="error-messages">
+						<div class="error-message" *ngIf="getFieldError('dateEnd')">
+							<mat-icon>error_outline</mat-icon>
+							{{ getFieldError('dateEnd') }}
+						</div>
+						<div class="error-message"
+							*ngIf="!validateDates() && editForm.get('dateStart')?.value && editForm.get('dateEnd')?.value">
+							<mat-icon>error_outline</mat-icon>
+							La fecha de fin debe ser posterior a la fecha de inicio
+						</div>
+					</div>
+				</div>
+
+				<footer class="modal-actions">
+					<button mat-stroked-button type="button" (click)="closeModal()" [disabled]="saving()">
+						<mat-icon>cancel</mat-icon>
+						Cancelar
+					</button>
+					<button mat-raised-button color="primary" type="submit"
+						[disabled]="editForm.invalid || saving() || !validateDates()">
+						<mat-icon>{{ saving() ? 'hourglass_empty' : 'save' }}</mat-icon>
+						{{ saving() ? 'Guardando...' : 'Guardar Cambios' }}
+					</button>
+				</footer>
+			</form>
+		</div>
+	</div>
+</div>

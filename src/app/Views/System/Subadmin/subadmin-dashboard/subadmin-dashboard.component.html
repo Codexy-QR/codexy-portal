@@ -1,0 +1,57 @@
+<!-- subadmin-dashboard.component.html -->
+<div class="dashboard-container">
+	<app-loader [loading]="loading" loadingMessage="Cargando Dashboard..." [fullScreen]="true" [diameter]="70"
+		color="primary">
+	</app-loader>
+
+	<div *ngIf="error && !loading" class="error-message-loader">
+		<mat-icon>error_outline</mat-icon>
+		<p>{{ errorMessage }}</p>
+		<button mat-raised-button color="primary" (click)="loadDashboardData()">Reintentar</button>
+	</div>
+
+	<ng-container *ngIf="!loading && !error">
+		<!-- Header Section -->
+		<div class="dashboard-header">
+			<h1>Dashboard de Sucursal</h1>
+			<p>Visión general de la sucursal {{ sucursalNombre }}</p>
+		</div>
+
+		<!-- KPI Cards Section -->
+		<div class="kpi-grid">
+			<app-kpi-card icon="map" [value]="totalZonas" label="Zonas en Sucursal"></app-kpi-card>
+			<app-kpi-card icon="inventory_2" [value]="totalItems" label="Ítems Registrados"></app-kpi-card>
+			<app-kpi-card icon="supervisor_account" [value]="totalEncargados" label="Encargados de Zona"></app-kpi-card>
+			<app-kpi-card icon="engineering" [value]="totalOperativos" label="Operativos Activos"></app-kpi-card>
+			<app-kpi-card icon="fact_check" [value]="inventariosMes" label="Inventarios Este Mes"></app-kpi-card>
+		</div>
+
+		<div class="dashboard-grid">
+			<div class="chart-row">
+				<div class="grid-item">
+					<div class="section">
+						<app-status-chart [data]="itemsPorEstado"></app-status-chart>
+					</div>
+				</div>
+
+				<div class="grid-item">
+					<div class="section">
+						<app-zona-status-chart [data]="zonasPorEstado"></app-zona-status-chart>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid-item full-width">
+				<div class="section">
+					<app-category-chart [data]="itemsPorCategoria"></app-category-chart>
+				</div>
+			</div>
+
+			<div class="grid-item full-width">
+				<div class="section">
+					<app-recent-inventories [inventories]="inventariosRecientes"></app-recent-inventories>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+</div>

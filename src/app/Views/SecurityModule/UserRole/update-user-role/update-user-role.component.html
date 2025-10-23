@@ -1,0 +1,9 @@
+<h2 style="text-align: center;">Editar UserRole</h2>
+
+<app-base-form-pivote
+  *ngIf="entity && selectFields.length > 0"
+    [entity]="entity"
+    [selectFields]="selectFields"
+    [cancelRoute]="'/securitymodule/UserRole'"
+    (save)="handleUpdateUserRole($event)">
+</app-base-form-pivote>

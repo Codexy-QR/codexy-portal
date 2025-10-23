@@ -1,0 +1,122 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <header class="modal-header">
+            <h2>
+                <mat-icon>verified</mat-icon>
+                Detalles de Verificación
+            </h2>
+            <button mat-icon-button class="close-button" (click)="closeModal()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </header>
+
+        <div class="modal-content" *ngIf="verification">
+            <!-- Header con Resultado -->
+            <div class="verification-header" [ngClass]="getVerificationStatusClass()">
+                <div class="verification-result">
+                    <mat-icon class="result-icon">{{ getVerificationStatusIcon() }}</mat-icon>
+                    <div class="result-content">
+                        <span class="result-subtitle">Inventario #{{ verification.inventory.id }} - {{ formatDate(verification.inventory.date) }}</span>
+						<span class="result-date">{{ formatDateTime(verification.inventory.date) }}</span>
+
+                    </div>
+                </div>
+                <div class="verification-meta">
+                    <div class="meta-item">
+                        <mat-icon>calendar_today</mat-icon>
+						<span>{{ formatDateTime(verification.date) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layout Principal -->
+            <div class="main-layout">
+                <!-- Primera Fila - Información del Verificador -->
+                <div class="left-column">
+                    <div class="card">
+                        <div class="card-header">
+                            <mat-icon>person_search</mat-icon>
+                            <h3>Verificador Responsable</h3>
+                        </div>
+                        <div class="checker-info">
+                            <div class="checker-avatar">
+                                <mat-icon>account_circle</mat-icon>
+                            </div>
+                            <div class="checker-details">
+                                <span class="checker-name">{{ verification.checker.user.name }}</span>
+								<span class="checker-email">
+									<mat-icon>email</mat-icon>
+									{{ verification.checker.user.email }}
+								</span>
+								<span class="checker-branch">
+									<mat-icon>store</mat-icon>
+									{{ verification.checker.branch.name }}
+								</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del Inventario Relacionado -->
+                    <div class="card">
+                        <div class="card-header">
+                            <mat-icon>inventory_2</mat-icon>
+                            <h3>Inventario Verificado</h3>
+                        </div>
+                        <div class="inventory-summary">
+                            <div class="summary-item">
+                                <mat-icon>diversity_3</mat-icon>
+                                <div class="summary-content">
+                                    <span class="summary-label">Grupo Operativo</span>
+                                    <span class="summary-value">{{ verification.inventory.operatingGroup.name }}</span>
+                                </div>
+                            </div>
+                            <div class="summary-item">
+                                <mat-icon>fact_check</mat-icon>
+                                <div class="summary-content">
+                                    <span class="summary-label">Ítems Verificados</span>
+                                    <span class="summary-value">{{ verification.inventory.itemsCount }}</span>
+                                </div>
+                            </div>
+                            <div class="summary-item" *ngIf="verification.inventory.observations">
+                                <mat-icon>notes</mat-icon>
+                                <div class="summary-content">
+                                    <span class="summary-label">Observaciones del Grupo</span>
+                                    <span class="summary-text">{{ verification.inventory.observations }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda Fila - Observaciones del Verificador -->
+                <div class="right-column">
+                    <div class="card">
+                        <div class="card-header">
+                            <mat-icon>rate_review</mat-icon>
+                            <h3>Observaciones del Verificador</h3>
+                        </div>
+                        <div class="observations-content">
+                           <p *ngIf="verification.observations; else noObservations">
+								{{ verification.observations }}
+							</p>
+                            <ng-template #noObservations>
+                                <div class="no-observations">
+                                    <mat-icon>chat_bubble_outline</mat-icon>
+                                    <span>No se registraron observaciones</span>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <footer class="modal-actions">
+                <button mat-stroked-button (click)="closeModal()" class="btn-close">
+                    <mat-icon>close</mat-icon>
+                    Cerrar
+                </button>
+            </footer>
+        </div>
+    </div>
+</div>

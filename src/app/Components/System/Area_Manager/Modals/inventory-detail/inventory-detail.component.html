@@ -1,0 +1,250 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>inventory_2</mat-icon>
+				Detalles del Inventario
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content" *ngIf="inventory">
+			<!-- Header Resumen -->
+			<div class="summary-header">
+				<div class="summary-item">
+					<mat-icon>calendar_today</mat-icon>
+					<div class="summary-content">
+						<span class="summary-label">Fecha</span>
+						<span class="summary-value">{{ formatDateTime(inventory.date) }}</span>
+					</div>
+				</div>
+				<div class="summary-item">
+					<mat-icon>diversity_3</mat-icon>
+					<div class="summary-content">
+						<span class="summary-label">Grupo Operativo</span>
+						<span class="summary-value" [matTooltip]="inventory.operatingGroup.name">
+							{{ inventory.operatingGroup.name }}
+						</span>
+					</div>
+				</div>
+				<div class="summary-item">
+					<mat-icon>fact_check</mat-icon>
+					<div class="summary-content">
+						<span class="summary-label">Ítems</span>
+						<span class="summary-value">{{ inventory.inventaryDetails.length }}</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Observaciones -->
+			<div class="card observations-card" *ngIf="inventory.observations">
+				<div class="card-header">
+					<mat-icon>notes</mat-icon>
+					<h3>Observaciones</h3>
+				</div>
+				<p class="observations-text">{{ inventory.observations }}</p>
+			</div>
+
+			<!-- Layout Principal - Dos Columnas -->
+			<div class="main-layout">
+				<!-- Columna Izquierda - Información Detallada -->
+				<div class="left-column">
+					<!-- Resumen de Estados -->
+					<div class="card">
+						<div class="card-header">
+							<mat-icon>analytics</mat-icon>
+							<h3>Resumen por Estado</h3>
+						</div>
+						<div class="status-summary-grid">
+							<div *ngFor="let status of statusSummary(); trackBy: trackByStatusName"
+								class="status-summary-item" [ngClass]="getItemStatusClass(status.name)">
+								<span class="status-count">{{ status.count }}</span>
+								<span class="status-name">{{ status.name }}</span>
+								<span class="status-percentage">{{ (status.count / inventory.inventaryDetails.length *
+									100).toFixed(0) }}%</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Información del Grupo -->
+					<div class="card">
+						<div class="card-header">
+							<mat-icon>groups</mat-icon>
+							<h3>Grupo Operativo</h3>
+						</div>
+						<div class="group-info-compact">
+							<div class="group-dates">
+								<span class="date-range">
+									{{ formatDate(inventory.operatingGroup.dateStart) }} -
+									{{ inventory.operatingGroup.dateEnd ? formatDate(inventory.operatingGroup.dateEnd) :
+									'Presente' }}
+								</span>
+							</div>
+							<div class="operatives-count">
+								<mat-icon>people</mat-icon>
+								<span>{{ getOperativesCount() }} operativos</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Columna Derecha - Tabla de Ítems -->
+				<div class="right-column">
+					<div class="card">
+						<div class="card-header">
+							<mat-icon>list_alt</mat-icon>
+							<h3>Ítems Inventariados ({{ filteredItems().length }})</h3>
+							<div class="header-actions">
+								<button mat-icon-button class="btn-filter" [class.active]="isShowFilters"
+									[class.has-filters]="hasActiveFilters()" matTooltip="Filtrar"
+									(click)="toggleFilters()">
+									<mat-icon>filter_list</mat-icon>
+								</button>
+								<button *ngIf="hasActiveFilters()" mat-icon-button class="btn-clear-filters"
+									matTooltip="Limpiar filtros" (click)="clearFilters()">
+									<mat-icon>clear</mat-icon>
+								</button>
+							</div>
+						</div>
+
+						<!-- Panel de filtros -->
+						<div class="filters-panel" [class.show]="isShowFilters">
+							<div class="filters-row">
+								<mat-form-field appearance="outline" class="filter-field">
+									<mat-label>Buscar por código o nombre</mat-label>
+									<input matInput [ngModel]="currentFilters.searchText"
+										(ngModelChange)="updateSearchText($event)"
+										placeholder="Ingrese código o nombre">
+								</mat-form-field>
+
+								<mat-form-field appearance="outline" class="filter-field">
+									<mat-label>Categoría</mat-label>
+									<mat-select [ngModel]="currentFilters.selectedCategory"
+										(ngModelChange)="updateSelectedCategory($event)">
+										<mat-option value="">Todas las categorías</mat-option>
+										<mat-option
+											*ngFor="let category of availableCategories(); trackBy: trackByCategory"
+											[value]="category">
+											{{ category }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+
+								<mat-form-field appearance="outline" class="filter-field">
+									<mat-label>Estado</mat-label>
+									<mat-select [ngModel]="currentFilters.selectedStatus"
+										(ngModelChange)="updateSelectedStatus($event)">
+										<mat-option value="">Todos los estados</mat-option>
+										<mat-option *ngFor="let status of availableStatuses(); trackBy: trackByCategory"
+											[value]="status">
+											<span class="status-option" [ngClass]="getItemStatusClass(status)">
+												<mat-icon>{{ getItemStatusIcon(status) }}</mat-icon>
+												{{ status }}
+											</span>
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+
+						<div class="table-container">
+							<table class="items-table">
+								<thead>
+									<tr>
+										<th width="120">Código</th>
+										<th>Nombre</th>
+										<th width="140">Categoría</th>
+										<th width="120">Estado</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let detail of filteredItems(); trackBy: trackByItemId">
+										<td class="code-cell">
+											<div class="code-content">
+												<mat-icon>qr_code_2</mat-icon>
+												<span class="code-text">{{ detail.item.code }}</span>
+											</div>
+										</td>
+										<td class="name-cell">
+											<div class="name-content">
+												<span class="name-text">{{ detail.item.name }}</span>
+												<span *ngIf="detail.item.description" class="description-tooltip"
+													matTooltip="{{ detail.item.description }}">
+													<mat-icon>info</mat-icon>
+												</span>
+											</div>
+										</td>
+										<td class="category-cell">
+											<span class="category-badge">{{ detail.item.categoryItem.name }}</span>
+										</td>
+										<td class="status-cell">
+											<span class="status-badge"
+												[ngClass]="getItemStatusClass(detail.stateItem.name)">
+												<mat-icon>{{ getItemStatusIcon(detail.stateItem.name) }}</mat-icon>
+												{{ detail.stateItem.name }}
+											</span>
+										</td>
+									</tr>
+									<!-- Mensaje cuando no hay resultados -->
+									<tr *ngIf="filteredItems().length === 0" class="no-results">
+										<td colspan="4" class="no-results-cell">
+											<div class="no-results-content">
+												<mat-icon>search_off</mat-icon>
+												<span>No se encontraron ítems que coincidan con los filtros
+													aplicados</span>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<!-- Contador actualizado -->
+						<div class="table-footer">
+							<span class="items-count">
+								Mostrando {{ filteredItems().length }} de {{ inventory.inventaryDetails.length || 0 }}
+								ítems
+								<span *ngIf="hasActiveFilters()" class="filter-indicator">(filtrado)</span>
+							</span>
+							<div class="table-actions">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Lista de Operativos (Expandible) -->
+			<div class="operatives-section">
+				<div class="section-toggle" (click)="toggleOperatives()">
+					<mat-icon>{{ isShowOperatives ? 'expand_less' : 'expand_more' }}</mat-icon>
+					<span>Operativos Participantes ({{ getOperativesCount() }})</span>
+				</div>
+
+				<div class="operatives-grid" *ngIf="isShowOperatives">
+					<div class="operative-card" *ngFor="let operative of inventory.operatingGroup.operatings">
+						<div class="operative-avatar">
+							<mat-icon>person</mat-icon>
+						</div>
+						<div class="operative-details">
+							<span class="operative-name">{{ operative.user.name }}</span>
+							<span class="operative-contact">
+								<mat-icon>email</mat-icon>
+								{{ operative.user.email }}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Acciones -->
+			<footer class="modal-actions">
+				<button mat-stroked-button (click)="closeModal()" class="btn-close">
+					<mat-icon>close</mat-icon>
+					Cerrar
+				</button>
+			</footer>
+		</div>
+	</div>
+</div>

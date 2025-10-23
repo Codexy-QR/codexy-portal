@@ -1,0 +1,163 @@
+<!-- item-history-modal.component.html -->
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>history</mat-icon>
+				Historial de Estados - {{item?.code}}
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content" *ngIf="item">
+			<!-- Header del Ítem -->
+			<div class="item-header">
+				<div class="item-info">
+					<div class="item-code-name">
+						<span class="item-code">{{ item.code }}</span>
+						<span class="item-name">{{ item.name }}</span>
+					</div>
+					<div class="item-category">{{ item.category }}</div>
+				</div>
+				<div class="item-summary">
+					<div class="summary-item">
+						<span class="summary-label">Estado Base</span>
+						<span class="status-badge" [ngClass]="getStatusClass(item.baseInventoryStatus)">
+							{{ item.baseInventoryStatus }}
+						</span>
+					</div>
+					<div class="summary-item">
+						<span class="summary-label">Estado Actual</span>
+						<span class="status-badge" [ngClass]="getStatusClass(item.currentStatus)">
+							{{ item.currentStatus }}
+						</span>
+					</div>
+					<div class="summary-item">
+						<span class="summary-label">Total Cambios</span>
+						<span class="changes-badge">{{ item.totalChanges }}</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Línea de Tiempo -->
+			<div class="timeline-section">
+				<h3>Línea de Tiempo de Estados</h3>
+
+				<div class="timeline">
+					<div *ngFor="let event of item.statusHistory; let i = index" class="timeline-event"
+						[ngClass]="{'has-change': event.hasChanged}">
+
+						<!-- Conector -->
+						<div class="timeline-connector" *ngIf="i > 0"></div>
+
+						<!-- Punto de línea de tiempo -->
+						<div class="timeline-point" [ngClass]="getEventStatusClass(event)">
+							<mat-icon>{{ getStatusIcon(event.status) }}</mat-icon>
+						</div>
+
+						<!-- Contenido del evento -->
+						<div class="timeline-content">
+							<div class="event-header">
+								<span class="event-date">{{ formatDateTime(event.inventoryDate) }}</span>
+								<span class="event-group">{{ event.operatingGroupName }}</span>
+							</div>
+
+							<div class="event-status">
+								<span class="status-badge" [ngClass]="getStatusClass(event.status)">
+									{{ event.status }}
+								</span>
+
+								<span *ngIf="event.hasChanged" class="change-indicator" [ngClass]="event.changeType">
+									<mat-icon>{{ getChangeIcon(event.changeType || '') }}</mat-icon>
+									{{ event.changeType }}
+								</span>
+
+								<span *ngIf="!event.hasChanged" class="change-indicator no-change">
+									<mat-icon>check</mat-icon>
+									Sin cambio
+								</span>
+							</div>
+
+							<!-- Comparación con estado base -->
+							<div class="comparison" *ngIf="event.hasChanged">
+								<span class="comparison-text">
+									vs. Estado Base:
+									<span class="base-status">{{ item.baseInventoryStatus }}</span>
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Estado Base (al inicio) -->
+					<div class="timeline-event base-event">
+						<div class="timeline-point base-point">
+							<mat-icon>inventory_2</mat-icon>
+						</div>
+						<div class="timeline-content">
+							<div class="event-header">
+								<span class="event-date">Inventario Base</span>
+							</div>
+							<div class="event-status">
+								<span class="status-badge base-badge"
+									[ngClass]="getStatusClass(item.baseInventoryStatus)">
+									{{ item.baseInventoryStatus }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Resumen de Cambios -->
+			<div class="changes-summary">
+				<h4>Resumen de Cambios</h4>
+				<div class="summary-grid">
+					<div class="summary-card" [ngClass]="item.trend">
+						<div class="summary-icon">
+							<mat-icon>{{ getTrendIcon(item.trend) }}</mat-icon>
+						</div>
+						<div class="summary-content">
+							<div class="summary-value">{{ getTrendLabel(item.trend) }}</div>
+							<div class="summary-label">Tendencia General</div>
+						</div>
+					</div>
+
+					<div class="summary-card">
+						<div class="summary-icon">
+							<mat-icon>swap_vert</mat-icon>
+						</div>
+						<div class="summary-content">
+							<div class="summary-value">{{ item.totalChanges }}</div>
+							<div class="summary-label">Cambios Totales</div>
+						</div>
+					</div>
+
+					<div class="summary-card">
+						<div class="summary-icon">
+							<mat-icon>calendar_today</mat-icon>
+						</div>
+						<div class="summary-content">
+							<div class="summary-value">{{ item.lastChangeDate ? formatDate(item.lastChangeDate) : 'N/A'
+								}}</div>
+							<div class="summary-label">Último Cambio</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Acciones -->
+			<footer class="modal-actions">
+				<button mat-stroked-button (click)="closeModal()" class="btn-close">
+					<mat-icon>close</mat-icon>
+					Cerrar
+				</button>
+				<button mat-raised-button color="primary" (click)="exportItemHistory()" class="btn-export">
+					<mat-icon>description</mat-icon>
+					Exportar Historial
+				</button>
+			</footer>
+		</div>
+	</div>
+</div>
