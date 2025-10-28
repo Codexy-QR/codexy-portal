@@ -1,0 +1,114 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>edit</mat-icon>
+				Actualizar Información Personal
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()" [disabled]="isSaving()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content">
+			<form [formGroup]="profileForm" class="modal-form" (ngSubmit)="saveProfile()">
+				<div class="form-row">
+					<!-- Campo Name -->
+					<div class="custom-input-group">
+						<input id="modalName" type="text" formControlName="name" placeholder=" "
+							[class.error]="nameErrors.length > 0">
+						<label for="modalName">Nombre</label>
+						@if (nameErrors.length > 0) {
+						<div class="error-messages">
+							@for (error of nameErrors; track error) {
+							<div class="error-message">{{ error }}</div>
+							}
+						</div>
+						}
+					</div>
+
+					<!-- Campo LastName -->
+					<div class="custom-input-group">
+						<input id="modalLastName" type="text" formControlName="lastName" placeholder=" "
+							[class.error]="lastNameErrors.length > 0">
+						<label for="modalLastName">Apellidos</label>
+						@if (lastNameErrors.length > 0) {
+						<div class="error-messages">
+							@for (error of lastNameErrors; track error) {
+							<div class="error-message">{{ error }}</div>
+							}
+						</div>
+						}
+					</div>
+				</div>
+
+				<div class="form-row">
+					<!-- Campo Email -->
+					<div class="custom-input-group">
+						<input id="modalEmail" type="email" formControlName="email" placeholder=" "
+							[class.error]="emailErrors.length > 0">
+						<label for="modalEmail">Correo Electrónico</label>
+						@if (emailErrors.length > 0) {
+						<div class="error-messages">
+							@for (error of emailErrors; track error) {
+							<div class="error-message">{{ error }}</div>
+							}
+						</div>
+						}
+					</div>
+
+					<!-- Campo Teléfono -->
+					<div class="custom-input-group">
+						<input id="modalPhone" type="tel" formControlName="phone" placeholder=" "
+							[class.error]="phoneErrors.length > 0" appNumericInput [maxLength]="10">
+						<label for="modalPhone">Teléfono</label>
+						@if (phoneErrors.length > 0) {
+						<div class="error-messages">
+							@for (error of phoneErrors; track error) {
+							<div class="error-message">{{ error }}</div>
+							}
+						</div>
+						}
+					</div>
+				</div>
+
+				<div class="form-row">
+					<!-- Campo Username -->
+					<div class="custom-input-group">
+						<input id="modalUsername" type="tel" formControlName="username" placeholder=" "
+							[class.error]="usernameErrors.length > 0">
+						<label for="modalUsername">Username</label>
+						@if (usernameErrors.length > 0) {
+						<div class="error-messages">
+							@for (error of usernameErrors; track error) {
+							<div class="error-message">{{ error }}</div>
+							}
+						</div>
+						}
+					</div>
+				</div>
+
+				<footer class="modal-actions">
+					<button mat-stroked-button type="button" (click)="closeModal()" [disabled]="isSaving()">
+						<mat-icon>cancel</mat-icon>
+						Cancelar
+					</button>
+					<button mat-raised-button type="submit" [disabled]="profileForm.invalid || isSaving()"
+						class="save-button" [class.disabled]="profileForm.invalid">
+						@if (isSaving()) {
+						<ng-container>
+							<mat-icon class="spinning">hourglass_empty</mat-icon>
+							Guardando...
+						</ng-container>
+						} @else {
+						<ng-container>
+							<!-- <mat-icon >save</mat-icon> -->
+							Guardar Cambios
+						</ng-container>
+						}
+					</button>
+				</footer>
+			</form>
+		</div>
+	</div>
+</div>

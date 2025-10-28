@@ -1,0 +1,85 @@
+<div class="modal-backdrop" [class.visible]="isOpen" (click)="closeModal()">
+	<div class="modal-container" (click)="$event.stopPropagation()">
+		<header class="modal-header">
+			<h2>
+				<mat-icon>person_add</mat-icon>
+				Agregar Operativo al Grupo
+			</h2>
+			<button mat-icon-button class="close-button" (click)="closeModal()">
+				<mat-icon>close</mat-icon>
+			</button>
+		</header>
+
+		<div class="modal-content">
+			<form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="modal-form">
+
+				<!-- Select mejorado de operativos disponibles -->
+				<div class="custom-select-group" *ngIf="availableOperatives().length > 0">
+					<div class="select-wrapper">
+						<select id="operativeSelect" formControlName="operativeId"
+							[class.error]="addForm.get('operativeId')?.invalid && addForm.get('operativeId')?.touched"
+							(focus)="onSelectFocus()" (blur)="onSelectBlur()">
+							<option value="" disabled selected>Seleccione un operativo</option>
+							<option *ngFor="let operative of availableOperatives()" [value]="operative.id">
+								{{ operative.fullName }}
+							</option>
+						</select>
+						<div class="select-arrow">
+							<mat-icon>arrow_drop_down</mat-icon>
+						</div>
+					</div>
+					<label for="operativeSelect" [class.active]="isSelectFocused || addForm.get('operativeId')?.value">
+						Operativos Disponibles
+					</label>
+
+					<div class="select-hint">
+						<mat-icon>info</mat-icon>
+						{{ availableOperatives().length }} operativos disponibles
+					</div>
+
+					<div class="error-messages">
+						<div class="error-message" *ngIf="getFieldError('operativeId')">
+							<mat-icon>error_outline</mat-icon>
+							{{ getFieldError('operativeId') }}
+						</div>
+					</div>
+				</div>
+
+				<!-- Mensaje cuando no hay operativos -->
+				<div class="no-operatives-card" *ngIf="availableOperatives().length === 0">
+					<div class="no-operatives-content">
+						<h3>No hay operativos disponibles</h3>
+					</div>
+				</div>
+
+				<!-- Botón para crear nuevo operativo -->
+				<div class="create-operative-section">
+					<div class="create-operative-header">
+						<mat-icon>add_circle</mat-icon>
+						<h3>¿No encuentras el operativo?</h3>
+					</div>
+					<p class="create-operative-description">
+						Si el operativo que buscas no aparece en la lista, puedes registrarlo en el sistema.
+					</p>
+					<button type="button" class="btn-create-operative" (click)="navigateToCreateOperative()">
+						<mat-icon>person_add</mat-icon>
+						Registrar Nuevo Operativo
+					</button>
+				</div>
+
+				<footer class="modal-actions">
+					<button mat-stroked-button type="button" (click)="closeModal()" [disabled]="adding()">
+						<mat-icon>cancel</mat-icon>
+						Cancelar
+					</button>
+					<button mat-raised-button color="primary" type="submit"
+						[disabled]="addForm.invalid || adding() || availableOperatives().length === 0"
+						class="submit-button">
+						<mat-icon>{{ adding() ? 'hourglass_empty' : 'add' }}</mat-icon>
+						{{ adding() ? 'Agregando...' : 'Agregar al Grupo' }}
+					</button>
+				</footer>
+			</form>
+		</div>
+	</div>
+</div>

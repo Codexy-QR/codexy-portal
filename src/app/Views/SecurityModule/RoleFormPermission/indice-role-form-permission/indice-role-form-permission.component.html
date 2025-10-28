@@ -1,0 +1,16 @@
+<h2>RoleFormPermission</h2>
+
+<button class="btn-register" mat-raised-button routerLink="/securitymodule/RoleFormPermission/Create">
+    <mat-icon>add_circle</mat-icon> Registrar
+</button>
+
+<mat-card class="contenedor-tabla">
+    <app-base-table
+        [data]="roleFormPermissionData"
+        [columns]="columnasMostrar"
+        [tooltipColumns]="[]"
+        [statusLabels]="{ true: 'Activo', false: 'Inactivo' }"
+        (onEdit)="editarRoleFormPermission($event)"
+        (onDelete)="eliminarRoleFormPermission($event)">
+    </app-base-table>
+</mat-card>

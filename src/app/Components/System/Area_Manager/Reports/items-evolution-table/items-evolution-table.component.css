@@ -1,0 +1,19 @@
+.status-filter .mat-mdc-form-field {
+	width: 100%;
+}
+
+.status-filter mat-label {
+	color: var(--color-white) !important;
+}
+
+.status-filter mat-select {
+	color: var(--color-white) !important;
+}
+
+.status-filter input {
+	color: var(--color-white) !important;
+}
+
+.status-filter mat-datepicker-toggle-default-icon {
+	fill: var(--color-white) !important;
+}

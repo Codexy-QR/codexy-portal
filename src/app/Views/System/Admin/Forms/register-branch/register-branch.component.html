@@ -1,0 +1,226 @@
+<div class="register-branch-container">
+	<div class="form-wrapper">
+		<!-- Panel lateral con información -->
+		<div class="form-sidebar">
+			<div class="sidebar-content">
+				<div class="creation-icon">
+					<mat-icon>add_business</mat-icon>
+					<h2>Crear Nueva Sucursal</h2>
+				</div>
+
+				<div class="step-indicator">
+					<div class="step" [class.active]="currentStep() === 0">
+						<div class="step-number">1</div>
+						<div class="step-info">
+							<h3>Datos de Sucursal</h3>
+							<p>Información básica de la sucursal</p>
+						</div>
+					</div>
+
+					<div class="step" [class.active]="currentStep() === 1">
+						<div class="step-number">2</div>
+						<div class="step-info">
+							<h3>Enc. Sucursal</h3>
+							<p>Datos del responsable</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Contenido principal del formulario -->
+		<div class="form-content">
+			<div class="contenedor-formulario">
+				<form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="formulario">
+					<!-- Paso 1: Datos de Sucursal -->
+					<div class="form-step" *ngIf="currentStep() === 0">
+						<h2 class="section-title">
+							<mat-icon>business</mat-icon>
+							Datos de la Sucursal
+						</h2>
+
+						<div class="step-description">
+							Complete la información básica de la sucursal
+						</div>
+
+						<div class="form-row">
+							<!-- Nombre de Sucursal -->
+							<div class="custom-input-group">
+								<input id="branchName" type="text" formControlName="branchName" required placeholder=" "
+									minlength="3">
+								<label for="branchName">Nombre de la Sucursal</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('branchName')?.invalid && branchForm.get('branchName')?.touched">
+									<span *ngIf="branchForm.get('branchName')?.hasError('required')">El campo
+										requerido</span>
+									<span *ngIf="branchForm.get('branchName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+
+							<!-- Teléfono de Sucursal -->
+							<div class="custom-input-group">
+								<input id="branchPhone" type="text" formControlName="branchPhone" required
+									placeholder="Ej:31... o 601..." appNumericInput [maxLength]="10">
+								<label for="branchPhone">Teléfono de la Sucursal</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('branchPhone')?.invalid && branchForm.get('branchPhone')?.touched">
+									<span *ngIf="branchForm.get('branchPhone')?.hasError('required')">El campo es
+										requerido</span>
+									<span *ngIf="branchForm.get('branchPhone')?.hasError('mixedPhone')">Formato
+										inválido. </span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Dirección (campo completo) -->
+						<div class="form-row full-width">
+							<div class="custom-input-group">
+								<input id="branchAddress" type="text" formControlName="branchAddress" required
+									placeholder=" ">
+								<label for="branchAddress">Dirección Completa</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('branchAddress')?.invalid && branchForm.get('branchAddress')?.touched">
+									<span *ngIf="branchForm.get('branchAddress')?.hasError('required')">El campo es
+										requerido</span>
+									<span *ngIf="branchForm.get('branchAddress')?.hasError('minlength')">Mínimo 5
+										caracteres</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="step-actions">
+							<button type="button" class="cancel-btn" (click)="onCancel()">
+								<mat-icon>arrow_back</mat-icon>
+								Cancelar
+							</button>
+
+							<button type="button" class="next-btn" (click)="nextStep()" [disabled]="!isStepValid(0)">
+								Siguiente
+								<mat-icon>arrow_forward</mat-icon>
+							</button>
+						</div>
+					</div>
+
+					<!-- Paso 2: Datos del Subadministrador -->
+					<div class="form-step" *ngIf="currentStep() === 1">
+						<h2 class="section-title">
+							<mat-icon>admin_panel_settings</mat-icon>
+							Datos del Enc. Sucursal
+						</h2>
+
+						<div class="step-description">
+							Complete la información del Encargado de la sucursal
+						</div>
+
+						<div class="form-row">
+							<!-- Nombre -->
+							<div class="custom-input-group">
+								<input id="adminName" type="text" formControlName="adminName" required placeholder=" "
+									minlength="3">
+								<label for="adminName">Nombre</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('adminName')?.invalid && branchForm.get('adminName')?.touched">
+									<span *ngIf="branchForm.get('adminName')?.hasError('required')">El campo es
+										requerido</span>
+									<span *ngIf="branchForm.get('adminName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+
+							<!-- Apellido -->
+							<div class="custom-input-group">
+								<input id="adminLastName" type="text" formControlName="adminLastName" required
+									placeholder=" " minlength="3">
+								<label for="adminLastName">Apellidos</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('adminLastName')?.invalid && branchForm.get('adminLastName')?.touched">
+									<span *ngIf="branchForm.get('adminLastName')?.hasError('required')">El apellido es
+										requerido</span>
+									<span *ngIf="branchForm.get('adminLastName')?.hasError('minlength')">Mínimo 3
+										caracteres</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Tipo de Documento -->
+							<div class="custom-select-group">
+								<select id="adminDocumentType" formControlName="adminDocumentType" required>
+									<option value="" disabled selected>Seleccione una opción</option>
+									<option *ngFor="let doc of documentTypes" [value]="doc.value">{{doc.label}}</option>
+								</select>
+								<label for="adminDocumentType">Tipo de documento</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('adminDocumentType')?.invalid && branchForm.get('adminDocumentType')?.touched">
+									<span>El campo es requerido</span>
+								</div>
+							</div>
+
+							<!-- Numero de documento-->
+							<div class="custom-input-group">
+								<input id="adminDocumentNumber" type="text" formControlName="adminDocumentNumber"
+									required placeholder=" " appNumericInput [maxLength]="10">
+								<label for="adminDocumentNumber">Número de Documento</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('adminDocumentNumber')?.invalid && branchForm.get('adminDocumentNumber')?.touched">
+									<span *ngIf="branchForm.get('adminDocumentNumber')?.hasError('required')">El campo
+										es requerido</span>
+									<span *ngIf="branchForm.get('adminDocumentNumber')?.hasError('documentNumber')">
+										{{ branchForm.get('adminDocumentNumber')?.getError('documentNumber') }}</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<!-- Teléfono -->
+							<div class="custom-input-group">
+								<input id="adminPhone" type="text" formControlName="adminPhone" required
+									placeholder="Ej: 3123456789" appNumericInput  [maxLength]="10">
+
+								<label for="adminPhone">Teléfono Celular</label>
+
+								<div class="error-message"
+									*ngIf="branchForm.get('adminPhone')?.invalid && branchForm.get('adminPhone')?.touched">
+									<span *ngIf="branchForm.get('adminPhone')?.hasError('required')">
+										Este campo es requerido
+									</span>
+									<span *ngIf="branchForm.get('adminPhone')?.hasError('colombianPhone')">
+										{{ branchForm.get('adminPhone')?.getError('colombianPhone') }}
+									</span>
+								</div>
+							</div>
+
+
+
+							<!-- Email -->
+							<div class="custom-input-group">
+								<input id="adminEmail" type="email" formControlName="adminEmail" required
+									placeholder="Ej:correo@dominio.com">
+								<label for="adminEmail">Email</label>
+								<div class="error-message"
+									*ngIf="branchForm.get('adminEmail')?.invalid && branchForm.get('adminEmail')?.touched">
+									<span *ngIf="branchForm.get('adminEmail')?.hasError('required')">Este campo es
+										requerido</span>
+									<span *ngIf="branchForm.get('adminEmail')?.hasError('emailFormat')">Formato de email
+										inválido</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="step-actions">
+							<button type="button" class="prev-btn" (click)="prevStep()">
+								<mat-icon>arrow_back</mat-icon>
+								Anterior
+							</button>
+
+							<button mat-raised-button type="submit" [disabled]="branchForm.invalid || isSubmit()">
+								{{ isSubmit() ? 'Creando...' : 'Crear Sucursal' }}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

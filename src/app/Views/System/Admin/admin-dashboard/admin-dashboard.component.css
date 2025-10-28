@@ -1,0 +1,175 @@
+.kpi-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: 3rem;
+}
+
+.dashboard-grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	grid-auto-rows: 1fr;
+	gap: 1.5rem;
+	align-items: stretch;
+}
+
+.equal-height-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.role-distribution {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+	justify-content: space-between;
+}
+
+.role-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 12px;
+	transition: all 0.3s ease;
+}
+
+.role-item:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transform: translateX(5px);
+}
+
+.role-info {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.role-info mat-icon {
+	color: var(--color-blue-400);
+}
+
+.role-name {
+	color: var(--color-white);
+	font-weight: 500;
+	text-transform: capitalize;
+}
+
+.role-count {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--color-blue-300);
+}
+
+.status-chart-container {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 400px;
+}
+
+.coming-soon {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	color: rgba(255, 255, 255, 0.5);
+	flex: 1;
+}
+
+.coming-soon mat-icon {
+	font-size: 3rem;
+	width: 3rem;
+	height: 3rem;
+	margin-bottom: 1rem;
+}
+
+.coming-soon p {
+	font-size: 1.1rem;
+}
+
+/* Responsive exclusivos */
+@media (max-width: 1200px) {
+	.dashboard-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 968px) {
+	.dashboard-grid {
+		grid-template-columns: 1fr;
+		grid-auto-rows: auto;
+	}
+
+	.full-width {
+		grid-column: 1;
+	}
+
+	.status-chart-container {
+		min-height: 350px;
+	}
+}
+
+@media (max-width: 480px) {
+	.role-item {
+		padding: 0.75rem;
+	}
+
+	.role-count {
+		font-size: 1.1rem;
+	}
+
+	.status-chart-container {
+		min-height: 300px;
+	}
+}
+
+/* Mejora visual */
+.section h2 {
+	position: relative;
+	padding-bottom: 0.5rem;
+}
+
+.section h2::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 50px;
+	height: 3px;
+	background: linear-gradient(90deg, var(--color-blue-500), transparent);
+	border-radius: 2px;
+}
+
+.dashboard-container {
+	scroll-behavior: smooth;
+}
+
+.role-name,
+.role-count {
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+	.section {
+		background: rgba(255, 255, 255, 0.03);
+	}
+
+	.role-item {
+		background: rgba(255, 255, 255, 0.04);
+	}
+}
+
+@media (prefers-contrast: high) {
+	.section {
+		border-color: rgba(255, 255, 255, 0.3);
+	}
+
+	.role-item {
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+}

@@ -1,0 +1,318 @@
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 75px;
+	background: linear-gradient(135deg, var(--color-blue-1000) 0%, var(--color-blue-900) 100%);
+	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+	box-sizing: border-box;
+	padding: 0 1.5rem;
+	position: relative;
+	z-index: 900;
+	width: 100%;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Clase para cuando es fijo */
+.header.fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 900;
+	height: 75px;
+}
+
+/* Sección izquierda */
+.left-section {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.sidebar-toggle {
+	color: var(--color-white) !important;
+}
+
+.sidebar-toggle:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logo-title {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	cursor: pointer;
+	transition: opacity 0.3s ease;
+}
+
+.logo-title:hover {
+	opacity: 0.8;
+}
+
+.header-logo {
+	width: 45px;
+	height: 45px;
+	object-fit: contain;
+}
+
+.title {
+	font-size: 1.5rem;
+	font-weight: 800;
+	letter-spacing: 1.5px;
+	color: var(--color-white);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* Sección derecha */
+.right-section {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+/* Botón de notificaciones */
+.notification-btn {
+	color: var(--color-white);
+	transition: all 0.3s ease;
+}
+
+.notification-btn:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	transform: scale(1.1);
+}
+
+/* Perfil de usuario */
+.user-profile {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.user-profile:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-info {
+	display: flex;
+	flex-direction: column;
+	align-items: end;
+	gap: 4px;
+}
+
+.user-name {
+	font-weight: 500;
+	color: var(--color-white);
+	font-size: 0.9rem;
+	line-height: normal;
+}
+
+.user-role {
+	font-size: 0.75rem;
+	color: rgba(255, 255, 255, 0.7);
+	text-transform: capitalize;
+	line-height: normal;
+}
+
+.avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--color-blue-700) 0%, var(--color-blue-800) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+}
+
+.avatar mat-icon {
+	font-size: 1.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+/* Menú de notificaciones */
+.notifications-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+}
+
+.notifications-header h3 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 500;
+}
+
+/* Estilos para notificaciones */
+.notification-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	padding: 1rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	position: relative;
+}
+
+.notification-item:hover {
+	background-color: #f5f5f5;
+}
+
+.notification-item.read {
+	opacity: 0.6;
+}
+
+.notification-item.read .notification-content p {
+	font-weight: normal;
+}
+
+.mark-read-btn {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.notification-item:hover .mark-read-btn {
+	opacity: 1;
+}
+
+.mark-read-btn mat-icon {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	color: #4caf50;
+}
+
+/* Botón de marcar todas como leídas */
+.notifications-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+}
+
+.notifications-header button {
+	color: #666;
+	transition: color 0.2s ease;
+}
+
+.notifications-header button:hover {
+	color: #2196f3;
+}
+
+.notification-item:hover {
+	background-color: #f5f5f5;
+}
+
+.notification-icon {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background-color: #e3f2fd;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--color-blue-700);
+	flex-shrink: 0;
+}
+
+.notification-content {
+	flex: 1;
+}
+
+.notification-content p {
+	margin: 0 0 0.25rem 0;
+	font-size: 0.9rem;
+}
+
+.notification-time {
+	font-size: 0.75rem;
+	color: #757575;
+}
+
+.notifications-footer {
+	padding: 0.5rem;
+	text-align: center;
+}
+
+/* Menú de usuario */
+.user-menu-header {
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.avatar-large {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--color-blue-700) 0%, var(--color-blue-800) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	flex-shrink: 0;
+}
+
+.avatar-large mat-icon {
+	font-size: 2rem;
+	width: 2rem;
+	height: 2rem;
+}
+
+.user-details {
+	display: flex;
+	flex-direction: column;
+}
+
+.user-details .user-name {
+	font-weight: 500;
+	color: #333;
+}
+
+.user-details .user-role {
+	color: #666;
+	text-transform: capitalize;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.header {
+		height: 60px;
+	}
+
+	.header.fixed {
+		height: 60px;
+	}
+
+	.user-info {
+		display: none;
+	}
+
+	.notifications-menu {
+		min-width: 300px;
+		max-width: 90vw;
+	}
+}
+
+@media (max-width: 480px) {
+	.title {
+		font-size: 1.2rem;
+	}
+
+	.header-logo {
+		width: 35px;
+		height: 35px;
+	}
+}

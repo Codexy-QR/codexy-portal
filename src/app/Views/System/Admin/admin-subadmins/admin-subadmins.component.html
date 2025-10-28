@@ -1,0 +1,10 @@
+<app-show-staff
+	[data]="subadmins"
+	[loading]="loading"
+	[error]="error"
+	[config]="tableConfig"
+	searchPlaceholder="Buscar por nombre o documento..."
+	(rowClick)="onRowClick($event)"
+	(buttonAction)="navigateToBranches()">
+</app-show-staff>
+
