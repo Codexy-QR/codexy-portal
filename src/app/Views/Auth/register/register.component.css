@@ -7,65 +7,12 @@
 	overflow: hidden;
 }
 
-/* Elementos decorativos de fondo */
-.background-decoration {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	pointer-events: none;
-}
-
-.decoration-circle {
-	position: absolute;
-	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.03);
-	animation: float 6s ease-in-out infinite;
-}
-
-.circle-1 {
-	width: 200px;
-	height: 200px;
-	top: 10%;
-	left: 5%;
-	animation-delay: 0s;
-}
-
-.circle-2 {
-	width: 150px;
-	height: 150px;
-	top: 60%;
-	right: 10%;
-	animation-delay: 2s;
-}
-
-.circle-3 {
-	width: 100px;
-	height: 100px;
-	bottom: 20%;
-	left: 15%;
-	animation-delay: 4s;
-}
-
-@keyframes float {
-
-	0%,
-	100% {
-		transform: translateY(0px) scale(1);
-	}
-
-	50% {
-		transform: translateY(-20px) scale(1.05);
-	}
-}
-
 .main-content {
 	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 2rem;
+	padding: 0.8rem;
 	position: relative;
 	z-index: 1;
 }
@@ -75,7 +22,7 @@
 	color: var(--color-white);
 	backdrop-filter: blur(20px);
 	border-radius: 24px;
-	padding: 1.6rem 2.6rem;
+	padding: 1.2rem 2.6rem;
 	width: 100%;
 	max-width: 900px;
 	box-shadow:
@@ -84,10 +31,11 @@
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	transform: translateY(0);
 	transition: all 0.3s ease;
-	max-height: 85vh;
+	max-height: 72vh;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+
 
 .register-card:hover {
 	transform: translateY(-5px);
@@ -118,43 +66,30 @@
 /* Header de la tarjeta */
 .card-header {
 	text-align: center;
-	margin-bottom: 1.5rem;
+	margin-bottom: 1.2rem;
 }
 
 .header-icon {
-	width: 80px;
-	height: 80px;
+	width: 70px;
+	height: 70px;
 	background: linear-gradient(135deg, #1e40af, #1e3a8a);
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 0 auto 1.5rem;
+	margin: 0 auto 1rem;
 	box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
-	animation: pulse-icon 3s ease-in-out infinite;
-}
-
-@keyframes pulse-icon {
-
-	0%,
-	100% {
-		box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
-	}
-
-	50% {
-		box-shadow: 0 8px 30px rgba(30, 64, 175, 0.5);
-	}
 }
 
 .header-icon mat-icon {
-	font-size: 2.5rem;
-	width: 2.5rem;
-	height: 2.5rem;
+	font-size: 2rem;
+	width: 2rem;
+	height: 2rem;
 	color: white;
 }
 
 .card-header h1 {
-	font-size: 1.8rem;
+	font-size: 1.5rem;
 	font-weight: 700;
 	color: var(--color-blue-950);
 	margin: 0 0 0.5rem;
@@ -166,7 +101,7 @@
 
 .card-header p {
 	color: rgba(255, 255, 255, 0.8);
-	font-size: 0.95rem;
+	font-size: 0.9rem;
 	margin: 0;
 	font-weight: 500;
 }
@@ -174,8 +109,10 @@
 /* Formulario */
 .register-form {
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	flex-direction: column;
-	gap: 1.5rem;
+	gap: 1.2rem;
 }
 
 .form-row {
@@ -329,12 +266,13 @@
 }
 
 /* Botón de envío */
-.cnt-submit-btn{
+.cnt-submit-btn {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
 }
+
 .submit-btn {
 	background: linear-gradient(135deg, #1e40af, #1e3a8a);
 	color: white !important;
@@ -344,7 +282,7 @@
 	font-size: 1rem !important;
 	font-weight: 600 !important;
 	height: auto !important;
-	width: 35% ;
+	width: 35%;
 	transition: all 0.3s ease !important;
 	box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3) !important;
 	position: relative;
@@ -386,45 +324,36 @@
 
 /* Sección de login */
 .login-section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 	text-align: center;
 	padding: 0;
 }
 
 .login-section p {
+	margin: 0;
+	margin-right: 4px;
 	color: #b6b8bd;
-	margin: 0 0 0.75rem;
 	font-size: 0.9rem;
 }
 
 .login-link {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.5rem;
 	color: #60a5fa;
 	text-decoration: none;
 	font-weight: 600;
 	font-size: 0.95rem;
-	padding: 0.75rem 1.5rem;
-	border: 2px solid;
-	border-color: #1e3a8a;
-	border-radius: 12px;
 	transition: all 0.3s ease;
-	background: rgba(96, 165, 250, 0.1);
-	cursor: pointer;
 }
 
 .login-link:hover {
-	background: #1e3a8a;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(255, 255, 255, 0.7);
 	transform: translateY(-1px);
-	box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
 }
 
-.login-link mat-icon {
-	font-size: 1.1rem;
-	width: 1.1rem;
-	height: 1.1rem;
-}
 
 /* Responsive - Tablet */
 @media (max-width: 768px) {
