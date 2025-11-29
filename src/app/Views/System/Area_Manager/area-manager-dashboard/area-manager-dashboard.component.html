@@ -59,7 +59,7 @@
 					</div>
 
 					<div class="table-container">
-						<table mat-table [dataSource]="inventoryComparison" class="comparison-table">
+						<table mat-table [dataSource]="paginatedComparison" class="comparison-table">
 							<!-- Nombre Column -->
 							<ng-container matColumnDef="itemName">
 								<th mat-header-cell *matHeaderCellDef>Nombre del Ítem</th>
@@ -101,9 +101,19 @@
 							</ng-container>
 
 							<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-							<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 						</table>
 					</div>
+
+					<!-- Paginación -->
+        			@if (inventoryComparison.length > itemsPerPage) {
+        			<app-pagination
+        			    [paginationData]="paginationData"
+        			    [itemsPerPageOptions]="[5, 10, 25, 50]"
+        			    (pageChanged)="onPageChange($event)"
+        			    (pageSizeChanged)="onPageSizeChange($event)">
+        			</app-pagination>
+        			}
 
 					<!-- Resumen de diferencias -->
 					<div class="differences-summary">
@@ -144,7 +154,7 @@
 					<h2>Grupos Operativos Relacionados</h2>
 
 					<div class="groups-grid">
-						<div class="group-card" *ngFor="let group of operatingGroups">
+						<div class="group-card" *ngFor="let group of paginatedGroups">
 							<div class="group-header">
 								<h3 class="group-name">{{ group.groupName }}</h3>
 								<span class="group-status" [class]="getGroupStatusClass(group.status)">
@@ -175,6 +185,16 @@
 							</div>
 						</div>
 					</div>
+
+					<!-- Paginación para grupos -->
+        			@if (operatingGroups.length > groupsPerPage) {
+        			<app-pagination
+        			    [paginationData]="groupsPaginationData"
+        			    [itemsPerPageOptions]="[3, 6, 9, 12]"
+        			    (pageChanged)="onGroupsPageChange($event)"
+        			    (pageSizeChanged)="onGroupsPageSizeChange($event)">
+        			</app-pagination>
+        			}
 
 					<div class="no-groups" *ngIf="operatingGroups.length === 0">
 						<mat-icon>groups</mat-icon>
