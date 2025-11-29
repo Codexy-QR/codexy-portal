@@ -29,35 +29,30 @@ import { NotificationStateService } from '../../../../../Core/Service/System/Oth
 export class InventoryRequestsComponent implements OnInit {
 
 	// Inyección de servicios propios del proyecto
-	private readonly authService = inject(AuthService);
-	private readonly notificationService = inject(NotificationService);
-	private readonly notificationState = inject(NotificationStateService);
+	readonly notificationState = inject(NotificationStateService);
+
+	readonly requests = this.notificationState.inventoryListState;
+	readonly loading = this.notificationState.isLoading;
 
 	// Inyección de servicios nativos de Angular
 	private readonly destroyRef = inject(DestroyRef);
 
 	// Signals para estados generales del componente
-	readonly loading = signal(true);
-	readonly error = signal(false);
 	readonly errorMessage = signal('');
-
-	// Signal para almacenar solicitudes de inventario
-	private readonly _requests = signal<InventoryRequestNotificationMod[]>([]);
+	readonly error = signal(false);
 
 	// Signals para el control del modal de detalle
 	readonly isDetailModalOpen = signal(false);
 	readonly selectedRequest = signal<InventoryRequestNotificationMod | null>(null);
 
 	// Computed para exponer solicitudes y calcular información derivada
-	readonly requests = computed(() => this._requests());
 	readonly pendingRequests = computed(() => this.requests().filter(req => !req.read));
 	readonly totalItemsToUpdate = computed(() =>
-		this.requests().reduce((total, req) => total + req.content.differences.length, 0)
+		this.requests().reduce((total, req) => total + (req.content.differences?.length || 0), 0)
 	);
 
-
 	ngOnInit(): void {
-		this.loadRequests();
+		this.notificationState.loadInventoryRequests();
 		this.setupActionListener();
 	}
 
@@ -65,98 +60,23 @@ export class InventoryRequestsComponent implements OnInit {
 		this.notificationState.action$
 			.pipe(
 				takeUntilDestroyed(this.destroyRef),
-				// Filtrar acciones que vengan del header (evita loops)
-				filter(action => action.source !== 'main')
+				filter(action => action.source !== 'main') // Evita loops
 			)
 			.subscribe(action => {
 				console.log('InventoryRequests: Received action', action);
 
-				switch (action.type) {
-					case 'markRead':
-						if (action.notificationId) {
-							this.updateLocalReadState(action.notificationId, true);
-						}
-						break;
-
-					case 'markAllRead':
-						this.markAllLocallyAsRead();
-						break;
-
-					case 'refresh':
-						this.loadRequests();
-						break;
+				if (action.type === 'refresh') {
+					this.notificationState.loadInventoryRequests();
 				}
 			});
 	}
 
-	private updateLocalReadState(notificationId: number, read: boolean): void {
-		this._requests.update(requests =>
-			requests.map(req =>
-				req.id === notificationId ? { ...req, read } : req
-			)
-		);
-	}
-
-	private markAllLocallyAsRead(): void {
-		this._requests.update(requests =>
-			requests.map(req => ({ ...req, read: true }))
-		);
-	}
 
 	markAsRead(request: InventoryRequestNotificationMod): void {
 		if (request.read) return;
-
-		console.log('InventoryRequests: Marking as read', request.id);
-
-		// Optimistic update local
-		this.updateLocalReadState(request.id, true);
-
-		// Notificar a otros componentes (especificando source)
 		this.notificationState.markAsRead(request.id, 'main');
-
-		// Llamada al backend
-		this.notificationService.markAsRead(request.id).subscribe({
-			error: (error) => {
-				console.error('Error al marcar lectura', error);
-				// Revertir si hay error
-				this.updateLocalReadState(request.id, false);
-				// Recargar para estar seguros
-				this.notificationState.refreshNotifications();
-			}
-		});
 	}
 
-	loadRequests(): void {
-		this.loading.set(true);
-		this.error.set(false);
-
-		const userId = Number(this.authService.getIdUser());
-
-		if (!userId) {
-			this.error.set(true);
-			this.errorMessage.set('No se pudo obtener el ID del usuario');
-			this.loading.set(false);
-			return;
-		}
-
-		this.notificationService.getInventoryRequests(userId).subscribe({
-			next: (requests) => {
-				this._requests.set(requests);
-
-				// Actualizar contador global
-				const unreadCount = requests.filter(r => !r.read).length;
-				this.notificationState.updateUnreadCount(unreadCount);
-
-				this.loading.set(false);
-			},
-			error: (err) => {
-				console.error('Error loading inventory requests:', err);
-				this.error.set(true);
-				this.errorMessage.set('Error al cargar las solicitudes de inventario');
-				this.loading.set(false);
-			}
-		});
-	}
 
 	viewRequestDetails(request: InventoryRequestNotificationMod): void {
 		this.selectedRequest.set(request);
@@ -189,6 +109,6 @@ export class InventoryRequestsComponent implements OnInit {
 	}
 
 	retryData(): void {
-		this.loadRequests();
+		this.notificationState.loadInventoryRequests()
 	}
 }

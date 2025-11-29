@@ -62,7 +62,7 @@ export class AddOperativeComponent implements OnInit, OnChanges {
 
 	constructor() {
 		this.addForm = this.fb.group({
-			operativeId: ['', Validators.required]
+			operativeId: [null, Validators.required]
 		});
 
 		// Cargar operativos disponibles hardcodeados
