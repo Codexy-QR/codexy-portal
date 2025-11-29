@@ -4,11 +4,12 @@
 // persistencia del token en localStorage y provee utilidades para validar roles y sesiones.
 
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { RoleMod } from '../../Models/SecurityModule/RoleMod.model';
+import { SignalrService } from '../signal-r.service';
 
 export interface UserInfo {
 	userId: number;
@@ -21,6 +22,11 @@ export interface UserInfo {
 	providedIn: 'root'
 })
 export class AuthService {
+
+	private readonly http = inject(HttpClient);
+	private readonly router = inject(Router);
+	private readonly signalrService = inject(SignalrService);
+
 	private readonly baseUrl = `${environment.apiURL}api/Auth/`;
 
 	// Signal para almacenar la información del usuario
@@ -34,9 +40,8 @@ export class AuthService {
 	private pendingRequests: HttpRequest<any>[] = [];
 	private isRefreshing = false;
 
-	constructor(private http: HttpClient, private router: Router) { }
+	constructor() { }
 
-	// Inicia sesión (las cookies se manejan automáticamente)
 	login(credentials: { username: string; password: string }): Observable<{ message: string }> {
 		return this.http.post<{ message: string }>(`${this.baseUrl}Login`, credentials, {
 			withCredentials: true
@@ -44,6 +49,11 @@ export class AuthService {
 			tap(() => {
 				this.isAuthChecked.set(true);
 				this.onTokensRefreshed(); // Iniciar timer después del login
+
+				// Conectar a SignalR después de un login exitoso.
+				this.signalrService.startConnection().catch(err => {
+					console.error("Fallo al iniciar SignalR post-login", err);
+				});
 			})
 		);
 	}
@@ -73,6 +83,7 @@ export class AuthService {
 			withCredentials: true
 		}).pipe(
 			tap(() => {
+				// clearAuthState() ahora también detendrá SignalR
 				this.clearAuthState();
 			})
 		);
@@ -126,8 +137,8 @@ export class AuthService {
 
 	// Actualizar el método refreshToken
 	refreshToken(): Observable<{ message: string }> {
-		this.isRefreshing = true; // Cambiar a la nueva variable
-		this.refreshInProgress = true; // Mantener por compatibilidad
+		this.isRefreshing = true;
+		this.refreshInProgress = true;
 
 		return this.http.post<{ message: string }>(`${this.baseUrl}Refresh`, {}, {
 			withCredentials: true
@@ -137,13 +148,24 @@ export class AuthService {
 				this.isRefreshing = false;
 				this.refreshInProgress = false;
 				this.onTokensRefreshed();
-				this.processPendingRequests(); // 🔄 Procesar requests pendientes
+				this.processPendingRequests();
+
+				// --- [NUEVO] ---
+				// Asegurar que la conexión de SignalR esté activa después de un refresh.
+				// La lógica 'connectionPromise' en el servicio evitará conexiones duplicadas.
+				this.signalrService.startConnection().catch(err => {
+					console.error("Fallo al (re)iniciar SignalR post-refresh", err);
+				});
+				// --- [FIN NUEVO] ---
 			}),
 			catchError((error) => {
 				console.error('❌ Error refrescando token:', error);
 				this.isRefreshing = false;
 				this.refreshInProgress = false;
+
+				// clearAuthState() detendrá SignalR
 				this.clearAuthState();
+
 				if (this.refreshTimer) {
 					clearTimeout(this.refreshTimer);
 				}
@@ -185,9 +207,16 @@ export class AuthService {
 			tap(userInfo => {
 				this.currentUser.set(userInfo);
 				this.isAuthChecked.set(true);
+
+				// --- [NUEVO] ---
+				// Punto clave para la inicialización (APP_INITIALIZER).
+				// Si 'Me' es exitoso, estamos autenticados. Conectar SignalR.
+				this.signalrService.startConnection().catch(err => {
+					console.error("Fallo al iniciar SignalR en check-auth", err);
+				});
+				// --- [FIN NUEVO] ---
 			}),
 			catchError(error => {
-				// 🔄 Cambiar de console.error a console.log para 401 esperados
 				if (error.status === 401) {
 					console.log('🔐 Usuario no autenticado - comportamiento esperado');
 				} else {
@@ -195,6 +224,13 @@ export class AuthService {
 				}
 				this.currentUser.set(null);
 				this.isAuthChecked.set(true);
+
+				// --- [NUEVO] ---
+				// Si 'Me' falla (401 o error), nos aseguramos de detener
+				// cualquier conexión SignalR que pudiera estar activa/intentando.
+				this.signalrService.stopConnection();
+				// --- [FIN NUEVO] ---
+
 				throw error;
 			})
 		);
@@ -207,14 +243,14 @@ export class AuthService {
 				console.log('✅ Usuario autenticado al inicializar:', userInfo);
 				this.currentUser.set(userInfo);
 				this.isAuthChecked.set(true);
+				// (La conexión de SignalR se inicia dentro de getCurrentUserInfo)
 			}),
 			map(() => true),
 			catchError((error) => {
 				console.log('🔐 Usuario no autenticado o error:', error.status);
 				this.currentUser.set(null);
 				this.isAuthChecked.set(true);
-
-				// IMPORTANTE: No redirigir aquí, solo retornar false
+				// (El stop de SignalR se maneja dentro de getCurrentUserInfo)
 				return of(false);
 			})
 		);
@@ -225,17 +261,21 @@ export class AuthService {
 		this.currentUser.set(null);
 		this.isAuthChecked.set(true);
 
-		// 🔄 Limpiar timer de refresh proactivo
 		if (this.refreshTimer) {
 			clearTimeout(this.refreshTimer);
 			this.refreshTimer = null;
 		}
 
-		// 🔄 Limpiar estado de refresh
 		this.pendingRequests = [];
 		this.isRefreshing = false;
 		this.refreshInProgress = false;
 		this.refreshSubject.next(null);
+
+		// --- [NUEVO] ---
+		// Punto centralizado para detener SignalR.
+		// Se llama en logout() y en el catchError de refreshToken().
+		this.signalrService.stopConnection();
+		// --- [FIN NUEVO] ---
 	}
 
 	// ========== MÉTODOS COMPATIBLES (misma interfaz) ==========

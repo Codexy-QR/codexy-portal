@@ -26,9 +26,9 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
 	return next(clonedReq).pipe(
 		catchError((error: HttpErrorResponse) => {
 			if (error.status === 401) {
-				// 🔄 EVITAR ciclo infinito en requests de auth
+				// EVITAR ciclo infinito en requests de auth
 				if (req.url.includes('/api/Auth/Me')) {
-					console.log('🔐 Request /Me con 401 - No intentar refresh');
+					console.log('Request /Me con 401 - No intentar refresh');
 					return throwError(() => error);
 				}
 
@@ -46,7 +46,7 @@ function handle401Error(
 	authService: AuthService,
 	router: Router
 ) {
-	// 🔄 EVITAR múltiples intentos de refresh
+	// EVITAR múltiples intentos de refresh
 	if (authService.isRefreshInProgress()) {
 		return authService.getRefreshObservable().pipe(
 			filter(request => request !== null),
@@ -71,10 +71,10 @@ function handle401Error(
 			return next(retryReq);
 		}),
 		catchError((refreshError) => {
-			console.log('❌ Refresh token falló - Limpiando estado');
+			console.log('Refresh token falló - Limpiando estado');
 			authService.clearAuthState();
 
-			// 🔄 SOLO redirigir si no es una request de inicialización
+			// SOLO redirigir si no es una request de inicialización
 			if (!req.url.includes('/api/Auth/Me')) {
 				router.navigate(['/Login']);
 			}
