@@ -7,10 +7,16 @@ import { SidebarInitialComponent } from '../../../Components/System/Landing/side
 
 @Component({
 	selector: 'app-landing',
-	imports: [CommonModule, InitialHeaderComponent, SidebarInitialComponent, CarouselComponent, MatIconModule],
+	imports: [
+		CommonModule,
+		InitialHeaderComponent,
+		SidebarInitialComponent,
+		CarouselComponent,
+		MatIconModule,
+	],
 	standalone: true,
 	templateUrl: './landing.component.html',
-	styleUrl: './landing.component.css'
+	styleUrl: './landing.component.css',
 })
 export class LandingComponent {
 	isSidebarExpanded: boolean = false;
@@ -20,5 +26,10 @@ export class LandingComponent {
 	}
 	expandSidebar(): void {
 		this.isSidebarExpanded = true;
+	}
+
+	downloadAPK(): void {
+		const url = 'https://github.com/Codexy-QR/codexy-app/releases/latest';
+		window.open(url, '_blank');
 	}
 }
