@@ -1,3 +1,3 @@
 export const environment = {
-  apiURL: 'http://localhost:7069/' // URL API en IIS
+  apiURL: 'https://codexy-jif-api.azurewebsites.net/' // URL API en Azure
 };

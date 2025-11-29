@@ -19,7 +19,7 @@
 						<select id="operativeSelect" formControlName="operativeId"
 							[class.error]="addForm.get('operativeId')?.invalid && addForm.get('operativeId')?.touched"
 							(focus)="onSelectFocus()" (blur)="onSelectBlur()">
-							<option value="" disabled selected>Seleccione un operativo</option>
+							<option [value]="null" disabled>Seleccione un operativo</option>
 							<option *ngFor="let operative of availableOperatives()" [value]="operative.id">
 								{{ operative.fullName }}
 							</option>

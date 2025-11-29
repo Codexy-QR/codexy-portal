@@ -1,20 +1,36 @@
-<!-- recent-inventories.component.html -->
 <div class="recent-inventories">
 	<h2>Inventarios Recientes</h2>
 
 	<div class="inventories-list">
-		<div class="inventory-item" *ngFor="let inventory of inventories">
+		<div
+			class="inventory-item"
+			*ngFor="let inventory of paginationData.data"
+		>
 			<div class="inventory-info">
 				<div class="inventory-date">{{ inventory.fecha }}</div>
 				<div class="inventory-zone">{{ inventory.zona }}</div>
 				<div class="inventory-team">{{ inventory.grupoOperativo }}</div>
 			</div>
-			<div class="inventory-status" [class]="getStatusClass(inventory.estado)">
+			<div
+				class="inventory-status"
+				[class]="getStatusClass(inventory.estado)"
+			>
 				<mat-icon>{{ getStatusIcon(inventory.estado) }}</mat-icon>
 				<span>{{ inventory.estado }}</span>
 			</div>
 		</div>
 	</div>
+
+	<!-- Paginación para inventarios -->
+	@if (inventories.length > itemsPerPage) {
+	<app-pagination
+		[paginationData]="paginationData"
+		[itemsPerPageOptions]="[3, 5, 10, 15]"
+		(pageChanged)="onPageChange($event)"
+		(pageSizeChanged)="onPageSizeChange($event)"
+	>
+	</app-pagination>
+	}
 
 	<div class="no-inventories" *ngIf="inventories.length === 0">
 		<mat-icon>inventory</mat-icon>
