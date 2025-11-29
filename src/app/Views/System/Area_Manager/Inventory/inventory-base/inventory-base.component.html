@@ -63,10 +63,16 @@
 						<mat-icon>add</mat-icon>
 						Nuevo Item
 					</button>
+
 					<button mat-stroked-button class="btn-export" (click)="exportToExcel()"
 						[disabled]="loadingDetails()">
 						<mat-icon>print</mat-icon>
 						{{ loadingDetails() ? 'Preparando...' : 'Exportar QRs Items' }}
+					</button>
+
+					<button mat-raised-button color="primary" (click)="openImportModal()">
+						<mat-icon>upload_file</mat-icon>
+						Importar desde Excel
 					</button>
 				</div>
 			</div>

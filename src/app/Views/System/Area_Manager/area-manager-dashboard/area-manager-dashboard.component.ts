@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -8,13 +9,26 @@ import { LoaderComponent } from '../../../../Components/Shared/app-loader/app-lo
 import { KpiCardComponent } from '../../../../Components/Shared/kpi-card/kpi-card.component';
 import { StatusChartComponent } from '../../../../Components/System/Admin/Analytics/status-chart/status-chart.component';
 import { ZONE_STATE_ESPECIFIC_MAP } from '../../../../Core/Constants/zone-mapping';
-import { ItemStatusMod, ZoneDashboard, ZoneInfoMod } from '../../../../Core/Models/System/Others/Dashboard.model';
+import {
+	ItemStatusMod,
+	ZoneDashboard,
+	ZoneInfoMod,
+} from '../../../../Core/Models/System/Others/Dashboard.model';
 import { AuthService } from '../../../../Core/Service/Auth/auth.service';
-import { CalculateStatusOpGroupService, OperatingGroup } from '../../../../Core/Service/System/Others/Operatives/calculate-status-opGroup.service';
+import {
+	CalculateStatusOpGroupService,
+	OperatingGroup,
+} from '../../../../Core/Service/System/Others/Operatives/calculate-status-opGroup.service';
 import { DashboardService } from '../../../../Core/Service/System/Others/dashboard.service';
-import { InventoryComparisonResult, InventoryComparisonService } from '../../../../Core/Service/System/Others/inventory-comparasion.service';
+import {
+	InventoryComparisonResult,
+	InventoryComparisonService,
+} from '../../../../Core/Service/System/Others/inventory-comparasion.service';
 import { ZoneService } from '../../../../Core/Service/System/zone.service';
-import { MatButtonModule } from '@angular/material/button';
+import {
+	PaginationComponent,
+	PaginationData,
+} from '../../../../Components/Shared/pagination/pagination.component';
 
 @Component({
 	selector: 'app-area-manager-dashboard',
@@ -27,17 +41,24 @@ import { MatButtonModule } from '@angular/material/button';
 		MatTableModule,
 		LoaderComponent,
 		KpiCardComponent,
-		StatusChartComponent
+		StatusChartComponent,
+		PaginationComponent,
 	],
 	templateUrl: './area-manager-dashboard.component.html',
-	styleUrls: ['../../../../Components/Shared/Styles/dashboard-shared.css', './area-manager-dashboard.component.css']
+	styleUrls: [
+		'../../../../Components/Shared/Styles/dashboard-shared.css',
+		'./area-manager-dashboard.component.css',
+	],
 })
 export class AreaManagerDashboardComponent implements OnInit {
-
 	// Inyección de servicios propios del proyecto
 	private readonly authService = inject(AuthService);
-	private readonly inventoryComparisonService = inject(InventoryComparisonService);
-	private readonly calculateStateOpGroupService = inject(CalculateStatusOpGroupService);
+	private readonly inventoryComparisonService = inject(
+		InventoryComparisonService
+	);
+	private readonly calculateStateOpGroupService = inject(
+		CalculateStatusOpGroupService
+	);
 	private readonly zoneService = inject(ZoneService);
 	private readonly dashboardService = inject(DashboardService);
 
@@ -61,9 +82,115 @@ export class AreaManagerDashboardComponent implements OnInit {
 	inProgressGroupsCount = 0;
 	completedGroupsCount = 0;
 
+	// Propiedades para paginación tabla de comparación de inventarios
+	currentPage = 1;
+	itemsPerPage = 10;
+	itemsPerPageOptions = [5, 10, 25, 50];
+
+	// Propiedades para paginación de GRUPOS
+	groupsCurrentPage = 1;
+	groupsPerPage = 3;
+	groupsPerPageOptions = [3, 6, 9, 12];
+
+	// Computed para datos paginados
+	get paginatedComparison(): InventoryComparisonResult[] {
+		const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+		const endIndex = startIndex + this.itemsPerPage;
+		return this.inventoryComparison.slice(startIndex, endIndex);
+	}
+
+	// Computed para información de paginación
+	get paginationData(): PaginationData {
+		const totalItems = this.inventoryComparison.length;
+		const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+		const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+		const endIndex = Math.min(startIndex + this.itemsPerPage, totalItems);
+
+		return {
+			currentPage: this.currentPage,
+			itemsPerPage: this.itemsPerPage,
+			totalItems,
+			totalPages,
+			startIndex,
+			endIndex,
+			hasPreviousPage: this.currentPage > 1,
+			hasNextPage: this.currentPage < totalPages,
+		};
+	}
+
+	// Computed para grupos paginados
+	get paginatedGroups(): OperatingGroup[] {
+		const startIndex = (this.groupsCurrentPage - 1) * this.groupsPerPage;
+		const endIndex = startIndex + this.groupsPerPage;
+		return this.operatingGroups.slice(startIndex, endIndex);
+	}
+
+	// Computed para información de paginación de grupos
+	get groupsPaginationData(): PaginationData {
+		const totalItems = this.operatingGroups.length;
+		const totalPages = Math.ceil(totalItems / this.groupsPerPage);
+		const startIndex = (this.groupsCurrentPage - 1) * this.groupsPerPage;
+		const endIndex = Math.min(startIndex + this.groupsPerPage, totalItems);
+
+		return {
+			currentPage: this.groupsCurrentPage,
+			itemsPerPage: this.groupsPerPage,
+			totalItems,
+			totalPages,
+			startIndex,
+			endIndex,
+			hasPreviousPage: this.groupsCurrentPage > 1,
+			hasNextPage: this.groupsCurrentPage < totalPages,
+		};
+	}
+
+	// Métodos para manejar eventos de paginación
+	onPageChange(page: number): void {
+		this.currentPage = page;
+		this.scrollToTable();
+	}
+
+	onPageSizeChange(pageSize: number): void {
+		this.itemsPerPage = pageSize;
+		this.currentPage = 1;
+	}
+
+	// Método auxiliar para scroll
+	private scrollToTable(): void {
+		const tableElement = document.querySelector('.table-container');
+		if (tableElement) {
+			tableElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	}
+
+	// Métodos para manejar eventos de paginación de grupos
+	onGroupsPageChange(page: number): void {
+		this.groupsCurrentPage = page;
+		this.scrollToGroupsSection();
+	}
+
+	onGroupsPageSizeChange(pageSize: number): void {
+		this.groupsPerPage = pageSize;
+		this.groupsCurrentPage = 1; // Reset a la primera página
+	}
+
+	// Método auxiliar para scroll a la sección de grupos
+	private scrollToGroupsSection(): void {
+		const groupsElement = document.querySelector('.groups-grid');
+		if (groupsElement) {
+			groupsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	}
+
 	// Para visualizaciones
 	itemsByState: Record<string, number> = {};
-	displayedColumns: string[] = ['itemName', 'category', 'expectedState', 'foundState', 'status'];
+	displayedColumns: string[] = [
+		'itemName',
+		'category',
+		'expectedState',
+		'foundState',
+		'status',
+	];
 
 	ngOnInit(): void {
 		this.loadDashboardData();
@@ -81,10 +208,11 @@ export class AreaManagerDashboardComponent implements OnInit {
 			// Flujo: obtener ID del usuario → obtener zona → obtener datos del dashboard
 			const userId = parseInt(this.authService.getIdUser());
 
-			this.zoneService.getByIdAreaManager(userId)
+			this.zoneService
+				.getByIdAreaManager(userId)
 				.pipe(
 					delay(1500),
-					switchMap(zone => {
+					switchMap((zone) => {
 						// Una vez obtenida la zona, obtener los datos del dashboard
 						return this.dashboardService.getDashboardZone(zone.id);
 					})
@@ -97,9 +225,8 @@ export class AreaManagerDashboardComponent implements OnInit {
 					error: (error) => {
 						console.error('Error loading dashboard data:', error);
 						this.handleError('Error al cargar los datos del dashboard');
-					}
+					},
 				});
-
 		} catch (error) {
 			console.error('Error en loadDashboardData:', error);
 			this.handleError('Error al inicializar la carga de datos');
@@ -127,12 +254,19 @@ export class AreaManagerDashboardComponent implements OnInit {
 	/**
 	 * Procesa los datos de comparación de inventarios
 	 */
-	private processInventoryData(rawInventoryData: ZoneDashboard['inventoryComparison']): void {
+	private processInventoryData(
+		rawInventoryData: ZoneDashboard['inventoryComparison']
+	): void {
 		// Procesar la comparación con el servicio
-		this.inventoryComparison = this.inventoryComparisonService.processInventoryComparison(rawInventoryData);
+		this.inventoryComparison =
+			this.inventoryComparisonService.processInventoryComparison(
+				rawInventoryData
+			);
 
 		// Calcular estadísticas usando el servicio
-		const stats = this.inventoryComparisonService.getComparisonStatistics(this.inventoryComparison);
+		const stats = this.inventoryComparisonService.getComparisonStatistics(
+			this.inventoryComparison
+		);
 		this.correctCount = stats.correctCount;
 		this.missingCount = stats.missingCount;
 		this.differentCount = stats.differentCount;
@@ -142,18 +276,28 @@ export class AreaManagerDashboardComponent implements OnInit {
 	/**
 	 * Procesa los datos de grupos operativos
 	 */
-	private processOperatingGroupsData(rawOperatingGroups: ZoneDashboard['operatingGroups']): void {
+	private processOperatingGroupsData(
+		rawOperatingGroups: ZoneDashboard['operatingGroups']
+	): void {
 		// Procesar grupos con el servicio
-		this.operatingGroups = this.calculateStateOpGroupService.processOperatingGroups(rawOperatingGroups);
+		this.operatingGroups =
+			this.calculateStateOpGroupService.processOperatingGroups(
+				rawOperatingGroups
+			);
 
 		// Calcular estadísticas
-		const groupStats = this.calculateStateOpGroupService.getGroupStatistics(this.operatingGroups);
+		const groupStats = this.calculateStateOpGroupService.getGroupStatistics(
+			this.operatingGroups
+		);
 		this.scheduledGroupsCount = groupStats.scheduledCount;
 		this.inProgressGroupsCount = groupStats.inProgressCount;
 		this.completedGroupsCount = groupStats.completedCount;
 
 		// Ordenar por fecha de inicio
-		this.operatingGroups = this.calculateStateOpGroupService.sortGroupsByStartDate(this.operatingGroups);
+		this.operatingGroups =
+			this.calculateStateOpGroupService.sortGroupsByStartDate(
+				this.operatingGroups
+			);
 	}
 
 	/**
@@ -182,7 +326,7 @@ export class AreaManagerDashboardComponent implements OnInit {
 			scheduled: this.scheduledGroupsCount,
 			inProgress: this.inProgressGroupsCount,
 			completed: this.completedGroupsCount,
-			total: this.operatingGroups.length
+			total: this.operatingGroups.length,
 		};
 	}
 
@@ -190,65 +334,94 @@ export class AreaManagerDashboardComponent implements OnInit {
 	 * Getter para el estado de la zona
 	 */
 	get zoneState() {
-		return ZONE_STATE_ESPECIFIC_MAP[this.zoneInfo.state as keyof typeof ZONE_STATE_ESPECIFIC_MAP];
+		return ZONE_STATE_ESPECIFIC_MAP[
+			this.zoneInfo.state as keyof typeof ZONE_STATE_ESPECIFIC_MAP
+		];
 	}
 
 	// ==================== MÉTODOS DE UI ====================
 
 	getStatusIcon(status: string): string {
 		switch (status) {
-			case 'correct': return 'check_circle';
-			case 'missing': return 'search_off';
-			case 'different-state': return 'compare_arrows';
-			case 'damaged': return 'warning';
-			default: return 'help';
+			case 'correct':
+				return 'check_circle';
+			case 'missing':
+				return 'search_off';
+			case 'different-state':
+				return 'compare_arrows';
+			case 'damaged':
+				return 'warning';
+			default:
+				return 'help';
 		}
 	}
 
 	getStatusClass(status: string): string {
 		switch (status) {
-			case 'correct': return 'status-correct';
-			case 'missing': return 'status-missing';
-			case 'different-state': return 'status-different';
-			case 'damaged': return 'status-damaged';
-			default: return 'status-unknown';
+			case 'correct':
+				return 'status-correct';
+			case 'missing':
+				return 'status-missing';
+			case 'different-state':
+				return 'status-different';
+			case 'damaged':
+				return 'status-damaged';
+			default:
+				return 'status-unknown';
 		}
 	}
 
 	getStatusLabel(status: string): string {
 		switch (status) {
-			case 'correct': return 'Correcto';
-			case 'missing': return 'Faltante';
-			case 'different-state': return 'Estado diferente';
-			case 'damaged': return 'Dañado';
-			default: return 'Desconocido';
+			case 'correct':
+				return 'Correcto';
+			case 'missing':
+				return 'Faltante';
+			case 'different-state':
+				return 'Estado diferente';
+			case 'damaged':
+				return 'Dañado';
+			default:
+				return 'Desconocido';
 		}
 	}
 
 	getGroupStatusIcon(status: string): string {
 		switch (status) {
-			case 'scheduled': return 'event';
-			case 'in-progress': return 'pending_actions';
-			case 'completed': return 'check_circle';
-			default: return 'help';
+			case 'scheduled':
+				return 'event';
+			case 'in-progress':
+				return 'pending_actions';
+			case 'completed':
+				return 'check_circle';
+			default:
+				return 'help';
 		}
 	}
 
 	getGroupStatusClass(status: string): string {
 		switch (status) {
-			case 'scheduled': return 'group-scheduled';
-			case 'in-progress': return 'group-in-progress';
-			case 'completed': return 'group-completed';
-			default: return 'group-unknown';
+			case 'scheduled':
+				return 'group-scheduled';
+			case 'in-progress':
+				return 'group-in-progress';
+			case 'completed':
+				return 'group-completed';
+			default:
+				return 'group-unknown';
 		}
 	}
 
 	getGroupStatusLabel(status: string): string {
 		switch (status) {
-			case 'scheduled': return 'Programado';
-			case 'in-progress': return 'En progreso';
-			case 'completed': return 'Completado';
-			default: return 'Desconocido';
+			case 'scheduled':
+				return 'Programado';
+			case 'in-progress':
+				return 'En progreso';
+			case 'completed':
+				return 'Completado';
+			default:
+				return 'Desconocido';
 		}
 	}
 
@@ -257,7 +430,7 @@ export class AreaManagerDashboardComponent implements OnInit {
 		return date.toLocaleDateString('es-ES', {
 			day: '2-digit',
 			month: '2-digit',
-			year: 'numeric'
+			year: 'numeric',
 		});
 	}
 

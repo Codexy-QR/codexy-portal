@@ -38,8 +38,7 @@ export class AreaManagerHeaderComponent implements OnInit {
 
 	// Inyección de servicios propios del proyecto
 	private readonly authService = inject(AuthService);
-	private readonly notificationService = inject(NotificationService);
-	private readonly notificationState = inject(NotificationStateService);
+	readonly notificationState = inject(NotificationStateService);
 
 	// Inyección de servicios nativos de Angular
 	private readonly router = inject(Router);
@@ -52,24 +51,18 @@ export class AreaManagerHeaderComponent implements OnInit {
 	// Outputs de eventos emitidos al componente padre
 	@Output() toggleSidebar = new EventEmitter<void>();
 
-	// Signal para almacenar la respuesta de notificaciones
-	private readonly _notificationsResponse = signal<HeaderNotificationsResponseMod>({
-		unreadCount: 0,
-		notifications: []
-	});
-
 	// Computed para exponer datos derivados de las notificaciones
-	readonly notificationCount = computed(() => this._notificationsResponse().unreadCount);
-	readonly notifications = computed(() => this._notificationsResponse().notifications);
+	readonly notificationCount = computed(() => this.notificationState.headerState().unreadCount);
+	readonly notifications = computed(() => this.notificationState.headerState().notifications);
 	readonly hasNotifications = computed(() => this.notificationCount() > 0);
 
 	// Signals para estado de carga y manejo de errores
-	readonly isLoading = signal(false);
+	readonly isLoading = this.notificationState.isLoading;
 	readonly error = signal<string | null>(null);
 
 	// Métodos del ciclo de vida del componente
 	ngOnInit(): void {
-		this.loadHeaderNotifications();
+		this.notificationState.loadHeaderNotifications();
 		this.setupActionListener();
 	}
 
@@ -77,105 +70,26 @@ export class AreaManagerHeaderComponent implements OnInit {
 		this.notificationState.action$
 			.pipe(
 				takeUntilDestroyed(this.destroyRef),
-				// Filtrar acciones que vengan del mismo header (evita loops)
-				filter(action => action.source !== 'header')
+				filter(action => action.source !== 'header') // Evita loops
 			)
 			.subscribe(action => {
-				console.log('Header: Received action', action);
-
-				switch (action.type) {
-					case 'markRead':
-						if (action.notificationId) {
-							this.removeNotification(action.notificationId);
-						}
-						break;
-
-					case 'markAllRead':
-						this.clearAllNotifications();
-						break;
-
-					case 'refresh':
-						this.loadHeaderNotifications();
-						break;
+				console.log('Header: Received action from another component', action);
+				if (action.type === 'refresh') {
+					this.notificationState.loadHeaderNotifications();
 				}
 			});
 	}
 
-	private removeNotification(notificationId: number): void {
-		this._notificationsResponse.update(current => ({
-			unreadCount: Math.max(0, current.unreadCount - 1),
-			notifications: current.notifications.filter(n => n.id !== notificationId)
-		}));
-	}
-
-	private clearAllNotifications(): void {
-		this._notificationsResponse.set({
-			unreadCount: 0,
-			notifications: []
-		});
-	}
 
 	markAsRead(notification: HeaderNotificationMod, event: Event): void {
 		event.stopPropagation();
-
-		console.log('Header: Marking as read', notification.id);
-
-		// Optimistic update local
-		this.removeNotification(notification.id);
-
-		// Notificar a otros componentes (especificando source)
 		this.notificationState.markAsRead(notification.id, 'header');
-
-		// Llamada al backend
-		this.notificationService.markAsRead(notification.id).subscribe({
-			error: (err) => {
-				console.error('Error marking notification as read:', err);
-				// Recargar en caso de error
-				this.loadHeaderNotifications();
-			}
-		});
 	}
 
 	markAllAsRead(event: Event): void {
 		event.stopPropagation();
-
-		console.log('Header: Marking all as read');
-
-		// Optimistic update local
-		this.clearAllNotifications();
-
-		// Notificar a otros componentes
+		// ¡La lógica se delega!
 		this.notificationState.markAllAsRead('header');
-
-		// Llamada al backend
-		this.notificationService.markAllAsRead().subscribe({
-			error: (err) => {
-				console.error('Error marking all notifications as read:', err);
-				// Recargar en caso de error
-				this.loadHeaderNotifications();
-			}
-		});
-	}
-
-	loadHeaderNotifications(): void {
-		this.isLoading.set(true);
-		this.error.set(null);
-
-		this.notificationService.getHeaderNotifications().subscribe({
-			next: (response) => {
-				this._notificationsResponse.set(response);
-
-				// Actualizar contador global
-				this.notificationState.updateUnreadCount(response.unreadCount);
-
-				this.isLoading.set(false);
-			},
-			error: (err) => {
-				console.error('Error loading header notifications:', err);
-				this.error.set('Error al cargar notificaciones');
-				this.isLoading.set(false);
-			}
-		});
 	}
 
 	get logoRedirectUrl(): string {
